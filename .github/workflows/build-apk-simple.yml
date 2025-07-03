@@ -1,0 +1,69 @@
+name: Build APK (Simple)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:  # 手动触发
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Install dependencies
+      run: npm install --legacy-peer-deps
+
+    - name: Build web app
+      run: npm run build
+
+    - name: Sync Capacitor
+      run: npx cap sync android
+
+    - name: Make gradlew executable
+      run: chmod +x android/gradlew
+
+    - name: Build Android APK
+      run: |
+        cd android
+        ./gradlew assembleDebug --no-daemon --stacktrace
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: local-travel-app-apk
+        path: android/app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 30
+        
+    - name: Build Summary
+      run: |
+        echo "✅ APK 构建成功！" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "📱 **下载链接**: 在本次运行的 Artifacts 中下载 \`local-travel-app-apk\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "📦 **文件名**: app-debug.apk" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "🚀 **安装步骤**:" >> $GITHUB_STEP_SUMMARY
+        echo "1. 下载 APK 文件到手机" >> $GITHUB_STEP_SUMMARY
+        echo "2. 启用手机的'未知来源安装'" >> $GITHUB_STEP_SUMMARY
+        echo "3. 安装并享受旅行应用！" >> $GITHUB_STEP_SUMMARY

@@ -7,6 +7,11 @@ on:
     branches: [ main, master ]
   workflow_dispatch:  # 手动触发
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,50 +44,39 @@ jobs:
     - name: Sync Capacitor
       run: npx cap sync android
 
+    - name: Make gradlew executable
+      run: chmod +x android/gradlew
+
     - name: Build Android APK
       run: |
         cd android
-        chmod +x ./gradlew
-        ./gradlew assembleDebug
+        ./gradlew assembleDebug --no-daemon --stacktrace
 
-    - name: Upload APK
+    - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: app-debug
+        name: local-travel-app-debug
         path: android/app/build/outputs/apk/debug/app-debug.apk
-
-    - name: Create Release
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v1.0.${{ github.run_number }}
-        release_name: Local Travel App v1.0.${{ github.run_number }}
-        body: |
-          自动构建的 Android APK
-          
-          ## 新功能
-          - 🚀 完整的旅游应用功能
-          - 📱 原生 Android 适配
-          - 📷 相机和相册集成
-          - 🗺️ 地理位置服务
-          - 🎯 AI 智能功能
-          
-          ## 安装说明
-          1. 下载 `app-debug.apk` 文件
-          2. 在手机上启用"未知来源安装"
-          3. 安装 APK 文件
-        draft: false
-        prerelease: false
-
-    - name: Upload Release Asset
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: android/app/build/outputs/apk/debug/app-debug.apk
-        asset_name: local-travel-app.apk
-        asset_content_type: application/vnd.android.package-archive
+        retention-days: 30
+        
+    - name: Build Success Summary
+      run: |
+        echo "🎉 Android APK 构建成功！" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## 📱 下载 APK" >> $GITHUB_STEP_SUMMARY
+        echo "1. 点击本次运行页面上方的 **Artifacts** 部分" >> $GITHUB_STEP_SUMMARY
+        echo "2. 下载 \`local-travel-app-debug\` 文件" >> $GITHUB_STEP_SUMMARY
+        echo "3. 解压后得到 \`app-debug.apk\` 文件" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## 🚀 安装指南" >> $GITHUB_STEP_SUMMARY
+        echo "1. 将 APK 文件传输到 Android 手机" >> $GITHUB_STEP_SUMMARY
+        echo "2. 在手机设置中启用'未知来源安装'" >> $GITHUB_STEP_SUMMARY
+        echo "3. 点击 APK 文件进行安装" >> $GITHUB_STEP_SUMMARY
+        echo "4. 享受你的旅行应用！" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## ✨ 应用功能" >> $GITHUB_STEP_SUMMARY
+        echo "- 🗺️ 智能旅行规划" >> $GITHUB_STEP_SUMMARY
+        echo "- 📷 AI 照片日记" >> $GITHUB_STEP_SUMMARY
+        echo "- 🧭 AR 导航功能" >> $GITHUB_STEP_SUMMARY
+        echo "- 👥 社交与玩伴匹配" >> $GITHUB_STEP_SUMMARY
+        echo "- 🛒 旅游商城" >> $GITHUB_STEP_SUMMARY
