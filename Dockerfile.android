@@ -1,0 +1,35 @@
+FROM cimg/android:2024.01.1
+
+# 设置工作目录
+WORKDIR /app
+
+# 安装 Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - && \
+    sudo apt-get install -y nodejs
+
+# 复制项目文件
+COPY package*.json ./
+COPY . .
+
+# 安装依赖
+RUN npm install --legacy-peer-deps
+
+# 构建 Web 应用
+RUN npm run build
+
+# 同步到 Android
+RUN npx cap sync android
+
+# 设置 Android SDK 权限
+RUN sudo chown -R circleci:circleci $ANDROID_HOME
+
+# 构建 APK
+WORKDIR /app/android
+RUN chmod +x ./gradlew && ./gradlew assembleDebug
+
+# 将 APK 复制到输出目录
+RUN mkdir -p /app/output && \
+    cp app/build/outputs/apk/debug/app-debug.apk /app/output/local-travel-app.apk
+
+# 设置入口点
+CMD ["echo", "APK built successfully! Check /app/output/local-travel-app.apk"]
