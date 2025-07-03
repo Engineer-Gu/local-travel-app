@@ -312,14 +312,23 @@ export function MobileApp() {
   return (
     <ThemeProvider>
       <div 
-        className={`relative w-full overflow-hidden bg-white dark:bg-gray-900 flex flex-col ${
-          isNative() ? 'min-h-screen h-screen mobile-app safe-area-inset' : 'h-[700px] rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-800'
+        className={`${
+          isNative() 
+            ? 'fixed inset-0 w-screen h-screen bg-white dark:bg-gray-900 flex flex-col overflow-hidden' 
+            : 'relative w-full h-[700px] rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex flex-col overflow-hidden'
         }`}
         style={isNative() ? { 
-          paddingTop: Math.max(safeAreaInsets.top, 24), 
-          paddingBottom: Math.max(safeAreaInsets.bottom, 16),
+          margin: 0,
+          padding: 0,
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          position: 'fixed',
           width: '100vw',
-          height: '100vh'
+          height: '100vh',
+          maxWidth: '100vw',
+          maxHeight: '100vh'
         } : undefined}
       >
         <div className="flex-1 overflow-y-auto dark:text-gray-100">{renderScreen()}</div>

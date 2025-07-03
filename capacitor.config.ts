@@ -9,7 +9,7 @@ const config: CapacitorConfig = {
   },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 2000,
+      launchShowDuration: 1000,
       backgroundColor: "#3b82f6",
       androidSplashResourceName: "splash",
       androidScaleType: "CENTER_CROP",
@@ -23,18 +23,18 @@ const config: CapacitorConfig = {
     StatusBar: {
       style: "DARK",
       backgroundColor: "#3b82f6",
-      androidOverlaysWebView: false
+      androidOverlaysWebView: true
     },
     Keyboard: {
-      resize: "ionic",
+      resize: "none",
       style: "dark",
-      resizeOnFullScreen: true
+      resizeOnFullScreen: false
     },
     PushNotifications: {
       presentationOptions: ["badge", "sound", "alert"]
     },
     App: {
-      windowSoftInputMode: "adjustResize"
+      windowSoftInputMode: "adjustNothing"
     }
   }
 };
