@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.travel.app',
-  appName: 'Local Travel App',
+  appName: '随行伴',
   webDir: 'out',
   server: {
     androidScheme: 'https'
@@ -22,15 +22,19 @@ const config: CapacitorConfig = {
     },
     StatusBar: {
       style: "DARK",
-      backgroundColor: "#3b82f6"
+      backgroundColor: "#3b82f6",
+      androidOverlaysWebView: false
     },
     Keyboard: {
-      resize: "body",
+      resize: "ionic",
       style: "dark",
       resizeOnFullScreen: true
     },
     PushNotifications: {
       presentationOptions: ["badge", "sound", "alert"]
+    },
+    App: {
+      windowSoftInputMode: "adjustResize"
     }
   }
 };

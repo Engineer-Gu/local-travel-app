@@ -313,11 +313,13 @@ export function MobileApp() {
     <ThemeProvider>
       <div 
         className={`relative w-full overflow-hidden bg-white dark:bg-gray-900 flex flex-col ${
-          isNative() ? 'h-screen' : 'h-[700px] rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-800'
+          isNative() ? 'min-h-screen h-screen mobile-app safe-area-inset' : 'h-[700px] rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-800'
         }`}
         style={isNative() ? { 
-          paddingTop: safeAreaInsets.top, 
-          paddingBottom: safeAreaInsets.bottom 
+          paddingTop: Math.max(safeAreaInsets.top, 24), 
+          paddingBottom: Math.max(safeAreaInsets.bottom, 16),
+          width: '100vw',
+          height: '100vh'
         } : undefined}
       >
         <div className="flex-1 overflow-y-auto dark:text-gray-100">{renderScreen()}</div>
