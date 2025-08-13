@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useIsMobile } from "@/hooks/use-mobile"
 import { isNative, getSafeAreaInsets } from "@/lib/platform"
 import { statusBarService, splashScreenService, appService } from "@/lib/mobile-services"
 import { Home } from "@/components/screens/home"
@@ -30,7 +31,6 @@ import { Register } from "@/components/screens/auth/register"
 import { MapView } from "@/components/screens/map/map-view"
 import { PaymentPage } from "@/components/screens/payment/payment-page"
 import { ThemeSettings } from "@/components/screens/settings/theme-settings"
-import { ThemeProvider } from "@/components/theme-provider"
 import { InterestSettings } from "@/components/screens/social/interest-settings"
 import { GroupDetail } from "@/components/screens/social/group-detail"
 import { EditProfile } from "@/components/screens/profile/edit-profile"
@@ -125,6 +125,7 @@ export function MobileApp() {
   const [navigationStack, setNavigationStack] = useState<NavigationProps[]>([{ screen: "home" }])
   const [screenParams, setScreenParams] = useState<Record<string, any> | undefined>({})
   const [safeAreaInsets, setSafeAreaInsets] = useState({ top: 0, bottom: 0 })
+  const isMobile = useIsMobile()
   const currentNavigation = navigationStack[navigationStack.length - 1]
 
   // 初始化移动端适配
@@ -309,36 +310,24 @@ export function MobileApp() {
   // Only show bottom navigation on main tabs
   const isMainTab = ["home", "planning", "social", "guides", "shop", "profile"].includes(currentNavigation.screen)
 
+  // 基于移动端检测决定容器样式
+  const containerClass = isNative() 
+    ? "fixed inset-0 w-screen h-screen bg-white dark:bg-gray-900 flex flex-col overflow-hidden"
+    : isMobile 
+      ? "w-full h-screen bg-white dark:bg-gray-900 flex flex-col overflow-hidden"
+      : "relative w-full max-w-sm mx-auto h-[700px] rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex flex-col overflow-hidden"
+
   return (
-    <ThemeProvider>
-      <div 
-        className={`${
-          isNative() 
-            ? 'fixed inset-0 w-screen h-screen bg-white dark:bg-gray-900 flex flex-col overflow-hidden' 
-            : 'relative w-full h-[700px] rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex flex-col overflow-hidden'
-        }`}
-        style={isNative() ? { 
-          margin: 0,
-          padding: 0,
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          position: 'fixed',
-          width: '100vw',
-          height: '100vh',
-          maxWidth: '100vw',
-          maxHeight: '100vh'
-        } : undefined}
-      >
-        <div className="flex-1 overflow-y-auto dark:text-gray-100">{renderScreen()}</div>
-        {isMainTab && (
-          <BottomNavigation
-            currentScreen={currentNavigation.screen as "home" | "planning" | "social" | "guides" | "shop" | "profile"}
-            onChangeScreen={navigateToTab}
-          />
-        )}
+    <div className={containerClass}>
+      <div className="flex-1 overflow-y-auto dark:text-gray-100">
+        {renderScreen()}
       </div>
-    </ThemeProvider>
+      {isMainTab && (
+        <BottomNavigation
+          currentScreen={currentNavigation.screen as "home" | "planning" | "social" | "guides" | "shop" | "profile"}
+          onChangeScreen={navigateToTab}
+        />
+      )}
+    </div>
   )
 }
