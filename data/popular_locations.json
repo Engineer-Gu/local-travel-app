@@ -1,0 +1,362 @@
+{
+    "hangzhou": [
+        {
+            "id": "hz-xihu",
+            "name": "西湖风景区",
+            "description": "杭州及其代表性的景点，不仅自然风光秀丽，更蕴含深厚的文化底蕴。",
+            "image": "/images/hangzhou/xihu.jpg",
+            "tags": [
+                "自然",
+                "湖泊",
+                "历史"
+            ],
+            "routes": [
+                {
+                    "id": "route-hz-xihu-1",
+                    "title": "西湖经典一日游",
+                    "duration": "一日游",
+                    "budget": "¥300",
+                    "budgetType": "经济型",
+                    "stops": [
+                        {
+                            "time": "09:00",
+                            "place": "断桥残雪",
+                            "activity": "漫步断桥，欣赏湖景",
+                            "duration": "1小时"
+                        },
+                        {
+                            "time": "10:30",
+                            "place": "平湖秋月",
+                            "activity": "观赏西湖十景之一",
+                            "duration": "45分钟"
+                        },
+                        {
+                            "time": "12:00",
+                            "place": "楼外楼",
+                            "activity": "品尝西湖醋鱼",
+                            "duration": "1.5小时"
+                        },
+                        {
+                            "time": "14:00",
+                            "place": "三潭印月",
+                            "activity": "乘船游湖",
+                            "duration": "2小时"
+                        },
+                        {
+                            "time": "16:30",
+                            "place": "雷峰塔",
+                            "activity": "登塔远眺",
+                            "duration": "1.5小时"
+                        }
+                    ],
+                    "aiRecommendation": "这是西湖最经典的游玩路线，涵盖了主要的十景，适合第一次来杭州的游客。"
+                }
+            ],
+            "location": {
+                "latitude": 30.2479,
+                "longitude": 120.1423,
+                "address": "杭州市西湖区西湖风景名胜区"
+            }
+        },
+        {
+            "id": "hz-lingyin",
+            "name": "灵隐寺",
+            "description": "中国最早的佛教寺院和中国十大古刹之一。",
+            "image": "/images/hangzhou/lingyin.jpg",
+            "tags": [
+                "宗教",
+                "历史",
+                "爬山"
+            ],
+            "routes": [
+                {
+                    "id": "route-hz-lingyin-1",
+                    "title": "灵隐寺祈福半日游",
+                    "duration": "上午半日游",
+                    "budget": "¥200",
+                    "budgetType": "经济型",
+                    "stops": [
+                        {
+                            "time": "08:30",
+                            "place": "飞来峰",
+                            "activity": "参观石刻造像",
+                            "duration": "1.5小时"
+                        },
+                        {
+                            "time": "10:00",
+                            "place": "灵隐寺",
+                            "activity": "烧香祈福，参观大雄宝殿",
+                            "duration": "1.5小时"
+                        },
+                        {
+                            "time": "11:30",
+                            "place": "素面馆",
+                            "activity": "品尝特色素面",
+                            "duration": "1小时"
+                        }
+                    ],
+                    "aiRecommendation": "清晨的灵隐寺最为清幽，适合静心祈福。"
+                }
+            ],
+            "location": {
+                "latitude": 30.2435,
+                "longitude": 120.0967,
+                "address": "杭州市西湖区灵隐路法云弄1号"
+            }
+        }
+    ],
+    "shanghai": [
+        {
+            "id": "sh-waitan",
+            "name": "外滩",
+            "description": "上海的标志性景点，欣赏黄浦江两岸的万国建筑群和陆家嘴摩天大楼。",
+            "image": "/images/shanghai/waitan.jpg",
+            "tags": [
+                "城市风光",
+                "夜景",
+                "历史建筑"
+            ],
+            "routes": [
+                {
+                    "id": "route-sh-waitan-1",
+                    "title": "外滩夜景漫步",
+                    "duration": "晚上",
+                    "budget": "¥0",
+                    "budgetType": "经济型",
+                    "stops": [
+                        {
+                            "time": "19:00",
+                            "place": "外白渡桥",
+                            "activity": "打卡情深深雨蒙蒙取景地",
+                            "duration": "30分钟"
+                        },
+                        {
+                            "time": "19:30",
+                            "place": "外滩源",
+                            "activity": "欣赏圆明园路老建筑",
+                            "duration": "45分钟"
+                        },
+                        {
+                            "time": "20:15",
+                            "place": "万国建筑博览群",
+                            "activity": "漫步外滩，隔江相望陆家嘴",
+                            "duration": "1小时"
+                        }
+                    ],
+                    "aiRecommendation": "夜上海的精华所在，最适合晚上散步拍照。"
+                }
+            ],
+            "location": {
+                "latitude": 31.2401,
+                "longitude": 121.4905,
+                "address": "上海市黄浦区中山东一路"
+            }
+        },
+        {
+            "id": "sh-disney",
+            "name": "上海迪士尼度假区",
+            "description": "中国内地首座迪士尼主题乐园。",
+            "image": "/images/shanghai/disney.jpg",
+            "tags": [
+                "乐园",
+                "亲子",
+                "娱乐"
+            ],
+            "routes": [
+                {
+                    "id": "route-sh-disney-1",
+                    "title": "迪士尼神奇一日游",
+                    "duration": "一日游",
+                    "budget": "¥1000",
+                    "budgetType": "舒适型",
+                    "stops": [
+                        {
+                            "time": "08:00",
+                            "place": "乐园入口",
+                            "activity": "入园安检",
+                            "duration": "30分钟"
+                        },
+                        {
+                            "time": "09:00",
+                            "place": "飞越地平线",
+                            "activity": "体验热门项目",
+                            "duration": "1小时"
+                        },
+                        {
+                            "time": "10:30",
+                            "place": "创极速光轮",
+                            "activity": "体验刺激项目",
+                            "duration": "45分钟"
+                        },
+                        {
+                            "time": "12:00",
+                            "place": "巴波萨烧烤",
+                            "activity": "享用午餐",
+                            "duration": "1小时"
+                        },
+                        {
+                            "time": "13:30",
+                            "place": "花车巡游",
+                            "activity": "观看巡游表演",
+                            "duration": "30分钟"
+                        },
+                        {
+                            "time": "15:00",
+                            "place": "加勒比海盗",
+                            "activity": "沉浸式体验",
+                            "duration": "45分钟"
+                        },
+                        {
+                            "time": "20:00",
+                            "place": "奇幻童话城堡",
+                            "activity": "欣赏烟花秀",
+                            "duration": "30分钟"
+                        }
+                    ],
+                    "aiRecommendation": "不仅是孩子的乐园，也是成年人的童话世界。"
+                }
+            ],
+            "location": {
+                "latitude": 31.1444,
+                "longitude": 121.6565,
+                "address": "上海市浦东新区申迪北路753号"
+            }
+        }
+    ],
+    "beijing": [
+        {
+            "id": "bj-gugong",
+            "name": "故宫博物院",
+            "description": "世界上现存规模最大、保存最为完整的木质结构古建筑之一。",
+            "image": "/images/beijing/gugong.jpg",
+            "tags": [
+                "历史",
+                "博物馆",
+                "皇家建筑"
+            ],
+            "routes": [
+                {
+                    "id": "route-bj-gugong-1",
+                    "title": "故宫深度一日游",
+                    "duration": "一日游",
+                    "budget": "¥60",
+                    "budgetType": "经济型",
+                    "stops": [
+                        {
+                            "time": "08:30",
+                            "place": "午门",
+                            "activity": "检票入宫",
+                            "duration": "30分钟"
+                        },
+                        {
+                            "time": "09:00",
+                            "place": "太和殿",
+                            "activity": "参观三大殿",
+                            "duration": "1小时"
+                        },
+                        {
+                            "time": "10:30",
+                            "place": "珍宝馆",
+                            "activity": "欣赏皇家珍宝",
+                            "duration": "1.5小时"
+                        },
+                        {
+                            "time": "12:30",
+                            "place": "冰窖餐厅",
+                            "activity": "体验皇家冰窖简餐",
+                            "duration": "1小时"
+                        },
+                        {
+                            "time": "14:00",
+                            "place": "御花园",
+                            "activity": "游览皇家园林",
+                            "duration": "1小时"
+                        },
+                        {
+                            "time": "15:30",
+                            "place": "神武门",
+                            "activity": "出宫，拍摄角楼",
+                            "duration": "30分钟"
+                        }
+                    ],
+                    "aiRecommendation": "故宫需要慢慢品味，建议租用电子导览或聘请讲解。"
+                }
+            ],
+            "location": {
+                "latitude": 39.9163,
+                "longitude": 116.3971,
+                "address": "北京市东城区景山前街4号"
+            }
+        }
+    ],
+    "guangzhou": [
+        {
+            "id": "gz-ta",
+            "name": "广州塔",
+            "description": "中国第一高塔，昵称“小蛮腰”。",
+            "image": "/images/guangzhou/cantontower.jpg",
+            "tags": [
+                "地标",
+                "观景",
+                "夜景"
+            ],
+            "routes": []
+        }
+    ],
+    "chengdu": [
+        {
+            "id": "cd-panda",
+            "name": "大熊猫繁育研究基地",
+            "description": "近距离观看国宝大熊猫的最佳地点。",
+            "image": "/images/chengdu/panda.jpg",
+            "tags": [
+                "动物",
+                "亲子",
+                "自然"
+            ],
+            "routes": []
+        }
+    ],
+    "suzhou": [
+        {
+            "id": "sz-yuanlin",
+            "name": "拙政园",
+            "description": "中国四大名园之一，苏州园林的代表。",
+            "image": "/images/suzhou/zhuozhengyuan.jpg",
+            "tags": [
+                "园林",
+                "历史",
+                "文化"
+            ],
+            "routes": []
+        }
+    ],
+    "nanjing": [
+        {
+            "id": "nj-fuzimiao",
+            "name": "夫子庙秦淮风光带",
+            "description": "集自然风光、园林营造、厅堂建筑、文化艺术于一体。",
+            "image": "/images/nanjing/fuzimiao.jpg",
+            "tags": [
+                "历史",
+                "夜景",
+                "美食"
+            ],
+            "routes": []
+        }
+    ],
+    "xiamen": [
+        {
+            "id": "xm-gulangyu",
+            "name": "鼓浪屿",
+            "description": "著名的“钢琴之岛”，拥有独特的侨乡风情和异国建筑。",
+            "image": "/images/xiamen/gulangyu.jpg",
+            "tags": [
+                "海岛",
+                "建筑",
+                "文艺"
+            ],
+            "routes": []
+        }
+    ]
+}

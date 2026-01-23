@@ -1,0 +1,42 @@
+[
+    {
+        "id": "hangzhou",
+        "name": "杭州",
+        "image": "/placeholder.svg?height=120&width=320&text=杭州"
+    },
+    {
+        "id": "shanghai",
+        "name": "上海",
+        "image": "/placeholder.svg?height=120&width=320&text=上海"
+    },
+    {
+        "id": "beijing",
+        "name": "北京",
+        "image": "/placeholder.svg?height=120&width=320&text=北京"
+    },
+    {
+        "id": "guangzhou",
+        "name": "广州",
+        "image": "/placeholder.svg?height=120&width=320&text=广州"
+    },
+    {
+        "id": "chengdu",
+        "name": "成都",
+        "image": "/placeholder.svg?height=120&width=320&text=成都"
+    },
+    {
+        "id": "suzhou",
+        "name": "苏州",
+        "image": "/placeholder.svg?height=120&width=320&text=苏州"
+    },
+    {
+        "id": "nanjing",
+        "name": "南京",
+        "image": "/placeholder.svg?height=120&width=320&text=南京"
+    },
+    {
+        "id": "xiamen",
+        "name": "厦门",
+        "image": "/placeholder.svg?height=120&width=320&text=厦门"
+    }
+]

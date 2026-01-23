@@ -18,6 +18,8 @@ const nextConfig = {
   },
   // 禁用服务器端功能，确保纯静态
   distDir: 'out',
+  // 禁用开发指示器（如左下角的图标）
+  devIndicators: false,
 }
 
 export default nextConfig
