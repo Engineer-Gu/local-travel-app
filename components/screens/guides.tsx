@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Search, Filter, Star, Calendar, MessageCircle, Award } from "lucide-react"
+import { Search, Filter, Star, Calendar, MessageCircle, Award, ArrowLeft, ThumbsUp } from "lucide-react"
+import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
@@ -144,11 +145,11 @@ export function Guides({ navigate }: GuidesProps) {
     selectedCategory === "全部"
       ? allGuides
       : allGuides.filter((guide) =>
-          guide.specialties.some(
-            (specialty) =>
-              specialty === selectedCategory || (selectedCategory === "亲子" && specialty.includes("亲子")),
-          ),
-        )
+        guide.specialties.some(
+          (specialty) =>
+            specialty === selectedCategory || (selectedCategory === "亲子" && specialty.includes("亲子")),
+        ),
+      )
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category)
@@ -195,9 +196,8 @@ export function Guides({ navigate }: GuidesProps) {
           <Badge
             key={category}
             variant={category === selectedCategory ? "default" : "outline"}
-            className={`px-3 py-1 whitespace-nowrap cursor-pointer ${
-              category === selectedCategory ? "bg-blue-500" : ""
-            }`}
+            className={`px-3 py-1 whitespace-nowrap cursor-pointer ${category === selectedCategory ? "bg-blue-500" : ""
+              }`}
             onClick={() => handleCategorySelect(category)}
           >
             {category}
@@ -514,7 +514,3 @@ function GuideReviews({ guide, onBack }: { guide: any; onBack: () => void }) {
     </div>
   )
 }
-
-// 导入缺少的图标
-import { ArrowLeft, ThumbsUp } from "lucide-react"
-import { Progress } from "@/components/ui/progress"

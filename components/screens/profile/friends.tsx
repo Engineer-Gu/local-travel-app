@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { Screen } from "@/components/mobile-app"
 
 interface FriendsProps {
@@ -162,5 +163,3 @@ export function Friends({ goBack, navigate }: FriendsProps) {
     </div>
   )
 }
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"

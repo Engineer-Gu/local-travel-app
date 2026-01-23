@@ -1,1 +1,2 @@
-// 删除这个文件，因为它是错误的React Native版本
+// Re-export ProductDetail from shop folder
+export { ProductDetail } from "./shop/product-detail"
