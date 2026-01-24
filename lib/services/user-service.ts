@@ -102,6 +102,36 @@ export interface VerificationRequest {
 }
 
 /**
+ * 用户兴趣标签接口（与后端UserInterestResponse对应）
+ */
+export interface UserInterest {
+  id: number
+  userId: number
+  tagName: string
+  tagCategory: string
+  gmtCreate?: string
+  gmtModified?: string
+}
+
+/**
+ * 添加用户兴趣标签请求接口
+ */
+export interface AddUserInterestRequest {
+  tagName: string
+  tagCategory: string
+}
+
+/**
+ * 批量更新用户兴趣标签请求接口
+ */
+export interface UpdateUserInterestsRequest {
+  interests: Array<{
+    tagName: string
+    tagCategory: string
+  }>
+}
+
+/**
  * API统一响应接口
  */
 export interface ApiResponse<T = any> {
@@ -249,6 +279,66 @@ export const userService = {
       },
     })
     return response.data.avatarUrl
+  },
+
+  // ==================== 兴趣标签相关接口 ====================
+
+  /**
+   * 获取用户兴趣标签列表
+   * @returns Promise with user interests list
+   */
+  async getInterests(): Promise<UserInterest[]> {
+    const response: ApiResponse<UserInterest[]> = await api.get("/api/user/interest/list")
+    return response.data
+  },
+
+  /**
+   * 按分类获取用户兴趣标签列表
+   * @param tagCategory - 标签分类
+   * @returns Promise with user interests list
+   */
+  async getInterestsByCategory(tagCategory: string): Promise<UserInterest[]> {
+    const response: ApiResponse<UserInterest[]> = await api.get("/api/user/interest/listByCategory", {
+      params: { tagCategory },
+    })
+    return response.data
+  },
+
+  /**
+   * 添加用户兴趣标签
+   * @param tagName - 标签名称
+   * @param tagCategory - 标签分类
+   * @returns Promise with added interest
+   */
+  async addInterest(tagName: string, tagCategory: string): Promise<UserInterest> {
+    const response: ApiResponse<UserInterest> = await api.post("/api/user/interest/add", {
+      tagName,
+      tagCategory,
+    })
+    return response.data
+  },
+
+  /**
+   * 删除用户兴趣标签
+   * @param interestId - 兴趣标签ID
+   * @returns Promise
+   */
+  async deleteInterest(interestId: number): Promise<void> {
+    await api.post("/api/user/interest/delete", null, {
+      params: { interestId },
+    })
+  },
+
+  /**
+   * 批量更新用户兴趣标签
+   * @param interests - 兴趣标签列表
+   * @returns Promise with updated interests list
+   */
+  async updateInterests(interests: Array<{ tagName: string; tagCategory: string }>): Promise<UserInterest[]> {
+    const response: ApiResponse<UserInterest[]> = await api.post("/api/user/interest/update", {
+      interests,
+    })
+    return response.data
   },
 }
 

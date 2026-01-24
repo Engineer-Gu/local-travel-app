@@ -33,9 +33,12 @@ export function Profile({ navigate }: ProfileProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [isCheckingAuth, setIsCheckingAuth] = useState(true)
 
+  // 兴趣标签数据
+  const [interests, setInterests] = useState<string[]>([])
+  const [isLoadingInterests, setIsLoadingInterests] = useState(false)
+
   // Mock数据：后端还未实现的功能字段
   const mockBadges = ["旅行达人", "摄影爱好者", "美食家"]
-  const mockInterests = ["摄影", "美食", "历史", "户外", "城市探索"]
   const mockTravelDays = 35
   const mockVisitedCities = 8
   const mockCompletedRoutes = 12
@@ -44,6 +47,39 @@ export function Profile({ navigate }: ProfileProps) {
   useEffect(() => {
     checkLoginStatus()
   }, [])
+
+  // 当用户登录后，加载兴趣标签
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchUserInterests()
+    }
+  }, [isLoggedIn])
+
+  /**
+   * 获取用户兴趣标签
+   */
+  const fetchUserInterests = () => {
+    if (!isLoggedIn) {
+      return
+    }
+
+    setIsLoadingInterests(true)
+    userService
+      .getInterests()
+      .then((data) => {
+        // 提取兴趣标签名称
+        const interestNames = data.map((interest: any) => interest.tagName)
+        setInterests(interestNames)
+      })
+      .catch((error) => {
+        console.error("获取兴趣标签失败", error)
+        // 失败时使用空数组
+        setInterests([])
+      })
+      .finally(() => {
+        setIsLoadingInterests(false)
+      })
+  }
 
   const checkLoginStatus = () => {
     try {
@@ -278,7 +314,7 @@ export function Profile({ navigate }: ProfileProps) {
         </div>
       </div>
 
-      {/* 兴趣标签展示 - Mock数据 */}
+      {/* 兴趣标签展示 - 使用真实数据 */}
       <div className="p-4 border-b">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-sm font-medium text-gray-500 dark:text-gray-400">我的兴趣</h2>
@@ -286,13 +322,19 @@ export function Profile({ navigate }: ProfileProps) {
             编辑
           </Button>
         </div>
-        <div className="flex flex-wrap gap-2 overflow-x-auto pb-2">
-          {mockInterests.map((interest, index) => (
-            <Badge key={index} variant="outline" className="py-1 px-3 bg-blue-50">
-              {interest}
-            </Badge>
-          ))}
-        </div>
+        {isLoadingInterests ? (
+          <div className="text-sm text-gray-400">加载中...</div>
+        ) : interests.length === 0 ? (
+          <div className="text-sm text-gray-400">还没有添加兴趣标签，点击编辑添加吧！</div>
+        ) : (
+          <div className="flex flex-wrap gap-2 overflow-x-auto pb-2">
+            {interests.map((interest, index) => (
+              <Badge key={index} variant="outline" className="py-1 px-3 bg-blue-50">
+                {interest}
+              </Badge>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* 徽章展示 - Mock数据 */}
