@@ -14,7 +14,6 @@ import {
   Users,
   ShoppingBag,
   Package,
-  Loader2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
@@ -33,6 +32,13 @@ export function Profile({ navigate }: ProfileProps) {
   const [user, setUser] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isCheckingAuth, setIsCheckingAuth] = useState(true)
+
+  // Mock数据：后端还未实现的功能字段
+  const mockBadges = ["旅行达人", "摄影爱好者", "美食家"]
+  const mockInterests = ["摄影", "美食", "历史", "户外", "城市探索"]
+  const mockTravelDays = 35
+  const mockVisitedCities = 8
+  const mockCompletedRoutes = 12
 
   // 检查登录状态和加载用户信息
   useEffect(() => {
@@ -56,70 +62,6 @@ export function Profile({ navigate }: ProfileProps) {
     } finally {
       setIsCheckingAuth(false)
     }
-  }
-
-  const handleLogin = () => {
-    navigate("login")
-  }
-
-  const handleLogout = () => {
-    setIsLoading(true)
-
-    // 调用登出API
-    userService
-      .logout()
-      .then(() => {
-        // 清除本地存储的认证信息
-        authService.clearAuth()
-        setIsLoggedIn(false)
-        setUser(null)
-        setIsLoading(false)
-      })
-      .catch((error) => {
-        console.error("登出失败", error)
-        // 即使API调用失败，也清除本地信息
-        authService.clearAuth()
-        setIsLoggedIn(false)
-        setUser(null)
-        setIsLoading(false)
-      })
-  }
-
-  const handleEditProfile = () => {
-    navigate("edit-profile")
-  }
-
-  // 如果正在检查认证状态，显示加载中
-  if (isCheckingAuth) {
-    return (
-      <div className="p-4 flex items-center justify-center h-full">
-        <div className="text-center">
-          <Loader2 className="animate-spin mx-auto mb-2" size={32} />
-          <p className="text-gray-500">加载中...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // 未登录状态
-  if (!isLoggedIn || !user) {
-    return (
-      <div className="p-4 flex flex-col items-center justify-center h-full">
-        <Avatar className="h-24 w-24 mb-6">
-          <AvatarFallback>
-            <User size={40} />
-          </AvatarFallback>
-        </Avatar>
-        <h1 className="text-xl font-bold mb-2">欢迎使用随行伴</h1>
-        <p className="text-gray-500 dark:text-gray-400 mb-6 text-center">登录账号以使用更多功能</p>
-        <Button className="w-full mb-3" onClick={handleLogin}>
-          登录
-        </Button>
-        <Button variant="outline" className="w-full" onClick={() => navigate("register")}>
-          注册新账号
-        </Button>
-      </div>
-    )
   }
 
   // 功能菜单分组
@@ -180,9 +122,96 @@ export function Profile({ navigate }: ProfileProps) {
         },
       ],
     },
+    {
+      title: "社交",
+      items: [],
+    },
   ]
 
-  // 计算等级进度
+  const handleLogin = () => {
+    navigate("login")
+  }
+
+  // 调用真实登出API
+  const handleLogout = () => {
+    setIsLoading(true)
+
+    // 调用真实登出API
+    userService
+      .logout()
+      .then(() => {
+        // 清除本地存储的认证信息
+        authService.clearAuth()
+
+        // 更新状态
+        setIsLoggedIn(false)
+        setUser(null)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.error("登出请求失败", error)
+        setIsLoading(false)
+
+        // 即使API调用失败，也清除本地存储并更新状态
+        authService.clearAuth()
+        setIsLoggedIn(false)
+        setUser(null)
+      })
+  }
+
+  const handleEditProfile = () => {
+    navigate("edit-profile")
+  }
+
+  const handleViewVisitedCities = () => {
+    navigate("visited-cities")
+  }
+
+  const handleViewCompletedRoutes = () => {
+    navigate("completed-routes")
+  }
+
+  const handleViewBadges = () => {
+    navigate("badges")
+  }
+
+  const handleEditInterests = () => {
+    navigate("interest-settings")
+  }
+
+  // 如果正在检查认证状态，显示加载中
+  if (isCheckingAuth) {
+    return (
+      <div className="p-4 flex items-center justify-center h-full">
+        <div className="text-center">
+          <p className="text-gray-500">加载中...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // 未登录状态
+  if (!isLoggedIn || !user) {
+    return (
+      <div className="p-4 flex flex-col items-center justify-center h-full">
+        <Avatar className="h-24 w-24 mb-6">
+          <AvatarFallback>
+            <User size={40} />
+          </AvatarFallback>
+        </Avatar>
+        <h1 className="text-xl font-bold mb-2">欢迎使用随行伴</h1>
+        <p className="text-gray-500 dark:text-gray-400 mb-6 text-center">登录账号以使用更多功能</p>
+        <Button className="w-full mb-3" onClick={handleLogin}>
+          登录
+        </Button>
+        <Button variant="outline" className="w-full" onClick={() => navigate("register")}>
+          注册新账号
+        </Button>
+      </div>
+    )
+  }
+
+  // 计算等级进度（使用真实数据）
   const currentLevel = user.level || 1
   const currentPoints = user.points || 0
   const nextLevelPoints = currentLevel * 1000
@@ -190,7 +219,7 @@ export function Profile({ navigate }: ProfileProps) {
 
   return (
     <div className="pb-16">
-      {/* 用户信息卡片 */}
+      {/* 用户信息卡片 - 使用真实数据 */}
       <div className="bg-gradient-to-r from-blue-500 to-blue-700 p-4 text-white">
         <div className="flex items-center">
           <Avatar className="h-16 w-16 border-2 border-white">
@@ -219,7 +248,9 @@ export function Profile({ navigate }: ProfileProps) {
             </div>
             <div className="flex items-center mt-1">
               <Badge className="bg-yellow-500 text-white border-none">Lv.{currentLevel}</Badge>
-              <span className="ml-2 text-sm">{currentPoints}/{nextLevelPoints}</span>
+              <span className="ml-2 text-sm">
+                {currentPoints}/{nextLevelPoints}
+              </span>
             </div>
             <Progress value={progress} className="h-1.5 mt-1 bg-blue-300" />
           </div>
@@ -228,22 +259,59 @@ export function Profile({ navigate }: ProfileProps) {
         <div className="flex justify-between mt-4 pt-4 border-t border-blue-400">
           <div
             className="text-center cursor-pointer hover:bg-blue-600 py-2 px-3 rounded-lg transition-colors"
-            onClick={() => navigate("visited-cities")}
+            onClick={handleViewVisitedCities}
           >
-            <div className="text-xl font-bold">{user.balance ? Math.floor(user.balance / 100) : 0}</div>
-            <div className="text-xs">余额(元)</div>
+            <div className="text-xl font-bold">{mockVisitedCities}</div>
+            <div className="text-xs">去过的城市</div>
           </div>
           <div
             className="text-center cursor-pointer hover:bg-blue-600 py-2 px-3 rounded-lg transition-colors"
-            onClick={() => navigate("completed-routes")}
+            onClick={handleViewCompletedRoutes}
           >
-            <div className="text-xl font-bold">{currentPoints}</div>
-            <div className="text-xs">积分</div>
+            <div className="text-xl font-bold">{mockCompletedRoutes}</div>
+            <div className="text-xs">完成的路线</div>
           </div>
           <div className="text-center cursor-pointer hover:bg-blue-600 py-2 px-3 rounded-lg transition-colors">
-            <div className="text-xl font-bold">{user.isVerified ? "已" : "未"}</div>
-            <div className="text-xs">实名认证</div>
+            <div className="text-xl font-bold">{mockTravelDays}</div>
+            <div className="text-xs">旅行天数</div>
           </div>
+        </div>
+      </div>
+
+      {/* 兴趣标签展示 - Mock数据 */}
+      <div className="p-4 border-b">
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-sm font-medium text-gray-500 dark:text-gray-400">我的兴趣</h2>
+          <Button variant="ghost" size="sm" className="h-6 text-xs text-blue-500 p-0" onClick={handleEditInterests}>
+            编辑
+          </Button>
+        </div>
+        <div className="flex flex-wrap gap-2 overflow-x-auto pb-2">
+          {mockInterests.map((interest, index) => (
+            <Badge key={index} variant="outline" className="py-1 px-3 bg-blue-50">
+              {interest}
+            </Badge>
+          ))}
+        </div>
+      </div>
+
+      {/* 徽章展示 - Mock数据 */}
+      <div className="p-4 border-b">
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-sm font-medium text-gray-500 dark:text-gray-400">我的徽章</h2>
+          <Button variant="ghost" size="sm" className="h-6 text-xs text-blue-500 p-0" onClick={handleViewBadges}>
+            查看全部
+          </Button>
+        </div>
+        <div className="flex space-x-2 overflow-x-auto pb-2">
+          {mockBadges.map((badge, index) => (
+            <Badge key={index} variant="outline" className="py-1 px-3">
+              {badge}
+            </Badge>
+          ))}
+          <Badge variant="outline" className="py-1 px-3 border-dashed cursor-pointer" onClick={handleViewBadges}>
+            +
+          </Badge>
         </div>
       </div>
 
@@ -285,14 +353,7 @@ export function Profile({ navigate }: ProfileProps) {
           onClick={handleLogout}
           disabled={isLoading}
         >
-          {isLoading ? (
-            <>
-              <Loader2 className="animate-spin mr-2" size={16} />
-              退出中...
-            </>
-          ) : (
-            "退出登录"
-          )}
+          {isLoading ? "退出中..." : "退出登录"}
         </Button>
       </div>
     </div>
