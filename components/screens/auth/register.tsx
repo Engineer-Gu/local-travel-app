@@ -1,15 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowLeft, Mail, Lock, Eye, EyeOff, User, Phone } from "lucide-react"
+import { ArrowLeft, Lock, Eye, EyeOff, User, Phone, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import type { Screen } from "@/components/mobile-app"
-
-// 在文件顶部添加导入语句（注释掉）
-// import { userService } from "@/lib/services/user-service"
+import { userService } from "@/lib/services/user-service"
 
 interface RegisterProps {
   navigate: (screen: Screen, params?: Record<string, any>) => void
@@ -19,8 +17,7 @@ interface RegisterProps {
 export function Register({ navigate, goBack }: RegisterProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [username, setUsername] = useState("")
-  const [email, setEmail] = useState("")
+  const [nickname, setNickname] = useState("")
   const [phone, setPhone] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -28,93 +25,105 @@ export function Register({ navigate, goBack }: RegisterProps) {
   const [countdown, setCountdown] = useState(0)
   const [agreeTerms, setAgreeTerms] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
-  // 在handleSendVerificationCode函数中添加真实API调用（注释掉）
+  /**
+   * 发送验证码处理
+   */
   const handleSendVerificationCode = () => {
-    if (countdown > 0 || !phone || phone.length !== 11) return
+    if (countdown > 0) return
 
-    // 真实API调用（注释掉）
-    /* try {
-      userService.sendRegisterCode(phone)
-        .then(response => {
-          if (response.success) {
-            // 开始倒计时
-            setCountdown(60);
-            const timer = setInterval(() => {
-              setCountdown((prev) => {
-                if (prev <= 1) {
-                  clearInterval(timer);
-                  return 0;
-                }
-                return prev - 1;
-              });
-            }, 1000);
-          } else {
-            // 处理发送失败
-            console.error("发送验证码失败:", response.message);
-          }
-        })
-        .catch(error => {
-          console.error("发送验证码请求失败", error);
-        });
-    } catch (error) {
-      console.error("发送验证码异常", error);
-    } */
+    // 验证手机号
+    if (!phone || phone.length !== 11) {
+      setErrorMessage("请输入正确的手机号")
+      return
+    }
 
-    // 模拟发送验证码
-    setCountdown(60)
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer)
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-  }
-
-  // 在handleRegister函数中添加真实API调用（注释掉）
-  const handleRegister = () => {
     setIsLoading(true)
+    setErrorMessage("")
 
-    // 真实API调用（注释掉）
-    /* try {
-      const userData = {
-        username,
-        email,
-        phone,
-        password,
-        verificationCode
-      };
-
-      userService.register(userData)
-        .then(response => {
-          if (response.success) {
-            setIsLoading(false);
-            navigate("login");
-          } else {
-            console.error("注册失败:", response.message);
-            setIsLoading(false);
-            // 这里可以添加错误处理，如显示错误消息
-          }
-        })
-        .catch(error => {
-          console.error("注册请求失败", error);
-          setIsLoading(false);
-        });
-    } catch (error) {
-      console.error("注册异常", error);
-      setIsLoading(false);
-    } */
-
-    // 模拟注册过程
-    setTimeout(() => {
-      setIsLoading(false)
-      navigate("login")
-    }, 1500)
+    // 调用发送验证码API
+    userService
+      .sendCode(phone, "register")
+      .then(() => {
+        // 开始倒计时
+        setCountdown(60)
+        const timer = setInterval(() => {
+          setCountdown((prev) => {
+            if (prev <= 1) {
+              clearInterval(timer)
+              return 0
+            }
+            return prev - 1
+          })
+        }, 1000)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.error("发送验证码失败", error)
+        setErrorMessage(error.message || "发送验证码失败，请稍后重试")
+        setIsLoading(false)
+      })
   }
 
+  /**
+   * 注册处理
+   */
+  const handleRegister = () => {
+    // 验证输入
+    if (!phone) {
+      setErrorMessage("请输入手机号")
+      return
+    }
+    if (phone.length !== 11) {
+      setErrorMessage("请输入正确的手机号")
+      return
+    }
+    if (!verificationCode) {
+      setErrorMessage("请输入验证码")
+      return
+    }
+    if (!password) {
+      setErrorMessage("请输入密码")
+      return
+    }
+    if (password !== confirmPassword) {
+      setErrorMessage("两次输入的密码不一致")
+      return
+    }
+    if (!agreeTerms) {
+      setErrorMessage("请阅读并同意用户协议和隐私政策")
+      return
+    }
+
+    setIsLoading(true)
+    setErrorMessage("")
+
+    // 调用注册API
+    const registerData = {
+      phone,
+      code: verificationCode,
+      password,
+      nickname: nickname || phone.substring(7),
+    }
+
+    userService
+      .register(registerData)
+      .then(() => {
+        setIsLoading(false)
+        // 注册成功，跳转到登录页面
+        navigate("login")
+      })
+      .catch((error) => {
+        console.error("注册失败", error)
+        setErrorMessage(error.message || "注册失败，请稍后重试")
+        setIsLoading(false)
+      })
+  }
+
+  /**
+   * 跳转登录页面
+   */
   const handleLogin = () => {
     navigate("login")
   }
@@ -128,18 +137,26 @@ export function Register({ navigate, goBack }: RegisterProps) {
         <h1 className="text-xl font-bold">注册</h1>
       </div>
 
+      {/* 错误提示 */}
+      {errorMessage && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-2">
+          <AlertCircle className="text-red-500 mt-0.5 flex-shrink-0" size={16} />
+          <span className="text-sm text-red-600">{errorMessage}</span>
+        </div>
+      )}
+
       <div className="space-y-4 flex-1">
         <div className="space-y-2">
-          <Label htmlFor="username">用户名</Label>
+          <Label htmlFor="nickname">昵称（可选）</Label>
           <div className="relative">
             <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
             <Input
-              id="username"
+              id="nickname"
               type="text"
-              placeholder="请输入用户名"
+              placeholder="请输入昵称"
               className="pl-10"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
               disabled={isLoading}
             />
           </div>
@@ -157,6 +174,7 @@ export function Register({ navigate, goBack }: RegisterProps) {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               disabled={isLoading}
+              maxLength={11}
             />
           </div>
         </div>
@@ -172,6 +190,7 @@ export function Register({ navigate, goBack }: RegisterProps) {
               value={verificationCode}
               onChange={(e) => setVerificationCode(e.target.value)}
               disabled={isLoading}
+              maxLength={6}
             />
             <Button
               variant="outline"
@@ -181,22 +200,6 @@ export function Register({ navigate, goBack }: RegisterProps) {
             >
               {countdown > 0 ? `${countdown}秒后重发` : "获取验证码"}
             </Button>
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="email">邮箱</Label>
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-            <Input
-              id="email"
-              type="email"
-              placeholder="请输入邮箱"
-              className="pl-10"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isLoading}
-            />
           </div>
         </div>
 
@@ -250,14 +253,14 @@ export function Register({ navigate, goBack }: RegisterProps) {
           </div>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-start space-x-2">
           <Checkbox
             id="terms"
             checked={agreeTerms}
             onCheckedChange={(checked) => setAgreeTerms(!!checked)}
             disabled={isLoading}
           />
-          <Label htmlFor="terms" className="text-sm">
+          <Label htmlFor="terms" className="text-sm leading-tight">
             我已阅读并同意
             <Button
               variant="link"

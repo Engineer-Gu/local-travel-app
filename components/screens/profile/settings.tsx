@@ -1,10 +1,12 @@
 "use client"
 
-import { ArrowLeft, ChevronRight, Moon, Bell, Shield, Info, LogOut } from "lucide-react"
+import { useState } from "react"
+import { ArrowLeft, ChevronRight, Moon, Bell, Shield, Info, LogOut, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import type { Screen } from "@/components/mobile-app"
+import { userService, authService } from "@/lib/services/user-service"
 
 interface SettingsProps {
   goBack: () => void
@@ -12,6 +14,33 @@ interface SettingsProps {
 }
 
 export function Settings({ goBack, navigate }: SettingsProps) {
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  /**
+   * 退出登录处理
+   */
+  const handleLogout = () => {
+    setIsLoggingOut(true)
+
+    // 调用登出API
+    userService
+      .logout()
+      .then(() => {
+        // 清除本地存储的认证信息
+        authService.clearAuth()
+        setIsLoggingOut(false)
+        // 跳转到登录页面
+        navigate("login")
+      })
+      .catch((error) => {
+        console.error("登出失败", error)
+        // 即使API调用失败，也清除本地信息并跳转
+        authService.clearAuth()
+        setIsLoggingOut(false)
+        navigate("login")
+      })
+  }
+
   return (
     <div className="p-4 pb-16">
       <div className="flex items-center mb-6">
@@ -124,9 +153,18 @@ export function Settings({ goBack, navigate }: SettingsProps) {
           </Card>
         </div>
 
-        <Button variant="destructive" className="w-full" onClick={() => navigate("login")}>
-          <LogOut size={16} className="mr-2" />
-          退出登录
+        <Button variant="destructive" className="w-full" onClick={handleLogout} disabled={isLoggingOut}>
+          {isLoggingOut ? (
+            <>
+              <Loader2 className="animate-spin mr-2" size={16} />
+              退出中...
+            </>
+          ) : (
+            <>
+              <LogOut size={16} className="mr-2" />
+              退出登录
+            </>
+          )}
         </Button>
       </div>
     </div>
