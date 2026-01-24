@@ -259,7 +259,10 @@ export function Profile({ navigate }: ProfileProps) {
       <div className="bg-gradient-to-r from-blue-500 to-blue-700 p-4 text-white">
         <div className="flex items-center">
           <Avatar className="h-16 w-16 border-2 border-white">
-            <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.nickname || "用户"} />
+            <AvatarImage
+              src={user.avatar ? `data:image/jpeg;base64,${user.avatar}` : "/placeholder.svg"}
+              alt={user.nickname || "用户"}
+            />
             <AvatarFallback>{(user.nickname || "用").slice(0, 2)}</AvatarFallback>
           </Avatar>
           <div className="ml-4 flex-1">

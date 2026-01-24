@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { ArrowLeft, Camera, Calendar, MapPin, User, AlertCircle, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -28,6 +28,8 @@ export function EditProfile({ goBack }: EditProfileProps) {
   const [isLoadingUser, setIsLoadingUser] = useState(true)
   const [errorMessage, setErrorMessage] = useState("")
   const [successMessage, setSuccessMessage] = useState("")
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   /**
    * 加载用户信息
@@ -126,6 +128,77 @@ export function EditProfile({ goBack }: EditProfileProps) {
     return "保密"
   }
 
+  /**
+   * 处理文件选择
+   */
+  const handleFileSelect = () => {
+    fileInputRef.current?.click()
+  }
+
+  /**
+   * 处理头像上传
+   */
+  const handleAvatarChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // 验证文件类型
+    if (!file.type.startsWith("image/")) {
+      setErrorMessage("请选择图片文件")
+      return
+    }
+
+    // 验证文件大小（2MB）
+    if (file.size > 2 * 1024 * 1024) {
+      setErrorMessage("图片大小不能超过2MB")
+      return
+    }
+
+    setIsUploadingAvatar(true)
+    setErrorMessage("")
+
+    try {
+      // 将文件转换为Base64
+      const reader = new FileReader()
+      reader.onloadend = async () => {
+        const base64Data = reader.result as string
+
+        try {
+          // 调用上传接口
+          const updatedUser = await userService.uploadAvatar(base64Data)
+          setUser(updatedUser)
+
+          // 更新本地存储
+          const auth = authService.getAuth()
+          if (auth.user) {
+            authService.saveAuth(auth.token, auth.refreshToken || "", updatedUser)
+          }
+
+          setSuccessMessage("头像上传成功")
+        } catch (error: any) {
+          console.error("头像上传失败", error)
+          setErrorMessage(error.message || "头像上传失败，请稍后重试")
+        } finally {
+          setIsUploadingAvatar(false)
+        }
+      }
+      reader.onerror = () => {
+        setErrorMessage("文件读取失败")
+        setIsUploadingAvatar(false)
+      }
+      reader.readAsDataURL(file)
+    } catch (error: any) {
+      console.error("头像上传失败", error)
+      setErrorMessage(error.message || "头像上传失败，请稍后重试")
+      setIsUploadingAvatar(false)
+    }
+
+    // 清空input值，允许重复上传同一文件
+    if (event.target) {
+      event.target.value = ""
+    }
+  }
+
   if (isLoadingUser) {
     return (
       <div className="p-4 h-full flex items-center justify-center">
@@ -164,20 +237,30 @@ export function EditProfile({ goBack }: EditProfileProps) {
       <div className="flex flex-col items-center mb-6">
         <div className="relative">
           <Avatar className="h-24 w-24">
-            <AvatarImage src={user?.avatar || "/placeholder.svg"} alt="用户头像" />
+            <AvatarImage
+              src={user?.avatar ? `data:image/jpeg;base64,${user.avatar}` : "/placeholder.svg"}
+              alt="用户头像"
+            />
             <AvatarFallback>{user?.nickname?.substring(0, 1) || "用"}</AvatarFallback>
           </Avatar>
-          {/* TODO: 实现头像上传功能 */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+            className="hidden"
+          />
           <Button
             variant="secondary"
             size="icon"
             className="absolute bottom-0 right-0 rounded-full h-8 w-8"
-            disabled={isLoading}
+            onClick={handleFileSelect}
+            disabled={isLoading || isUploadingAvatar}
           >
-            <Camera size={16} />
+            {isUploadingAvatar ? <Loader2 className="animate-spin" size={16} /> : <Camera size={16} />}
           </Button>
         </div>
-        <Button variant="link" className="mt-2" disabled={isLoading}>
+        <Button variant="link" className="mt-2" onClick={handleFileSelect} disabled={isLoading || isUploadingAvatar}>
           更换头像
         </Button>
       </div>

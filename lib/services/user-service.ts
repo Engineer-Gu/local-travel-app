@@ -267,18 +267,14 @@ export const userService = {
 
   /**
    * 上传头像
-   * @param file - 头像文件
-   * @returns Promise with avatar URL
+   * @param base64Data - 头像Base64数据
+   * @returns Promise with updated user info
    */
-  async uploadAvatar(file: File): Promise<string> {
-    const formData = new FormData()
-    formData.append("file", file)
-    const response: ApiResponse<{ avatarUrl: string }> = await api.post("/api/user/uploadAvatar", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+  async uploadAvatar(base64Data: string): Promise<User> {
+    const response: ApiResponse<User> = await api.post("/api/user/avatar/upload", {
+      base64Data,
     })
-    return response.data.avatarUrl
+    return response.data
   },
 
   // ==================== 兴趣标签相关接口 ====================
