@@ -21,11 +21,8 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { useToast } from "@/hooks/use-toast"
 import type { Screen } from "@/components/mobile-app"
-
-// 以下是后端API服务导入，目前注释掉
-// import { api } from "@/lib/api"
-// import { routeService } from "@/lib/services/route-service"
-// import { userService } from "@/lib/services/user-service"
+import { userService } from "@/lib/services/user-service"
+import { authService } from "@/lib/services/user-service"
 
 interface HomeProps {
   navigate: (screen: Screen, params?: Record<string, any>) => void
@@ -109,38 +106,73 @@ export function Home({ navigate }: HomeProps) {
   ])
   const [isLoading, setIsLoading] = useState(false)
 
+  // 检查今日是否已签到（移到 useEffect 前面）
+  const checkTodayCheckin = async () => {
+    console.log("开始检查今日签到状态...")
+    try {
+      const hasCheckedIn = await userService.hasCheckedInToday()
+      console.log("签到状态查询结果:", hasCheckedIn)
+      setHasCheckedIn(hasCheckedIn)
+    } catch (error) {
+      console.error("获取签到状态失败", error)
+    }
+  }
+
   // 检查登录状态
   useEffect(() => {
-    // 以下是连接真实后端的代码，目前注释掉
-    /*
-    const token = localStorage.getItem('token')
+    console.log("Home 组件 useEffect 执行")
+    // 初始化检查
+    const auth = authService.getAuth()
+    const token = auth.token
     setIsLoggedIn(!!token)
-    
-    // 检查今日是否已签到
+
     if (token) {
       checkTodayCheckin()
     }
-    
-    // 获取热门路线
-    fetchPopularRoutes()
-    
-    // 获取本地玩家推荐
-    fetchLocalPlayers()
-    */
-  }, [])
 
-  // 检查今日是否已签到
-  const checkTodayCheckin = async () => {
-    // 以下是连接真实后端的代码，目前注释掉
-    /*
-    try {
-      const response = await api.get('/api/checkins/today')
-      setHasCheckedIn(response.hasCheckedIn)
-    } catch (error) {
-      console.error('获取签到状态失败', error)
+    // 添加页面可见性监听，从其他页面返回时刷新签到状态
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        console.log("页面可见性变化，重新检查签到状态")
+        const auth = authService.getAuth()
+        const token = auth.token
+        if (token) {
+          checkTodayCheckin()
+        }
+      }
     }
-    */
-  }
+
+    // 添加页面焦点监听
+    const handleFocus = () => {
+      console.log("窗口获得焦点，重新检查签到状态")
+      const auth = authService.getAuth()
+      const token = auth.token
+      if (token) {
+        checkTodayCheckin()
+      }
+    }
+
+    // 监听路由返回事件（使用 popstate）
+    const handlePopState = () => {
+      console.log("路由返回，重新检查签到状态")
+      const auth = authService.getAuth()
+      const token = auth.token
+      if (token) {
+        checkTodayCheckin()
+      }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+    window.addEventListener("focus", handleFocus)
+    window.addEventListener("popstate", handlePopState)
+
+    // 清理监听器
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
+      window.removeEventListener("focus", handleFocus)
+      window.removeEventListener("popstate", handlePopState)
+    }
+  }, [])
 
   // 获取热门路线
   const fetchPopularRoutes = async () => {
@@ -177,7 +209,7 @@ export function Home({ navigate }: HomeProps) {
   }
 
   // 处理签到功能
-  const handleCheckIn = () => {
+  const handleCheckIn = async () => {
     console.log("签到按钮被点击")
 
     if (hasCheckedIn) {
@@ -188,40 +220,23 @@ export function Home({ navigate }: HomeProps) {
       return
     }
 
-    // 以下是连接真实后端的代码，目前注释掉
-    /*
     try {
-      const response = await api.post('/api/checkins')
+      const response = await userService.checkin()
       setHasCheckedIn(true)
       toast({
-        title: "签到成功",
-        description: `恭喜获得${response.points}积分！已连续签到${response.continuousDays}天`,
+        title: response.success ? "签到成功" : "签到提示",
+        description: response.message || `连续签到${response.continuousDays}天，获得${response.pointsEarned}积分`,
       })
-      
+
+      // 签到成功后跳转到签到页面
       navigate("checkin")
-      return
-    } catch (error) {
-      console.error('签到失败', error)
+    } catch (error: any) {
+      console.error("签到失败", error)
       toast({
         title: "签到失败",
-        description: "请稍后重试",
+        description: error.message || "请稍后重试",
         variant: "destructive",
       })
-      return
-    }
-    */
-
-    // 以下是mock数据交互，保持不变
-    setHasCheckedIn(true)
-    toast({
-      title: "签到成功",
-      description: "恭喜获得15积分！已连续签到3天",
-    })
-
-    // 确保navigate函数存在
-    if (typeof navigate === "function") {
-      // 模拟导航到签到页面
-      navigate("checkin")
     }
   }
 
@@ -342,14 +357,10 @@ export function Home({ navigate }: HomeProps) {
           className={`flex flex-col items-center justify-center p-1 h-auto min-w-[50px] ${
             hasCheckedIn ? "bg-blue-50 text-blue-500 border-blue-200" : ""
           }`}
-          onClick={() => {
-            if (typeof handleCheckIn === "function") {
-              handleCheckIn()
-            }
-          }}
+          onClick={() => navigate("checkin")}
         >
           <CheckSquare size={18} className={`${hasCheckedIn ? "text-blue-500" : ""} mb-1`} />
-          <span className="text-xs">签到</span>
+          <span className="text-xs">{hasCheckedIn ? "已签到" : "签到"}</span>
         </Button>
       </div>
 

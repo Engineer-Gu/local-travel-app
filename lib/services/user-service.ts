@@ -257,6 +257,44 @@ export const userService = {
   },
 
   /**
+   * 检查今日是否已签到
+   * @returns Promise with boolean
+   */
+  async hasCheckedInToday(): Promise<boolean> {
+    const response: ApiResponse<boolean> = await api.get("/api/user/checkin/status")
+    return response.data
+  },
+
+  /**
+   * 获取签到历史记录
+   * @param year - 年份
+   * @param month - 月份
+   * @returns Promise with checkin history
+   */
+  async getCheckinHistory(
+    year?: number,
+    month?: number
+  ): Promise<{
+    continuousDays: number
+    totalDays: number
+    totalPoints: number
+    hasCheckedInToday: boolean
+    checkedDaysInMonth: number[]
+    records: Array<{
+      checkinDate: string
+      continuousDays: number
+      pointsEarned: number
+    }>
+  }> {
+    const params: any = {}
+    if (year !== undefined) params.year = year
+    if (month !== undefined) params.month = month
+
+    const response: ApiResponse<any> = await api.get("/api/user/checkin/history", { params })
+    return response.data
+  },
+
+  /**
    * 提交实名认证
    * @param data - 实名认证数据
    * @returns Promise

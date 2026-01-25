@@ -1,24 +1,72 @@
 "use client"
 
-import { useState } from "react"
-import { ArrowLeft, Calendar, Gift, Award, ChevronRight } from "lucide-react"
+import { useState, useEffect } from "react"
+import { ArrowLeft, Calendar, Gift, Award, ChevronRight, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { useToast } from "@/hooks/use-toast"
 import type { Screen } from "@/components/mobile-app"
+import { userService } from "@/lib/services/user-service"
 
 interface CheckinProps {
+  goBack?: () => void
   navigate: (screen: Screen, params?: Record<string, any>) => void
 }
 
-export function Checkin({ navigate }: CheckinProps) {
+export function Checkin({ goBack, navigate }: CheckinProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date())
-  const [checkedDays, setCheckedDays] = useState<number[]>([1, 2, 3]) // 假设已经签到了3天
-  const [currentStreak, setCurrentStreak] = useState(3)
-  const [totalPoints, setTotalPoints] = useState(45)
+  const [checkedDays, setCheckedDays] = useState<number[]>([])
+  const [currentStreak, setCurrentStreak] = useState(0)
+  const [totalDays, setTotalDays] = useState(0)
+  const [totalPoints, setTotalPoints] = useState(0)
+  const [hasCheckedInToday, setHasCheckedInToday] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const { toast } = useToast()
+
+  // 加载签到历史数据
+  useEffect(() => {
+    console.log("签到页面 useEffect 触发，月份:", currentMonth.getMonth() + 1)
+    loadCheckinHistory()
+  }, [currentMonth])
+
+  const loadCheckinHistory = async () => {
+    console.log("开始加载签到历史...")
+    try {
+      setIsLoading(true)
+      const year = currentMonth.getFullYear()
+      const month = currentMonth.getMonth() + 1 // 月份从0开始，需要+1
+
+      console.log("请求签到历史:", { year, month })
+      const history = await userService.getCheckinHistory(year, month)
+
+      console.log("签到历史数据:", history)
+
+      setCheckedDays(history.checkedDaysInMonth || [])
+      setCurrentStreak(history.continuousDays || 0)
+      setTotalDays(history.totalDays || 0)
+      setTotalPoints(history.totalPoints || 0)
+      setHasCheckedInToday(history.hasCheckedInToday || false)
+
+      console.log("签到状态更新完成:", {
+        checkedDays: history.checkedDaysInMonth,
+        continuousDays: history.continuousDays,
+        totalDays: history.totalDays,
+        totalPoints: history.totalPoints,
+        hasCheckedInToday: history.hasCheckedInToday,
+      })
+    } catch (error) {
+      console.error("加载签到历史失败", error)
+      toast({
+        title: "加载失败",
+        description: "无法加载签到记录，请稍后重试",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   // 获取当前月份的天数
   const getDaysInMonth = (year: number, month: number) => {
@@ -61,10 +109,10 @@ export function Checkin({ navigate }: CheckinProps) {
   }
 
   // 处理签到
-  const handleCheckIn = () => {
-    const today = new Date().getDate()
+  const handleCheckIn = async () => {
+    console.log("签到页面签到按钮被点击，当前状态 hasCheckedInToday:", hasCheckedInToday)
 
-    if (checkedDays.includes(today)) {
+    if (hasCheckedInToday) {
       toast({
         title: "今日已签到",
         description: "明天再来签到获取更多积分吧！",
@@ -72,15 +120,27 @@ export function Checkin({ navigate }: CheckinProps) {
       return
     }
 
-    const newCheckedDays = [...checkedDays, today]
-    setCheckedDays(newCheckedDays)
-    setCurrentStreak(currentStreak + 1)
-    setTotalPoints(totalPoints + 15)
+    try {
+      console.log("开始调用签到接口...")
+      const response = await userService.checkin()
+      console.log("签到接口返回:", response)
 
-    toast({
-      title: "签到成功",
-      description: `恭喜获得15积分！已连续签到${currentStreak + 1}天`,
-    })
+      toast({
+        title: "签到成功",
+        description: response.message || `恭喜获得${response.pointsEarned}积分！已连续签到${response.continuousDays}天`,
+      })
+
+      // 签到成功后，重新加载数据以确保所有状态都是最新的
+      console.log("签到成功，重新加载签到历史...")
+      await loadCheckinHistory()
+    } catch (error: any) {
+      console.error("签到失败", error)
+      toast({
+        title: "签到失败",
+        description: error.message || "请稍后重试",
+        variant: "destructive",
+      })
+    }
   }
 
   // 月份名称
@@ -102,10 +162,21 @@ export function Checkin({ navigate }: CheckinProps) {
   // 周几名称
   const weekDays = ["日", "一", "二", "三", "四", "五", "六"]
 
+  if (isLoading) {
+    return (
+      <div className="p-4 flex items-center justify-center h-full">
+        <div className="text-center">
+          <Loader2 className="animate-spin mx-auto mb-2" size={32} />
+          <p className="text-gray-500">加载中...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="p-4 pb-16">
       <div className="flex items-center mb-6">
-        <Button variant="ghost" size="icon" onClick={() => navigate("home")}>
+        <Button variant="ghost" size="icon" onClick={() => goBack ? goBack() : navigate("home")}>
           <ArrowLeft />
         </Button>
         <h1 className="text-xl font-bold ml-2">每日签到</h1>
@@ -127,6 +198,16 @@ export function Checkin({ navigate }: CheckinProps) {
           </div>
 
           <Progress value={(currentStreak / 7) * 100} className="h-2 mb-4" />
+
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-sm text-gray-500">累计签到</span>
+            <Badge variant="outline">{totalDays}天</Badge>
+          </div>
+
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-sm text-gray-500">当前积分</span>
+            <Badge className="bg-green-500">{totalPoints}分</Badge>
+          </div>
 
           <div className="grid grid-cols-7 gap-2 mb-4">
             {[5, 10, 15, 20, 30, 40, 50].map((points, index) => (
@@ -153,9 +234,9 @@ export function Checkin({ navigate }: CheckinProps) {
           <Button
             className="w-full bg-blue-500 hover:bg-blue-600"
             onClick={handleCheckIn}
-            disabled={checkedDays.includes(new Date().getDate())}
+            disabled={hasCheckedInToday}
           >
-            {checkedDays.includes(new Date().getDate()) ? "今日已签到" : "立即签到"}
+            {hasCheckedInToday ? "今日已签到" : "立即签到"}
           </Button>
         </CardContent>
       </Card>
