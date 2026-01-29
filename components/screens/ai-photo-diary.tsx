@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { ArrowLeft, Camera, ImageIcon, Sparkles, MapPin, Calendar, Tag, Save, Trash, Edit, Check } from "lucide-react"
 import { cameraService, hapticService } from "@/lib/mobile-services"
 import { Button } from "@/components/ui/button"
@@ -19,6 +19,7 @@ interface AIPhotoDiaryProps {
 // 确保正确导出组件
 export function AIPhotoDiary({ navigate, goBack }: AIPhotoDiaryProps) {
   const { toast } = useToast()
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [step, setStep] = useState<"upload" | "generate" | "edit">("upload")
   const [photos, setPhotos] = useState<string[]>([])
   const [isGenerating, setIsGenerating] = useState(false)
@@ -30,67 +31,112 @@ export function AIPhotoDiary({ navigate, goBack }: AIPhotoDiaryProps) {
   const [newTag, setNewTag] = useState("")
   const [editingContent, setEditingContent] = useState("")
 
+  // 处理文件选择 fallback for Web
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        const photoData = event.target?.result as string
+        if (photoData) {
+          if (photos.length < 5) {
+            setPhotos([...photos, photoData])
+            toast({
+              title: "照片已添加",
+              description: `已添加第${photos.length + 1}张照片`,
+            })
+          } else {
+            toast({
+              title: "照片数量已达上限",
+              description: "最多只能添加5张照片",
+              variant: "destructive",
+            })
+          }
+        }
+      }
+      reader.readAsDataURL(file)
+    }
+    // 重置 input value 以便下次还可以选择同一个文件
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
+  }
+
   // 拍照功能
   const handleTakePhoto = async () => {
     try {
-      await hapticService.impact('light');
-      const photoData = await cameraService.takePhoto();
-      
+      if (typeof window !== "undefined" && !window?.Capacitor?.isNative) {
+        // Web 环境下直接调用文件选择器 (模拟拍照)
+        if (fileInputRef.current) {
+          fileInputRef.current.click()
+        }
+        return
+      }
+
+      await hapticService.impact("light")
+      const photoData = await cameraService.takePhoto()
+
       if (photoData) {
         if (photos.length < 5) {
-          setPhotos([...photos, photoData]);
+          setPhotos([...photos, photoData])
           toast({
             title: "照片已添加",
             description: `已添加第${photos.length + 1}张照片`,
-          });
+          })
         } else {
           toast({
             title: "照片数量已达上限",
             description: "最多只能添加5张照片",
-            variant: "destructive"
-          });
+            variant: "destructive",
+          })
         }
       }
     } catch (error) {
-      console.error('Camera error:', error);
-      toast({
-        title: "拍照失败",
-        description: "请检查相机权限",
-        variant: "destructive"
-      });
+      console.error("Camera error:", error)
+      // Fallback
+      if (fileInputRef.current) {
+        fileInputRef.current.click()
+      }
     }
-  };
+  }
 
   // 选择相册照片
   const handlePickImage = async () => {
     try {
-      await hapticService.impact('light');
-      const photoData = await cameraService.pickImage();
-      
+      if (typeof window !== "undefined" && !window?.Capacitor?.isNative) {
+        // Web 环境下直接调用文件选择器
+        if (fileInputRef.current) {
+          fileInputRef.current.click()
+        }
+        return
+      }
+
+      await hapticService.impact("light")
+      const photoData = await cameraService.pickImage()
+
       if (photoData) {
         if (photos.length < 5) {
-          setPhotos([...photos, photoData]);
+          setPhotos([...photos, photoData])
           toast({
             title: "照片已添加",
             description: `已添加第${photos.length + 1}张照片`,
-          });
+          })
         } else {
           toast({
             title: "照片数量已达上限",
             description: "最多只能添加5张照片",
-            variant: "destructive"
-          });
+            variant: "destructive",
+          })
         }
       }
     } catch (error) {
-      console.error('Pick image error:', error);
-      toast({
-        title: "选择照片失败",
-        description: "请检查相册权限",
-        variant: "destructive"
-      });
+      console.error("Pick image error:", error)
+      // Fallback
+      if (fileInputRef.current) {
+        fileInputRef.current.click()
+      }
     }
-  };
+  }
 
   const handleRemovePhoto = (index: number) => {
     const newPhotos = [...photos]
@@ -236,6 +282,7 @@ export function AIPhotoDiary({ navigate, goBack }: AIPhotoDiaryProps) {
           </>
         )}
       </Button>
+      <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
     </div>
   )
 

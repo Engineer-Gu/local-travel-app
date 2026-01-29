@@ -264,9 +264,9 @@ export function Login({ navigate, goBack }: LoginProps) {
 
         <div className="flex justify-center space-x-6 mt-4">
           {[
-            { name: "微信", color: "bg-green-500", icon: "/placeholder.svg?height=40&width=40&text=微信" },
-            { name: "QQ", color: "bg-blue-500", icon: "/placeholder.svg?height=40&width=40&text=QQ" },
-            { name: "微博", color: "bg-red-500", icon: "/placeholder.svg?height=40&width=40&text=微博" },
+            { name: "微信", color: "bg-green-500", icon: "/images/icon_wechat.svg" },
+            { name: "QQ", color: "bg-blue-500", icon: "/images/icon_qq.svg" },
+            { name: "微博", color: "bg-red-500", icon: "/images/icon_weibo.svg" },
           ].map((platform) => (
             <button key={platform.name} className="flex flex-col items-center" disabled={isLoading}>
               <div className={`w-10 h-10 rounded-full ${platform.color} flex items-center justify-center`}>

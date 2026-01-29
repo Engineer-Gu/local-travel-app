@@ -361,14 +361,14 @@ export function PaymentPage({ goBack, items, totalAmount, orderType, orderId }: 
             <div className="flex items-center space-x-2 mb-3">
               <RadioGroupItem value="wechat" id="wechat" />
               <Label htmlFor="wechat" className="flex items-center">
-                <img src="/placeholder.svg?height=16&width=16&text=微信" alt="微信支付" className="w-4 h-4 mr-2" />
+                <img src="/images/icon_wechat.svg" alt="微信支付" className="w-4 h-4 mr-2" />
                 微信支付
               </Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="alipay" id="alipay" />
               <Label htmlFor="alipay" className="flex items-center">
-                <img src="/placeholder.svg?height=16&width=16&text=支付宝" alt="支付宝" className="w-4 h-4 mr-2" />
+                <img src="/images/icon_alipay.svg" alt="支付宝" className="w-4 h-4 mr-2" />
                 支付宝
               </Label>
             </div>
