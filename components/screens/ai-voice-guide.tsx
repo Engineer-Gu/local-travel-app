@@ -28,7 +28,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 
 interface AIVoiceGuideProps {
   navigate: (screen: Screen, params?: Record<string, any>) => void
@@ -313,10 +313,10 @@ export function AIVoiceGuide({
   const filteredLocations =
     selectedRegion && locationsByRegion[selectedRegion.id]
       ? locationsByRegion[selectedRegion.id].filter(
-          (loc) =>
-            loc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            loc.description.toLowerCase().includes(searchQuery.toLowerCase()),
-        )
+        (loc) =>
+          loc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          loc.description.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
       : []
 
   // 选择地区

@@ -4,7 +4,7 @@ import { ArrowLeft, CreditCard, Plus, ArrowDownRight, ArrowUpRight, Filter } fro
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 
 interface WalletProps {
   goBack: () => void
@@ -95,9 +95,8 @@ export function Wallet({ goBack, navigate }: WalletProps) {
               <CardContent className="p-3">
                 <div className="flex items-center">
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      transaction.amount > 0 ? "bg-green-100" : "bg-red-100"
-                    }`}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center ${transaction.amount > 0 ? "bg-green-100" : "bg-red-100"
+                      }`}
                   >
                     {transaction.amount > 0 ? (
                       <ArrowDownRight size={20} className="text-green-600" />

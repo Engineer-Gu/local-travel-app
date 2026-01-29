@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 import { userService } from "@/lib/services/user-service"
 
 interface RegisterProps {

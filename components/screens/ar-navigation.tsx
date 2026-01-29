@@ -25,7 +25,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { useToast } from "@/hooks/use-toast"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 
 interface ARNavigationProps {
   navigate: (screen: Screen, params?: Record<string, any>) => void
@@ -44,7 +44,7 @@ export function ARNavigation({ navigate, goBack, destination }: ARNavigationProp
   const [progress, setProgress] = useState(0)
   const [remainingTime, setRemainingTime] = useState(10)
   const [remainingDistance, setRemainingDistance] = useState(0.5)
-  const [currentLocation, setCurrentLocation] = useState<{latitude: number, longitude: number} | null>(null)
+  const [currentLocation, setCurrentLocation] = useState<{ latitude: number, longitude: number } | null>(null)
   const [locationPermission, setLocationPermission] = useState<boolean>(false)
   const [nearbySpots, setNearbySpots] = useState<
     Array<{ id: string; name: string; distance: string; type: string; image?: string }>
@@ -88,7 +88,7 @@ export function ARNavigation({ navigate, goBack, destination }: ARNavigationProp
         // 请求位置权限
         const hasPermission = await geolocationService.requestPermissions();
         setLocationPermission(hasPermission);
-        
+
         if (hasPermission) {
           // 获取当前位置
           const position = await geolocationService.getCurrentPosition();
@@ -113,7 +113,7 @@ export function ARNavigation({ navigate, goBack, destination }: ARNavigationProp
       } catch (error) {
         console.error('Location error:', error);
         toast({
-          title: "位置获取失败", 
+          title: "位置获取失败",
           description: "将使用模拟位置进行导航",
           variant: "destructive"
         });
@@ -463,9 +463,8 @@ export function ARNavigation({ navigate, goBack, destination }: ARNavigationProp
             <div className="relative animate-float-slow">
               <div className="flex flex-col items-center">
                 <div
-                  className={`w-[36px] h-[36px] ${
-                    spot.type === "景点" ? "bg-green-500" : "bg-amber-500"
-                  } rounded-full flex items-center justify-center shadow-lg mb-1`}
+                  className={`w-[36px] h-[36px] ${spot.type === "景点" ? "bg-green-500" : "bg-amber-500"
+                    } rounded-full flex items-center justify-center shadow-lg mb-1`}
                 >
                   <MapPin size={18} className="text-white" />
                 </div>
@@ -473,9 +472,8 @@ export function ARNavigation({ navigate, goBack, destination }: ARNavigationProp
                   className={`h-[20px] w-[3px] ${spot.type === "景点" ? "bg-green-500" : "bg-amber-500"} rounded-full`}
                 ></div>
                 <div
-                  className={`${
-                    spot.type === "景点" ? "bg-green-500/80" : "bg-amber-500/80"
-                  } px-2 py-1 rounded text-white text-xs font-medium mt-1 whitespace-nowrap`}
+                  className={`${spot.type === "景点" ? "bg-green-500/80" : "bg-amber-500/80"
+                    } px-2 py-1 rounded text-white text-xs font-medium mt-1 whitespace-nowrap`}
                 >
                   {spot.name}
                 </div>
@@ -622,20 +620,18 @@ export function ARNavigation({ navigate, goBack, destination }: ARNavigationProp
                 {navigationSteps.map((step, index) => (
                   <div
                     key={index}
-                    className={`flex items-center p-2 rounded-lg ${
-                      index === currentStepIndex
+                    className={`flex items-center p-2 rounded-lg ${index === currentStepIndex
                         ? "bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
                         : ""
-                    }`}
+                      }`}
                   >
                     <div
-                      className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${
-                        step.completed
+                      className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${step.completed
                           ? "bg-green-500 text-white"
                           : index === currentStepIndex
                             ? "bg-blue-500 text-white"
                             : "bg-gray-200 text-gray-500"
-                      }`}
+                        }`}
                     >
                       {step.completed ? <Check size={14} /> : index + 1}
                     </div>
@@ -744,9 +740,8 @@ export function ARNavigation({ navigate, goBack, destination }: ARNavigationProp
             onClick={() => handleSpotClick(spot.id)}
           >
             <div
-              className={`h-6 w-6 rounded-full flex items-center justify-center ${
-                spot.type === "景点" ? "bg-green-500" : "bg-amber-500"
-              } text-white`}
+              className={`h-6 w-6 rounded-full flex items-center justify-center ${spot.type === "景点" ? "bg-green-500" : "bg-amber-500"
+                } text-white`}
             >
               <MapPin size={14} />
             </div>
@@ -836,20 +831,18 @@ export function ARNavigation({ navigate, goBack, destination }: ARNavigationProp
                 {navigationSteps.map((step, index) => (
                   <div
                     key={index}
-                    className={`flex items-center p-2 rounded-lg ${
-                      index === currentStepIndex
+                    className={`flex items-center p-2 rounded-lg ${index === currentStepIndex
                         ? "bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
                         : ""
-                    }`}
+                      }`}
                   >
                     <div
-                      className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${
-                        step.completed
+                      className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${step.completed
                           ? "bg-green-500 text-white"
                           : index === currentStepIndex
                             ? "bg-blue-500 text-white"
                             : "bg-gray-200 text-gray-500"
-                      }`}
+                        }`}
                     >
                       {step.completed ? <Check size={14} /> : index + 1}
                     </div>

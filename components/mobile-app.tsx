@@ -270,7 +270,7 @@ export function MobileApp() {
   }
 
   // Only show bottom navigation on main tabs
-  const isMainTab = ["home", "planning", "social", "guides", "shop", "profile"].includes(currentNavigation.screen)
+  const isMainTab = ["home", "planning", "social", "guides", "shop", "profile", "ai-photo-diary"].includes(currentNavigation.screen)
 
   // 基于移动端检测决定容器样式
   const containerClass = isNative()
@@ -286,7 +286,7 @@ export function MobileApp() {
       </div>
       {isMainTab && (
         <BottomNavigation
-          currentScreen={currentNavigation.screen as "home" | "planning" | "social" | "guides" | "shop" | "profile"}
+          currentScreen={currentNavigation.screen}
           onChangeScreen={navigateToTab}
         />
       )}

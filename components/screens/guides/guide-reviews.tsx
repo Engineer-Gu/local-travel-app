@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 
 interface GuideReviewsProps {
   guide: {

@@ -16,13 +16,15 @@ import {
   ShoppingBag,
   Package,
   Edit2,
+  AlertTriangle,
+  CheckSquare,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 import { userService, authService } from "@/lib/services/user-service"
 
 interface ProfileProps {
@@ -182,6 +184,11 @@ export function Profile({ navigate }: ProfileProps) {
           icon: <Users size={20} className="text-indigo-500" />,
           screen: "friends" as Screen,
         },
+        {
+          title: "紧急求助",
+          icon: <AlertTriangle size={20} className="text-red-500" />,
+          screen: "emergency-help" as Screen,
+        },
       ],
     },
     {
@@ -296,6 +303,16 @@ export function Profile({ navigate }: ProfileProps) {
         <div className="absolute top-0 left-0 right-0 p-4 z-20 flex justify-between items-start">
           {/* 顶部工具栏 */}
           <div className="flex space-x-2 ml-auto">
+            {/* 签到按钮 */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-white hover:bg-white/20 rounded-full h-9 px-3 mr-1 bg-white/10 backdrop-blur-md"
+              onClick={() => navigate("checkin")}
+            >
+              <CheckSquare size={16} className="mr-1" />
+              <span className="text-xs">签到</span>
+            </Button>
             <Button
               variant="ghost"
               size="icon"

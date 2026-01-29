@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { useToast } from "@/hooks/use-toast"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 import { userService } from "@/lib/services/user-service"
 
 interface CheckinProps {
@@ -213,16 +213,14 @@ export function Checkin({ goBack, navigate }: CheckinProps) {
             {[5, 10, 15, 20, 30, 40, 50].map((points, index) => (
               <div
                 key={index}
-                className={`flex flex-col items-center ${
-                  index + 1 <= currentStreak ? "text-blue-500" : "text-gray-400"
-                }`}
+                className={`flex flex-col items-center ${index + 1 <= currentStreak ? "text-blue-500" : "text-gray-400"
+                  }`}
               >
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs mb-1 ${
-                    index + 1 <= currentStreak
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs mb-1 ${index + 1 <= currentStreak
                       ? "bg-blue-100 text-blue-500 border-2 border-blue-500"
                       : "bg-gray-100 text-gray-500"
-                  }`}
+                    }`}
                 >
                   {index + 1}
                 </div>

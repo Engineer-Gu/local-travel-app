@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 // import { userService } from "@/lib/services/user-service"
 
 interface VisitedCitiesProps {
@@ -196,7 +196,7 @@ export function VisitedCities({ goBack, navigate }: VisitedCitiesProps) {
           type="text"
           placeholder="搜索城市"
           className="w-full pl-10 pr-4 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          // onChange={handleSearchChange}
+        // onChange={handleSearchChange}
         />
       </div>
 

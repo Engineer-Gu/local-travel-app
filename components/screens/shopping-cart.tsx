@@ -5,7 +5,7 @@ import { ArrowLeft, Trash2, Minus, Plus, ShoppingBag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 // import { ShopService, CartItem } from "@/lib/services/shop-service"
 
 import { useToast } from "@/components/ui/use-toast"

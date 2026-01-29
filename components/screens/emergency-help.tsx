@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 
 interface EmergencyHelpProps {
   navigate: (screen: Screen, params?: Record<string, any>) => void
@@ -249,9 +249,8 @@ export function EmergencyHelp({ navigate, goBack }: EmergencyHelpProps) {
                       <Button
                         key={service.id}
                         variant={selectedService === service.id ? "default" : "outline"}
-                        className={`flex items-center justify-start h-auto py-3 ${
-                          selectedService === service.id ? "bg-red-500 hover:bg-red-600" : ""
-                        }`}
+                        className={`flex items-center justify-start h-auto py-3 ${selectedService === service.id ? "bg-red-500 hover:bg-red-600" : ""
+                          }`}
                         onClick={() => setSelectedService(service.id)}
                       >
                         <div className="mr-2">{service.icon}</div>

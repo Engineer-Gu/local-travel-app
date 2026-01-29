@@ -22,7 +22,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 import { planningService, type City, type Location, type Route } from "@/lib/services/planning-service"
 
 interface PlanningProps {
@@ -684,7 +684,7 @@ export function Planning({ navigate, goBack, initialStep }: PlanningProps) {
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* 顶部导航 */}
-      <div className="bg-white p-4 shadow-sm sticky top-0 z-10 flex items-center justify-between">
+      <div className="bg-white p-4 shadow-sm flex items-center justify-between">
         <h1 className="text-lg font-bold">智能行程规划</h1>
         <div className="flex items-center space-x-2">
           {/* Add header actions if needed */}

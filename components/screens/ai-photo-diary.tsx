@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 
 interface AIPhotoDiaryProps {
   navigate: (screen: Screen, params?: Record<string, any>) => void
@@ -422,11 +422,9 @@ export function AIPhotoDiary({ navigate, goBack }: AIPhotoDiaryProps) {
   return (
     <div className="pb-16">
       {/* 顶部导航 */}
-      <div className="sticky top-0 z-10 bg-white dark:bg-gray-900 p-4 border-b flex items-center">
-        <Button variant="ghost" size="icon" onClick={goBack}>
-          <ArrowLeft size={20} />
-        </Button>
-        <h1 className="text-xl font-bold ml-2">AI照片日记</h1>
+      {/* 顶部导航 */}
+      <div className="sticky top-0 z-10 bg-white dark:bg-gray-900 p-4 border-b flex items-center justify-center">
+        <h1 className="text-xl font-bold">AI照片日记</h1>
       </div>
 
       {/* 主要内容 */}

@@ -5,7 +5,7 @@ import { ArrowLeft, ChevronRight, Moon, Bell, Shield, Info, LogOut, Loader2 } fr
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 import { userService, authService } from "@/lib/services/user-service"
 
 interface SettingsProps {

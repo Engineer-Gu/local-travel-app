@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { RouteProps, RouteStop, RouteReview } from "@/lib/types"
-import type { Screen } from "@/components/mobile-app"
+import type { Screen } from "@/lib/navigation-types"
 
 export interface RouteDetailProps {
   route?: RouteProps
