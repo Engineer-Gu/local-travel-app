@@ -12,10 +12,6 @@ interface BottomNavigationProps {
 export function BottomNavigation({ currentScreen, onChangeScreen }: BottomNavigationProps) {
   const navItems = [
     { id: "home", icon: Home, label: "首页" },
-    { id: "planning", icon: MapPin, label: "规划" },
-    { id: "social", icon: Users, label: "社交" },
-    { id: "guides", icon: Compass, label: "导游" },
-    { id: "shop", icon: ShoppingBag, label: "商城" },
     { id: "profile", icon: User, label: "我" },
   ]
 
@@ -28,9 +24,8 @@ export function BottomNavigation({ currentScreen, onChangeScreen }: BottomNaviga
         return (
           <button
             key={item.id}
-            className={`flex flex-col items-center justify-center w-12 py-1 ${
-              isActive ? "text-blue-600" : "text-gray-500"
-            }`}
+            className={`flex flex-col items-center justify-center w-12 py-1 ${isActive ? "text-blue-600" : "text-gray-500"
+              }`}
             onClick={() => onChangeScreen(item.id as Screen)}
           >
             <Icon size={20} className={isActive ? "text-blue-600" : "text-gray-500"} />

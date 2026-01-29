@@ -7,16 +7,18 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
+import { useToast } from "@/components/ui/use-toast"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-// Add these imports at the top of the file (commented out)
-// import { userService } from "@/lib/services/user-service"
+// ... (other imports)
 
 interface FriendRequestProps {
   goBack: () => void
 }
 
 export function FriendRequest({ goBack }: FriendRequestProps) {
+  const { toast } = useToast()
+
   const [message, setMessage] = useState("")
   const [requestSent, setRequestSent] = useState(false)
   const [receivedRequests, setReceivedRequests] = useState([
@@ -34,88 +36,27 @@ export function FriendRequest({ goBack }: FriendRequestProps) {
     },
   ])
 
-  // Add these functions inside the FriendRequest component (commented out)
-  /*
-    // 获取好友请求详情
-    const fetchRequestDetails = async () => {
-      try {
-        setIsLoading(true)
-        const requestDetails = await api.get(`/social/friend-requests/${requestId}`)
-        setRequest(requestDetails)
-        setIsLoading(false)
-      } catch (error) {
-        console.error('获取请求详情失败', error)
-        toast({
-          title: "获取请求详情失败",
-          description: "请稍后重试",
-          variant: "destructive",
-        })
-        setIsLoading(false)
-      }
-    }
-
-    // 获取用户兴趣匹配度
-    const fetchCompatibility = async () => {
-      try {
-        const compatibility = await userService.getCompatibilityScore(request.sender.id)
-        setCompatibilityData(compatibility)
-      } catch (error) {
-        console.error('获取兴趣匹配度失败', error)
-      }
-    }
-
-    // 接受好友请求
-    const handleAccept = async () => {
-      try {
-        await api.post(`/social/friend-requests/${requestId}/accept`)
-        toast({
-          title: "已接受好友请求",
-          description: "你们现在是好友了",
-        })
-        navigate("friends")
-      } catch (error) {
-        console.error('接受好友请求失败', error)
-        toast({
-          title: "操作失败",
-          description: "请稍后重试",
-          variant: "destructive",
-        })
-      }
-    }
-
-    // 拒绝好友请求
-    const handleReject = async () => {
-      try {
-        await api.post(`/social/friend-requests/${requestId}/reject`)
-        toast({
-          title: "已拒绝好友请求",
-        })
-        navigate("friends")
-      } catch (error) {
-        console.error('拒绝好友请求失败', error)
-        toast({
-          title: "操作失败",
-          description: "请稍后重试",
-          variant: "destructive",
-        })
-      }
-    }
-  */
-
   const handleSendRequest = () => {
     setRequestSent(true)
   }
 
   const handleAcceptRequest = (index: number) => {
     const newRequests = [...receivedRequests]
-    alert(`已接受${newRequests[index].name}的好友请求`)
+    toast({
+      title: "已接受好友请求",
+      description: `您已和 ${newRequests[index].name} 成为好友`
+    })
     newRequests.splice(index, 1)
     setReceivedRequests(newRequests)
   }
 
   const handleRejectRequest = (index: number) => {
     const newRequests = [...receivedRequests]
-    alert(`已拒绝${newRequests[index].name}的好友请求`)
+    toast({
+      title: "已拒绝好友请求",
+      description: `已拒绝 ${newRequests[index].name} 的好友请求`,
+      variant: "destructive"
+    })
     newRequests.splice(index, 1)
     setReceivedRequests(newRequests)
   }

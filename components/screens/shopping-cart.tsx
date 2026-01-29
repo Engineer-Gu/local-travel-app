@@ -8,6 +8,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 import type { Screen } from "@/components/mobile-app"
 // import { ShopService, CartItem } from "@/lib/services/shop-service"
 
+import { useToast } from "@/components/ui/use-toast"
+
 interface CartItem {
   id: string
   name: string
@@ -24,6 +26,7 @@ interface ShoppingCartProps {
 }
 
 export function ShoppingCart({ goBack, navigate }: ShoppingCartProps) {
+  const { toast } = useToast()
   // 模拟购物车数据
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {
@@ -182,7 +185,11 @@ export function ShoppingCart({ goBack, navigate }: ShoppingCartProps) {
   const handleCheckout = () => {
     const selectedItems = cartItems.filter((item) => item.selected)
     if (selectedItems.length === 0) {
-      alert("请选择要结算的商品")
+      toast({
+        title: "无法结算",
+        description: "请选择要结算的商品",
+        variant: "destructive",
+      })
       return
     }
 

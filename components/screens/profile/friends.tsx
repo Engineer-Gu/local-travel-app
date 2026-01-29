@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { useToast } from "@/components/ui/use-toast"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import type { Screen } from "@/components/mobile-app"
+// ... (other imports)
 
 interface FriendsProps {
   goBack: () => void
@@ -14,6 +15,8 @@ interface FriendsProps {
 }
 
 export function Friends({ goBack, navigate }: FriendsProps) {
+  const { toast } = useToast()
+
   return (
     <div className="p-4 pb-16">
       <div className="flex items-center mb-6">
@@ -146,11 +149,18 @@ export function Friends({ goBack, navigate }: FriendsProps) {
                       size="sm"
                       variant="outline"
                       className="h-8 w-8 p-0"
-                      onClick={() => alert(`已拒绝${request.name}的好友请求`)}
+                      onClick={() => toast({
+                        title: "已拒绝好友请求",
+                        description: `已拒绝 ${request.name} 的好友请求`,
+                        variant: "destructive"
+                      })}
                     >
                       <X size={16} />
                     </Button>
-                    <Button size="sm" onClick={() => alert(`已接受${request.name}的好友请求`)}>
+                    <Button size="sm" onClick={() => toast({
+                      title: "已接受好友请求",
+                      description: `您已和 ${request.name} 成为好友`
+                    })}>
                       接受
                     </Button>
                   </div>

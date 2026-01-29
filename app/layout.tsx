@@ -9,8 +9,10 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "随行伴 - 同城游玩规划与社交互动平台",
   description: "智能规划您的同城游玩路线，匹配志同道合的玩伴，享受专业导游服务",
-    generator: 'v0.dev'
+  generator: 'v0.dev'
 }
+
+import { Toaster } from "@/components/ui/toaster"
 
 export default function RootLayout({
   children,
@@ -22,6 +24,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
