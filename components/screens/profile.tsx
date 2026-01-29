@@ -11,9 +11,11 @@ import {
   CreditCard,
   Award,
   BookOpen,
+  Camera,
   Users,
   ShoppingBag,
   Package,
+  Edit2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
@@ -42,6 +44,30 @@ export function Profile({ navigate }: ProfileProps) {
   const mockTravelDays = 35
   const mockVisitedCities = 8
   const mockCompletedRoutes = 12
+
+  // 背景图状态
+  const [backgroundImage, setBackgroundImage] = useState<string>("/placeholder.svg?height=300&width=600&text=点击更换背景")
+
+  // 从本地存储加载背景图
+  useEffect(() => {
+    const savedBg = localStorage.getItem("profile_bg_image")
+    if (savedBg) {
+      setBackgroundImage(savedBg)
+    }
+  }, [])
+
+  const handleBackgroundUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const base64 = reader.result as string
+        setBackgroundImage(base64)
+        localStorage.setItem("profile_bg_image", base64)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
   // 检查登录状态和加载用户信息
   useEffect(() => {
@@ -256,64 +282,108 @@ export function Profile({ navigate }: ProfileProps) {
   return (
     <div className="pb-16">
       {/* 用户信息卡片 - 使用真实数据 */}
-      <div className="bg-gradient-to-r from-blue-500 to-blue-700 p-4 text-white">
-        <div className="flex items-center">
-          <Avatar className="h-16 w-16 border-2 border-white">
+      {/* 用户信息卡片 - 使用真实数据 */}
+      <div className="relative mb-16">
+        {/* 背景图 + 遮罩 */}
+        <div
+          className="h-64 bg-cover bg-center absolute inset-0 z-0 rounded-b-[2rem] shadow-lg overflow-hidden"
+          style={{ backgroundImage: `url(${backgroundImage})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+        </div>
+
+        {/* 更换背景按钮 - 放置在右上角 */}
+        <div className="absolute top-0 left-0 right-0 p-4 z-20 flex justify-between items-start">
+          {/* 顶部工具栏 */}
+          <div className="flex space-x-2 ml-auto">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white hover:bg-white/20 rounded-full h-9 w-9"
+              onClick={() => navigate("notifications")}
+            >
+              <Bell size={20} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white hover:bg-white/20 rounded-full h-9 w-9"
+              onClick={() => navigate("settings")}
+            >
+              <Settings size={20} />
+            </Button>
+            <label htmlFor="bg-upload" className="cursor-pointer bg-white/20 hover:bg-white/30 text-white flex items-center justify-center rounded-full h-9 w-9 backdrop-blur-md transition-all">
+              <Camera size={18} />
+              <input
+                id="bg-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleBackgroundUpload}
+              />
+            </label>
+          </div>
+        </div>
+
+        <div className="relative z-10 pt-20 pb-8 px-6 text-white flex flex-col items-center">
+          <Avatar className="h-24 w-24 border-4 border-white/30 shadow-xl mb-3">
             <AvatarImage
               src={user.avatar ? `data:image/jpeg;base64,${user.avatar}` : "/placeholder.svg"}
               alt={user.nickname || "用户"}
             />
-            <AvatarFallback>{(user.nickname || "用").slice(0, 2)}</AvatarFallback>
+            <AvatarFallback className="text-2xl bg-gray-200 text-gray-500 font-bold">{(user.nickname || "用").slice(0, 2)}</AvatarFallback>
           </Avatar>
-          <div className="ml-4 flex-1">
-            <div className="flex justify-between items-center">
-              <h1 className="text-xl font-bold">{user.nickname || "用户"}</h1>
-              <div className="flex space-x-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-white h-8 w-8"
-                  onClick={() => navigate("notifications")}
-                >
-                  <Bell size={18} />
-                </Button>
-                <Button variant="ghost" size="icon" className="text-white h-8 w-8" onClick={() => navigate("settings")}>
-                  <Settings size={18} />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white" onClick={handleEditProfile}>
-                  编辑资料
-                </Button>
-              </div>
+
+          <div className="text-center">
+            <div
+              className="flex items-center justify-center space-x-2 mb-1 cursor-pointer hover:bg-white/10 rounded-xl px-4 py-1 transition-colors group"
+              onClick={handleEditProfile}
+            >
+              <h1 className="text-2xl font-bold shadow-sm group-hover:text-blue-200 transition-colors">{user.nickname || "用户"}</h1>
+              <Edit2 size={16} className="text-white/60 group-hover:text-white transition-colors" />
             </div>
-            <div className="flex items-center mt-1">
-              <Badge className="bg-yellow-500 text-white border-none">Lv.{currentLevel}</Badge>
-              <span className="ml-2 text-sm">
+
+            <div className="flex items-center justify-center space-x-2 mb-3">
+              <Badge className="bg-yellow-500/90 hover:bg-yellow-500 text-white border-0 px-2 py-0.5 shadow-sm">Lv.{currentLevel}</Badge>
+              <span className="text-xs text-white/80 font-medium">
                 {currentPoints}/{nextLevelPoints}
               </span>
             </div>
-            <Progress value={progress} className="h-1.5 mt-1 bg-blue-300" />
+            <div className="w-32 h-1.5 bg-white/20 rounded-full mx-auto overflow-hidden">
+              <div
+                className="h-full bg-yellow-400 rounded-full shadow-[0_0_10px_rgba(250,204,21,0.5)]"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
           </div>
         </div>
 
-        <div className="flex justify-between mt-4 pt-4 border-t border-blue-400">
-          <div
-            className="text-center cursor-pointer hover:bg-blue-600 py-2 px-3 rounded-lg transition-colors"
-            onClick={handleViewVisitedCities}
-          >
-            <div className="text-xl font-bold">{mockVisitedCities}</div>
-            <div className="text-xs">去过的城市</div>
-          </div>
-          <div
-            className="text-center cursor-pointer hover:bg-blue-600 py-2 px-3 rounded-lg transition-colors"
-            onClick={handleViewCompletedRoutes}
-          >
-            <div className="text-xl font-bold">{mockCompletedRoutes}</div>
-            <div className="text-xs">完成的路线</div>
-          </div>
-          <div className="text-center cursor-pointer hover:bg-blue-600 py-2 px-3 rounded-lg transition-colors">
-            <div className="text-xl font-bold">{mockTravelDays}</div>
-            <div className="text-xs">旅行天数</div>
-          </div>
+        {/* 悬浮统计卡片 - Overlapping Card */}
+        <div className="absolute -bottom-10 left-4 right-4 z-20">
+          <Card className="shadow-lg border-0 bg-white/95 backdrop-blur-sm dark:bg-gray-800/95">
+            <CardContent className="p-4 flex justify-between items-center text-gray-800 dark:text-gray-100">
+              <div
+                className="flex-1 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-1 rounded-lg transition-colors"
+                onClick={handleViewVisitedCities}
+              >
+                <div className="text-xl font-bold text-gray-900 dark:text-white mb-0.5">{mockVisitedCities}</div>
+                <div className="text-xs text-gray-500">去过的城市</div>
+              </div>
+              <div className="w-px h-8 bg-gray-200 dark:bg-gray-700"></div>
+              <div
+                className="flex-1 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-1 rounded-lg transition-colors"
+                onClick={handleViewCompletedRoutes}
+              >
+                <div className="text-xl font-bold text-gray-900 dark:text-white mb-0.5">{mockCompletedRoutes}</div>
+                <div className="text-xs text-gray-500">完成的路线</div>
+              </div>
+              <div className="w-px h-8 bg-gray-200 dark:bg-gray-700"></div>
+              <div className="flex-1 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-1 rounded-lg transition-colors">
+                <div className="text-xl font-bold text-gray-900 dark:text-white mb-0.5">{mockTravelDays}</div>
+                <div className="text-xs text-gray-500">旅行天数</div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 

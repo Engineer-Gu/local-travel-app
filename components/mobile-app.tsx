@@ -134,15 +134,15 @@ export function MobileApp() {
       if (isNative()) {
         // 设置状态栏样式
         await statusBarService.setStyle('dark');
-        
+
         // 隐藏启动屏
         setTimeout(async () => {
           await splashScreenService.hide();
         }, 1000);
-        
+
         // 设置安全区域
         setSafeAreaInsets(getSafeAreaInsets());
-        
+
         // 监听返回按钮 (Android)
         appService.onBackButton(() => {
           if (navigationStack.length > 1) {
@@ -151,7 +151,7 @@ export function MobileApp() {
         });
       }
     };
-    
+
     initMobile();
   }, []);
 
@@ -163,6 +163,24 @@ export function MobileApp() {
       });
     }
   }, []);
+
+  // 监听认证失效事件
+  useEffect(() => {
+    const handleAuthUnauthorized = () => {
+      console.log("收到认证失效事件，跳转登录页")
+      navigate("login")
+    }
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("auth:unauthorized", handleAuthUnauthorized)
+    }
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("auth:unauthorized", handleAuthUnauthorized)
+      }
+    }
+  }, [navigationStack]) // 依赖项包含navigationStack以确保navigate函数是最新的
 
   const navigate = (screen: Screen, params?: Record<string, any>) => {
     // 如果是从AI导游返回到规划页面，并且有step参数
@@ -311,9 +329,9 @@ export function MobileApp() {
   const isMainTab = ["home", "planning", "social", "guides", "shop", "profile"].includes(currentNavigation.screen)
 
   // 基于移动端检测决定容器样式
-  const containerClass = isNative() 
+  const containerClass = isNative()
     ? "fixed inset-0 w-screen h-screen bg-white dark:bg-gray-900 flex flex-col overflow-hidden"
-    : isMobile 
+    : isMobile
       ? "w-full h-screen bg-white dark:bg-gray-900 flex flex-col overflow-hidden"
       : "relative w-full max-w-sm mx-auto h-[700px] rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex flex-col overflow-hidden"
 

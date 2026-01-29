@@ -36,6 +36,34 @@ api.interceptors.response.use(
 
     // 检查业务错误码，200表示成功
     if (result.code !== 200) {
+      const msg = (result.message || "").toLowerCase();
+
+      // 处理认证相关错误：
+      // 1. code为401或403
+      // 2. 消息包含token/auth/认证/登录等关键词
+      if (
+        result.code == 401 ||
+        result.code == 403 ||
+        msg.includes("token") ||
+        msg.includes("auth") ||
+        msg.includes("认证") ||
+        msg.includes("登录")
+      ) {
+        console.log("检测到认证失效:", result);
+
+        // 清除本地认证信息
+        localStorage.removeItem("token")
+        localStorage.removeItem("refreshToken")
+        localStorage.removeItem("user")
+
+        // 触发认证失效事件，由MobileApp组件监听并处理跳转
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("auth:unauthorized"))
+          // 返回一个永远pending的promise，中断后续错误处理
+          return new Promise(() => { })
+        }
+      }
+
       // 业务错误，抛出错误信息
       return Promise.reject(new Error(result.message || "请求失败"))
     }
@@ -48,16 +76,18 @@ api.interceptors.response.use(
     if (error.response) {
       const { status, data } = error.response
 
-      // 处理401未授权错误
+      // 处理401未授权错误 (HTTP状态码)
       if (status === 401) {
         // 清除本地认证信息
         localStorage.removeItem("token")
         localStorage.removeItem("refreshToken")
         localStorage.removeItem("user")
 
-        // 如果不是登录页面，可以重定向到登录页
-        if (typeof window !== "undefined" && window.location.pathname !== "/login") {
-          console.error("登录已过期，请重新登录")
+        // 触发认证失效事件，由MobileApp组件监听并处理跳转
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("auth:unauthorized"))
+          // 返回一个永远pending的promise，中断后续错误处理
+          return new Promise(() => { })
         }
       }
 
