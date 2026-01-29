@@ -60,66 +60,8 @@ import { AIPhotoDiary } from "@/components/screens/ai-photo-diary"
 import { TransactionDetail } from "@/components/screens/wallet/transaction-detail"
 import { CouponDetail } from "@/components/screens/wallet/coupon-detail"
 
-export type Screen =
-  | "home"
-  | "planning"
-  | "social"
-  | "guides"
-  | "shop"
-  | "profile"
-  | "route-detail"
-  | "tickets"
-  | "favorites"
-  | "routes"
-  | "friends"
-  | "itineraries"
-  | "wallet"
-  | "notifications"
-  | "settings"
-  | "checkin"
-  | "chat"
-  | "friend-request"
-  | "guide-consult"
-  | "guide-booking"
-  | "product-detail"
-  | "login"
-  | "register"
-  | "map"
-  | "payment"
-  | "theme-settings"
-  | "interest-settings"
-  | "group-detail"
-  | "edit-profile"
-  | "account-security"
-  | "notification-settings"
-  | "vip-membership"
-  | "wallet-recharge"
-  | "wallet-withdraw"
-  | "wallet-transfer"
-  | "user-agreement"
-  | "privacy-policy"
-  | "shopping-cart"
-  | "orders"
-  | "travel-diary"
-  | "diary-detail"
-  | "edit-diary"
-  | "visited-cities"
-  | "completed-routes"
-  | "badges"
-  // 新增的智能化功能
-  | "ai-voice-guide"
-  | "ar-navigation"
-  | "travel-stories"
-  | "short-videos"
-  | "emergency-help"
-  | "ai-photo-diary"
-  | "transaction-detail"
-  | "coupon-detail"
-
-export type NavigationProps = {
-  screen: Screen
-  params?: Record<string, any>
-}
+import { Screen, ScreenParams, NavigationProps } from "@/lib/navigation-types"
+export type { Screen, NavigationProps }
 
 export function MobileApp() {
   const [navigationStack, setNavigationStack] = useState<NavigationProps[]>([{ screen: "home" }])
@@ -182,15 +124,17 @@ export function MobileApp() {
     }
   }, [navigationStack]) // 依赖项包含navigationStack以确保navigate函数是最新的
 
-  const navigate = (screen: Screen, params?: Record<string, any>) => {
+  const navigateTyped = <T extends Screen>(screen: T, params?: ScreenParams[T]) => {
     // 如果是从AI导游返回到规划页面，并且有step参数
-    if (screen === "planning" && params?.returnFromAIGuide && params?.step) {
-      setNavigationStack([...navigationStack, { screen, params: { ...params, initialStep: params.step } }])
+    if (screen === "planning" && params && "returnFromAIGuide" in params && "step" in params) {
+      setNavigationStack([...navigationStack, { screen, params: { ...params, initialStep: params.step } } as NavigationProps])
     } else {
       // 正常导航逻辑
-      setNavigationStack([...navigationStack, { screen, params }])
+      setNavigationStack([...navigationStack, { screen, params } as NavigationProps])
     }
   }
+
+  const navigate = navigateTyped as any
 
   const goBack = () => {
     if (navigationStack.length > 1) {

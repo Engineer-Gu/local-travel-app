@@ -5,45 +5,13 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
+import { RouteProps, RouteStop, RouteReview } from "@/lib/types"
+import type { Screen } from "@/components/mobile-app"
 
-interface RouteStop {
-  time: string
-  place: string
-  activity: string
-  duration: string
-}
-
-interface RouteReview {
-  id: string
-  userName: string
-  avatar: string
-  rating: number
-  date: string
-  content: string
-  images?: string[]
-}
-
-interface RouteProps {
-  id: string
-  title: string
-  image: string
-  duration: string
-  budget: string
-  tags: string[]
-  rating: number
-  description: string
-  stops: RouteStop[]
-  location?: {
-    address?: string
-    latitude?: number
-    longitude?: number
-  }
-}
-
-interface RouteDetailProps {
-  route: RouteProps
+export interface RouteDetailProps {
+  route?: RouteProps
   goBack: () => void
-  navigate: (screen: string, params?: Record<string, any>) => void
+  navigate: (screen: Screen, params?: Record<string, any>) => void
 }
 
 export function RouteDetail({ route, goBack, navigate }: RouteDetailProps) {

@@ -42,7 +42,7 @@ export function Home({ navigate }: HomeProps) {
     {
       id: "route1",
       title: "西湖一日游",
-      image: "/placeholder.svg?height=120&width=200&text=西湖一日游",
+      image: "/images/route-westlake.png",
       rating: 4.8,
       reviews: 256,
       duration: "约6小时",
@@ -58,7 +58,7 @@ export function Home({ navigate }: HomeProps) {
     {
       id: "route2",
       title: "千岛湖休闲游",
-      image: "/placeholder.svg?height=120&width=200&text=千岛湖休闲游",
+      image: "/images/route-qiandao.png",
       rating: 4.9,
       reviews: 128,
       duration: "约8小时",
@@ -74,7 +74,7 @@ export function Home({ navigate }: HomeProps) {
     {
       id: "route3",
       title: "灵隐寺祈福之旅",
-      image: "/placeholder.svg?height=120&width=200&text=灵隐寺祈福之旅",
+      image: "/images/route-lingyin.png",
       rating: 4.7,
       reviews: 312,
       duration: "约4小时",
@@ -88,26 +88,7 @@ export function Home({ navigate }: HomeProps) {
       tags: ["文化古迹", "佛教圣地", "历史遗迹"],
     },
   ])
-  const [localPlayers, setLocalPlayers] = useState([
-    {
-      name: "小顾",
-      avatar: "/placeholder.svg?height=60&width=60",
-      bio: "摄影爱好者，西湖达人",
-      routes: 12,
-    },
-    {
-      name: "李华",
-      avatar: "/placeholder.svg?height=60&width=60",
-      bio: "美食探店家，寻找隐藏美食",
-      routes: 8,
-    },
-    {
-      name: "王芳",
-      avatar: "/placeholder.svg?height=60&width=60",
-      bio: "历史文化爱好者，古迹探索",
-      routes: 15,
-    },
-  ])
+
   const [isLoading, setIsLoading] = useState(false)
 
   const [profileCompletion, setProfileCompletion] = useState(0)
@@ -229,18 +210,7 @@ export function Home({ navigate }: HomeProps) {
     */
   }
 
-  // 获取本地玩家推荐
-  const fetchLocalPlayers = async () => {
-    // 以下是连接真实后端的代码，目前注释掉
-    /*
-    try {
-      const players = await userService.getLocalPlayers()
-      setLocalPlayers(players)
-    } catch (error) {
-      console.error('获取本地玩家推荐失败', error)
-    }
-    */
-  }
+
 
   // 处理签到功能
   const handleCheckIn = async () => {
@@ -541,66 +511,7 @@ export function Home({ navigate }: HomeProps) {
         </Card>
       )}
 
-      <div>
-        <div className="flex items-center justify-between mb-4 px-1">
-          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 flex items-center">
-            <Users size={18} className="mr-2 text-green-500" />
-            同城玩家
-          </h2>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-blue-500 dark:text-blue-400 font-medium"
-            onClick={() => navigate("social")}
-          >
-            全部 <ChevronRight size={14} className="ml-1" />
-          </Button>
-        </div>
 
-        <div className="flex overflow-x-auto space-x-3 pb-4 px-1 scrollbar-hide">
-          {localPlayers.map((player, index) => (
-            <div
-              key={index}
-              className="min-w-[140px] bg-white dark:bg-gray-800 rounded-xl p-3 border border-gray-100 dark:border-gray-800 shadow-sm cursor-pointer active:scale-[0.98] transition-transform flex flex-col items-center"
-              onClick={() => navigate("social")}
-            >
-              <div className="relative mb-2">
-                <Avatar className="h-14 w-14 border-2 border-white dark:border-gray-700 shadow-sm">
-                  <AvatarImage src={player.avatar || "/placeholder.svg"} alt={player.name} />
-                  <AvatarFallback className="bg-gradient-to-br from-green-100 to-green-200 text-green-600">
-                    {player.name.slice(0, 2)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="absolute -bottom-1 -right-1 bg-green-500 text-white text-[9px] px-1.5 py-0.5 rounded-full border-2 border-white dark:border-gray-800 font-bold">
-                  Lv.{(index % 5) + 1}
-                </div>
-              </div>
-
-              <h3 className="font-bold text-sm text-gray-800 dark:text-gray-100 mb-1">{player.name}</h3>
-              <p className="text-[10px] text-gray-500 dark:text-gray-400 text-center line-clamp-1 w-full mb-2">
-                {player.bio}
-              </p>
-
-              <div className="w-full bg-gray-50 dark:bg-gray-700/50 rounded-lg py-1 px-2 flex justify-center items-center">
-                <span className="text-[10px] text-gray-600 dark:text-gray-300 font-medium">
-                  {player.routes} 条路线
-                </span>
-              </div>
-            </div>
-          ))}
-
-          {/* 查看更多卡片 */}
-          <div
-            className="min-w-[100px] flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 cursor-pointer active:bg-gray-50 dark:active:bg-gray-800 transition-colors"
-            onClick={() => navigate("social")}
-          >
-            <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-2">
-              <ChevronRight size={18} className="text-gray-400" />
-            </div>
-            <span className="text-xs text-gray-400 font-medium">查看更多</span>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }

@@ -9,28 +9,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import type { Screen } from "@/components/mobile-app"
 // import { ShopService, Product, ProductReview } from "@/lib/services/shop-service"
 
-interface ProductSpecification {
-  name: string
-  value: string
-}
+import { ProductProps, ProductSpecification } from "@/lib/types"
 
-interface ProductProps {
-  id: string
-  name: string
-  image: string
-  price: number
-  originalPrice: number
-  rating: number
-  reviews: number
-  sold: number
-  category: string
-  description: string
-  specifications: ProductSpecification[]
-  images: string[]
-}
-
-interface ProductDetailProps {
-  product: ProductProps
+export interface ProductDetailProps {
+  product?: ProductProps
   goBack: () => void
   navigate: (screen: Screen, params?: Record<string, any>) => void
   addToCart?: (product: ProductProps, quantity: number) => void
@@ -233,9 +215,8 @@ export function ProductDetail({ product, goBack, navigate, addToCart }: ProductD
           {product.images.map((_, index) => (
             <div
               key={index}
-              className={`w-2 h-2 rounded-full ${
-                activeImageIndex === index ? "bg-white" : "bg-white/50"
-              } cursor-pointer`}
+              className={`w-2 h-2 rounded-full ${activeImageIndex === index ? "bg-white" : "bg-white/50"
+                } cursor-pointer`}
               onClick={() => setActiveImageIndex(index)}
             ></div>
           ))}
