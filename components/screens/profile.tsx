@@ -402,7 +402,7 @@ export function Profile({ navigate }: ProfileProps) {
         ) : (
           <div className="flex flex-wrap gap-2 overflow-x-auto pb-2">
             {interests.map((interest, index) => (
-              <Badge key={index} variant="outline" className="py-1 px-3 bg-blue-50">
+              <Badge key={index} variant="outline" className="py-1 px-3 bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900/30 dark:text-blue-200 dark:border-blue-800/50">
                 {interest}
               </Badge>
             ))}

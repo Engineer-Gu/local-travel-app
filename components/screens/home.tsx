@@ -470,7 +470,7 @@ export function Home({ navigate }: HomeProps) {
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {route.tags.slice(0, 2).map((tag, i) => (
-                        <span key={i} className="text-[10px] px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-500 rounded-md">
+                        <span key={i} className="text-[10px] px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 rounded-md">
                           {tag}
                         </span>
                       ))}

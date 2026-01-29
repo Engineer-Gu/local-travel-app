@@ -310,10 +310,10 @@ export function Shop({ navigate }: ShopProps) {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold">景区商城</h1>
         <div className="flex space-x-2">
-          <Button variant="outline" size="icon">
+          <Button variant="outline" size="icon" className="dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800">
             <Filter size={18} />
           </Button>
-          <Button variant="outline" size="icon" onClick={() => navigate("shopping-cart")}>
+          <Button variant="outline" size="icon" className="dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800" onClick={() => navigate("shopping-cart")}>
             <ShoppingBag size={18} />
           </Button>
         </div>
@@ -326,7 +326,7 @@ export function Shop({ navigate }: ShopProps) {
           placeholder="搜索商品"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full pl-10 pr-4 py-3 rounded-full border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
         />
       </div>
 
@@ -343,7 +343,7 @@ export function Shop({ navigate }: ShopProps) {
             {filteredProducts.map((product) => (
               <Card
                 key={product.id}
-                className="overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+                className="overflow-hidden cursor-pointer hover:shadow-md transition-shadow dark:bg-gray-800 dark:border-gray-700"
                 onClick={() => navigate("product-detail", { product })}
               >
                 <div className="relative h-36">
@@ -359,7 +359,7 @@ export function Shop({ navigate }: ShopProps) {
                   )}
                 </div>
                 <CardContent className="p-3">
-                  <h3 className="font-medium text-sm line-clamp-2">{product.name}</h3>
+                  <h3 className="font-medium text-sm line-clamp-2 dark:text-gray-100">{product.name}</h3>
                   <div className="flex items-center mt-1">
                     <span className="text-red-500 font-bold">¥{product.price}</span>
                     {product.originalPrice > product.price && (
