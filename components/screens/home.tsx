@@ -204,7 +204,7 @@ export function Home({ navigate }: HomeProps) {
   }
 
   // 标签页状态
-  const [activeTab, setActiveTab] = useState<"recommend" | "planning" | "routes" | "social" | "guides" | "shop">("recommend")
+  const [activeTab, setActiveTab] = useState<"routes" | "planning" | "guides" | "diary" | "social" | "shop">("routes")
 
   // 检查登录状态
   useEffect(() => {
@@ -405,11 +405,11 @@ export function Home({ navigate }: HomeProps) {
 
   // 顶部Tab配置
   const topTabs = [
-    { id: "planning", title: "规划" },
     { id: "routes", title: "路线" },
-    { id: "recommend", title: "推荐" },
-    { id: "social", title: "社交" },
+    { id: "planning", title: "规划" },
     { id: "guides", title: "向导" },
+    { id: "diary", title: "日记" },
+    { id: "social", title: "社交" },
     { id: "shop", title: "商城" },
   ]
 
@@ -456,7 +456,7 @@ export function Home({ navigate }: HomeProps) {
       {/* 顶部侧边栏/Tabs - 已移除，合并到 Header */}
 
       {/* 内容区域 - 根据Tab显示 */}
-      {activeTab === 'recommend' && (
+      {activeTab === 'diary' && (
         <>
           {/* 智能功能区 - 卡片展示 (保留在推荐页顶部) */}
 
