@@ -295,56 +295,67 @@ export function Social({ navigate }: SocialProps) {
         </TabsList>
 
         <TabsContent value="nearby" className="space-y-4">
-          {nearbyPlayers.map((player, index) => (
-            <Card key={index}>
-              <CardContent className="p-4">
-                <div className="flex items-start">
-                  <Avatar className="h-14 w-14">
-                    <AvatarImage src={player.avatar || "/placeholder.svg"} alt={player.name} />
-                    <AvatarFallback>{player.name.slice(0, 2)}</AvatarFallback>
-                  </Avatar>
+          {nearbyPlayers.map((player, index) => {
+            // Assign random avatar based on index
+            const avatarIndex = (index % 4);
+            const avatars = [
+              "/images/mock/avatar_male_1.png",
+              "/images/mock/avatar_female_1.png",
+              "/images/mock/avatar_male_2.png",
+              "/images/mock/avatar_female_2.png"
+            ];
 
-                  <div className="ml-3 flex-1">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-semibold">{player.name}</h3>
-                      <Badge variant="outline" className="flex items-center">
-                        <MapPin size={12} className="mr-1" />
-                        {player.distance}
-                      </Badge>
-                    </div>
+            return (
+              <Card key={index}>
+                <CardContent className="p-4">
+                  <div className="flex items-start">
+                    <Avatar className="h-14 w-14">
+                      <AvatarImage src={avatars[avatarIndex]} alt={player.name} />
+                      <AvatarFallback>{player.name.slice(0, 2)}</AvatarFallback>
+                    </Avatar>
 
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {player.interests.map((interest, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">
-                          {interest}
+                    <div className="ml-3 flex-1">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-semibold">{player.name}</h3>
+                        <Badge variant="outline" className="flex items-center">
+                          <MapPin size={12} className="mr-1" />
+                          {player.distance}
                         </Badge>
-                      ))}
-                    </div>
+                      </div>
 
-                    <p className="text-sm text-gray-600 mt-2">{player.status}</p>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {player.interests.map((interest, i) => (
+                          <Badge key={i} variant="secondary" className="text-xs">
+                            {interest}
+                          </Badge>
+                        ))}
+                      </div>
 
-                    <div className="flex space-x-2 mt-3">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="flex-1"
-                        onClick={() =>
-                          navigate("chat", { friend: { id: player.id, name: player.name, avatar: player.avatar } })
-                        }
-                      >
-                        <MessageCircle size={14} className="mr-1" />
-                        聊天
-                      </Button>
-                      <Button size="sm" className="flex-1" onClick={() => navigate("friend-request")}>
-                        <UserPlus size={14} className="mr-1" />
-                        加好友
-                      </Button>
+                      <p className="text-sm text-gray-600 mt-2">{player.status}</p>
+
+                      <div className="flex space-x-2 mt-3">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1"
+                          onClick={() =>
+                            navigate("chat", { friend: { id: player.id, name: player.name, avatar: avatars[avatarIndex] } })
+                          }
+                        >
+                          <MessageCircle size={14} className="mr-1" />
+                          聊天
+                        </Button>
+                        <Button size="sm" className="flex-1" onClick={() => navigate("friend-request")}>
+                          <UserPlus size={14} className="mr-1" />
+                          加好友
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            )
+          })}
         </TabsContent>
 
         <TabsContent value="matching">
@@ -366,42 +377,42 @@ export function Social({ navigate }: SocialProps) {
                 name: "西湖摄影爱好者",
                 members: 128,
                 activity: "每周日早晨西湖拍摄活动",
-                image: "/placeholder.svg?height=80&width=80",
+                image: "/images/mock/group_photography.png",
               },
               {
                 id: "group2",
                 name: "美食探店小分队",
                 members: 256,
                 activity: "本周六探店新开日料店",
-                image: "/placeholder.svg?height=80&width=80",
+                image: "/images/mock/group_food.png",
               },
               {
                 id: "group3",
                 name: "周末户外徒步",
                 members: 95,
                 activity: "计划下周登山活动",
-                image: "/placeholder.svg?height=80&width=80",
+                image: "/images/mock/group_hiking.png",
               },
               {
                 id: "group4",
                 name: "城市探索小分队",
                 members: 156,
                 activity: "每周探索城市秘境",
-                image: "/placeholder.svg?height=80&width=80",
+                image: "/images/mock/group_cycling.png", // Reusing cycling for city explore or fallback
               },
               {
                 id: "group5",
                 name: "单车骑行俱乐部",
                 members: 208,
                 activity: "本周末环湖骑行活动",
-                image: "/placeholder.svg?height=80&width=80",
+                image: "/images/mock/group_cycling.png",
               },
               {
                 id: "group6",
                 name: "摄影爱好者联盟",
                 members: 175,
                 activity: "城市夜景拍摄活动",
-                image: "/placeholder.svg?height=80&width=80",
+                image: "/images/mock/group_photography.png",
               },
             ].map((group, index) => (
               <Card key={index}>

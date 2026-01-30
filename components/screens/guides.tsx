@@ -64,7 +64,7 @@ export function Guides({ navigate }: GuidesProps) {
     {
       id: "guide1",
       name: "陈导游",
-      avatar: "/placeholder.svg?height=80&width=80",
+      avatar: "/images/mock/avatar_male_1.png",
       rating: 4.9,
       reviews: 128,
       specialties: ["历史文化", "古建筑"],
@@ -75,7 +75,7 @@ export function Guides({ navigate }: GuidesProps) {
     {
       id: "guide2",
       name: "李导游",
-      avatar: "/placeholder.svg?height=80&width=80",
+      avatar: "/images/mock/avatar_female_1.png",
       rating: 4.8,
       reviews: 96,
       specialties: ["美食", "市井文化"],
@@ -86,7 +86,7 @@ export function Guides({ navigate }: GuidesProps) {
     {
       id: "guide3",
       name: "王导游",
-      avatar: "/placeholder.svg?height=80&width=80",
+      avatar: "/images/mock/avatar_male_2.png",
       rating: 4.7,
       reviews: 85,
       specialties: ["摄影", "自然风光"],
@@ -97,7 +97,7 @@ export function Guides({ navigate }: GuidesProps) {
     {
       id: "guide4",
       name: "张导游",
-      avatar: "/placeholder.svg?height=80&width=80",
+      avatar: "/images/mock/avatar_female_2.png",
       rating: 4.6,
       reviews: 76,
       specialties: ["古建筑", "历史文化"],
@@ -108,7 +108,7 @@ export function Guides({ navigate }: GuidesProps) {
     {
       id: "guide5",
       name: "刘导游",
-      avatar: "/placeholder.svg?height=80&width=80",
+      avatar: "/images/mock/avatar_male_1.png",
       rating: 4.9,
       reviews: 142,
       specialties: ["美食", "夜景"],
@@ -119,7 +119,7 @@ export function Guides({ navigate }: GuidesProps) {
     {
       id: "guide6",
       name: "赵导游",
-      avatar: "/placeholder.svg?height=80&width=80",
+      avatar: "/images/mock/avatar_female_1.png",
       rating: 4.7,
       reviews: 93,
       specialties: ["户外探险", "生态旅游"],
@@ -130,7 +130,7 @@ export function Guides({ navigate }: GuidesProps) {
     {
       id: "guide7",
       name: "孙导游",
-      avatar: "/placeholder.svg?height=80&width=80",
+      avatar: "/images/mock/avatar_male_2.png",
       rating: 4.8,
       reviews: 115,
       specialties: ["艺术", "博物馆"],
