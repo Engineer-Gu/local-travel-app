@@ -5,7 +5,7 @@ export const APP_CONSTANTS = {
   /**
    * API基础URL
    */
-  API_BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
+  API_BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'http://192.168.90.227:8080',
 
   /**
    * API请求超时时间（毫秒）

@@ -48,7 +48,7 @@ export function Profile({ navigate }: ProfileProps) {
   const mockCompletedRoutes = 12
 
   // 背景图状态
-  const [backgroundImage, setBackgroundImage] = useState<string>("/placeholder.svg?height=300&width=600&text=点击更换背景")
+  const [backgroundImage, setBackgroundImage] = useState<string>("/images/defaults/profile-bg.png")
 
   // 从本地存储加载背景图
   useEffect(() => {
