@@ -46,69 +46,71 @@ export function Home({ navigate }: HomeProps) {
 
   // 模拟路线数据
   // 模拟故事数据
-  const stories = [
+  const [stories, setStories] = useState([
     {
       id: "story1",
       user: {
         id: "user1",
         name: "旅行达人",
-        avatar: "/placeholder.svg?height=40&width=40&text=旅行达人",
+        avatar: "/images/mock/avatar_traveler.png",
         isVerified: true,
       },
       location: "杭州·西湖",
       content:
         "西湖的春天真是美不胜收！断桥边的柳树已经泛绿，湖面上荡起了微波。今天天气特别好，拍了很多照片，分享给大家～",
       images: [
-        "/placeholder.svg?height=400&width=600&text=西湖春景1",
-        "/placeholder.svg?height=400&width=600&text=西湖春景2",
+        "/images/mock/west_lake_1.png",
+        "/images/mock/west_lake_2.png",
       ],
       likes: 256,
       comments: 42,
       time: "2小时前",
       tags: ["春游", "西湖", "摄影"],
+      isLiked: false,
     },
     {
       id: "story2",
       user: {
         id: "user2",
         name: "美食猎人",
-        avatar: "/placeholder.svg?height=40&width=40&text=美食猎人",
+        avatar: "/images/mock/avatar_foodie.png",
         isVerified: false,
       },
       location: "杭州·知味观",
       content:
         "杭州必吃美食推荐！知味观的西湖醋鱼和东坡肉真的太好吃了，一定要来尝尝。这家店开了上百年，还是老味道，强烈推荐！",
       images: [
-        "/placeholder.svg?height=400&width=600&text=杭州美食1",
-        "/placeholder.svg?height=400&width=600&text=杭州美食2",
-        "/placeholder.svg?height=400&width=600&text=杭州美食3",
+        "/images/mock/hangzhou_food_1.png",
+        "/images/mock/hangzhou_food_2.png",
       ],
       likes: 189,
       comments: 36,
       time: "5小时前",
       tags: ["美食", "杭帮菜", "推荐"],
+      isLiked: true,
     },
     {
       id: "story3",
       user: {
         id: "user3",
-        name: "背包客",
-        avatar: "/placeholder.svg?height=40&width=40&text=背包客",
+        name: "背包客小王",
+        avatar: "/images/mock/avatar_backpacker.png",
         isVerified: true,
       },
       location: "千岛湖",
       content:
-        "千岛湖三日游结束啦！这里的空气真的超级好，湖水清澈见底。岛上的民宿也很棒，推荐大家来体验！下次想尝试一下这里的皮划艇和钓鱼。",
+        "千岛湖的水真清啊，即使是阴天也别有一番风味。租了一艘皮划艇在湖上泛舟，周围青山环绕，感觉整个人都静下来了。",
       images: [
-        "/placeholder.svg?height=400&width=600&text=千岛湖1",
-        "/placeholder.svg?height=400&width=600&text=千岛湖2",
+        "/images/mock/qiandao_lake_1.png",
+        "/images/mock/qiandao_lake_2.png",
       ],
-      likes: 145,
-      comments: 28,
+      likes: 342,
+      comments: 56,
       time: "昨天",
       tags: ["千岛湖", "自然", "度假"],
+      isLiked: false,
     },
-  ]
+  ])
 
   const [popularRoutes, setPopularRoutes] = useState([
     {
@@ -330,6 +332,47 @@ export function Home({ navigate }: HomeProps) {
     },
   ]
 
+  const handleStoryClick = (story: any) => {
+    navigate("story-detail", { story })
+  }
+
+  const handleLike = (e: React.MouseEvent, storyId: string) => {
+    e.stopPropagation()
+    setStories(stories.map(story => {
+      if (story.id === storyId) {
+        const newIsLiked = !story.isLiked
+        return {
+          ...story,
+          isLiked: newIsLiked,
+          likes: newIsLiked ? story.likes + 1 : story.likes - 1
+        }
+      }
+      return story
+    }))
+
+    // Find story to check new state (actually can just use logic above)
+    // But since we are inside setStories...
+    // Let's just toast
+    toast({
+      title: "操作成功",
+      description: "感谢您的支持！", // Simplified message
+    })
+  }
+
+  const handleComment = (e: React.MouseEvent, storyId: string) => {
+    e.stopPropagation()
+    const story = stories.find(s => s.id === storyId)
+    navigate("story-detail", { story })
+  }
+
+  const handleShare = (e: React.MouseEvent, storyId: string) => {
+    e.stopPropagation()
+    toast({
+      title: "分享成功",
+      description: "已复制链接到剪贴板",
+    })
+  }
+
   // 处理路线点击
   const handleRouteClick = (route: any) => {
     // 以下是连接真实后端的代码，目前注释掉
@@ -422,7 +465,11 @@ export function Home({ navigate }: HomeProps) {
           <div className="mb-6">
             <div className="space-y-4">
               {stories.map((story) => (
-                <div key={story.id} className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-800">
+                <div
+                  key={story.id}
+                  className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-800 cursor-pointer active:scale-[0.99] transition-transform"
+                  onClick={() => handleStoryClick(story)}
+                >
                   {/* 用户信息 */}
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center">
@@ -462,12 +509,34 @@ export function Home({ navigate }: HomeProps) {
                   </div>
 
                   {/* 底部互动 */}
-                  <div className="flex items-center justify-between text-gray-500 text-xs">
-                    <div className="flex space-x-4">
-                      <span className="flex items-center"><Heart size={14} className="mr-1" /> {story.likes}</span>
-                      <span className="flex items-center"><MessageCircle size={14} className="mr-1" /> {story.comments}</span>
-                      <span className="flex items-center"><Share size={14} className="mr-1" /> 分享</span>
-                    </div>
+                  <div className="flex items-center justify-between text-gray-500 text-xs border-t border-gray-50 pt-3 dark:border-gray-700">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={`flex-1 h-8 ${story.isLiked ? "text-red-500" : ""}`}
+                      onClick={(e) => handleLike(e, story.id)}
+                    >
+                      <Heart size={14} className={`mr-1 ${story.isLiked ? "fill-current" : ""}`} />
+                      {story.likes}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={(e) => handleComment(e, story.id)}
+                    >
+                      <MessageCircle size={14} className="mr-1" />
+                      {story.comments}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={(e) => handleShare(e, story.id)}
+                    >
+                      <Share size={14} className="mr-1" />
+                      分享
+                    </Button>
                   </div>
                 </div>
               ))}

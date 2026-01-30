@@ -55,6 +55,7 @@ export type ScreenParams = {
     "ai-photo-diary": undefined
     "transaction-detail": any
     "coupon-detail": any
+    "story-detail": { story?: any }
 }
 
 export type Screen = keyof ScreenParams

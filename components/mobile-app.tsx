@@ -59,6 +59,7 @@ import { EmergencyHelp } from "@/components/screens/emergency-help"
 import { AIPhotoDiary } from "@/components/screens/ai-photo-diary"
 import { TransactionDetail } from "@/components/screens/wallet/transaction-detail"
 import { CouponDetail } from "@/components/screens/wallet/coupon-detail"
+import { StoryDetail } from "@/components/screens/story-detail"
 
 import { Screen, ScreenParams, NavigationProps } from "@/lib/navigation-types"
 export type { Screen, NavigationProps }
@@ -264,6 +265,8 @@ export function MobileApp() {
         return <TransactionDetail goBack={goBack} params={params} />
       case "coupon-detail":
         return <CouponDetail goBack={goBack} params={params} />
+      case "story-detail":
+        return <StoryDetail goBack={goBack} navigate={navigate} story={params?.story} />
       default:
         return <Home navigate={navigate} />
     }
