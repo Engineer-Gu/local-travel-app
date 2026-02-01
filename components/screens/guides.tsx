@@ -176,7 +176,7 @@ export function Guides({ navigate }: GuidesProps) {
   return (
     <div className="p-4 pb-16">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold">专业导游</h1>
+        <h1 className="text-xl font-bold">需要导游吗</h1>
         <Button variant="outline" size="icon">
           <Filter size={18} />
         </Button>

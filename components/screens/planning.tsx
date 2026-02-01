@@ -685,7 +685,7 @@ export function Planning({ navigate, goBack, initialStep }: PlanningProps) {
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* 顶部导航 */}
       <div className="bg-white p-4 shadow-sm flex items-center justify-between">
-        <h1 className="text-lg font-bold">智能行程规划</h1>
+        <h1 className="text-lg font-bold">来规划一下行程吧</h1>
         <div className="flex items-center space-x-2">
           {/* Add header actions if needed */}
         </div>

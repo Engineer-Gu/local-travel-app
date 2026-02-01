@@ -34,12 +34,16 @@ import { Planning } from "./planning"
 import { Social } from "./social"
 import { Guides } from "./guides"
 import { Shop } from "./shop"
+import { PredictionScreen } from "./prediction"
+import { PlayScreen } from "./play"
+import { DiningScreen } from "./dining"
 
 interface HomeProps {
   navigate: (screen: Screen, params?: Record<string, any>) => void
 }
 
 export function Home({ navigate }: HomeProps) {
+  const [activeTab, setActiveTab] = useState<"prediction" | "dining" | "play" | "routes" | "planning" | "guides" | "diary" | "social" | "shop">("prediction")
   const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [hasCheckedIn, setHasCheckedIn] = useState(false)
   const { toast } = useToast()
@@ -203,8 +207,7 @@ export function Home({ navigate }: HomeProps) {
     }
   }
 
-  // 标签页状态
-  const [activeTab, setActiveTab] = useState<"routes" | "planning" | "guides" | "diary" | "social" | "shop">("routes")
+
 
   // 检查登录状态
   useEffect(() => {
@@ -405,6 +408,9 @@ export function Home({ navigate }: HomeProps) {
 
   // 顶部Tab配置
   const topTabs = [
+    { id: "prediction", title: "预测" },
+    { id: "dining", title: "吃喝" },
+    { id: "play", title: "玩乐" },
     { id: "routes", title: "路线" },
     { id: "planning", title: "规划" },
     { id: "guides", title: "向导" },
@@ -419,8 +425,8 @@ export function Home({ navigate }: HomeProps) {
 
 
         {/* 顶部中央Tabs */}
-        <div className="flex items-center justify-center flex-1 mx-2 overflow-x-auto scrollbar-hide">
-          <div className="flex space-x-4">
+        <div className="flex items-center flex-1 mx-2 overflow-x-auto no-scrollbar mask-gradient-right">
+          <div className="flex space-x-6 px-2 min-w-max">
             {topTabs.map((tab) => (
               <div
                 key={tab.id}
@@ -547,6 +553,20 @@ export function Home({ navigate }: HomeProps) {
       )}
 
       {/* 热门路线 Tab */}
+      {activeTab === 'prediction' && (
+        <PredictionScreen />
+      )}
+
+      {/* 吃喝 Tab */}
+      {activeTab === 'dining' && (
+        <DiningScreen />
+      )}
+
+      {/* 玩乐 Tab */}
+      {activeTab === 'play' && (
+        <PlayScreen />
+      )}
+
       {activeTab === 'routes' && (
         <div className="mb-6">
           <div className="flex items-center justify-between mb-3">

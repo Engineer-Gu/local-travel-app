@@ -272,7 +272,7 @@ export function Social({ navigate }: SocialProps) {
   return (
     <div className="p-4 pb-16">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold">同城玩家</h1>
+        <h1 className="text-xl font-bold">和谁玩</h1>
         <Button variant="outline" size="icon" onClick={() => navigate("friend-request")}>
           <UserPlus size={18} />
         </Button>

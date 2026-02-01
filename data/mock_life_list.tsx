@@ -1,0 +1,138 @@
+import {
+    Mic2, Film, ShoppingBag, Landmark, Building2, Ticket, FerrisWheel,
+    Palette, Trees, Wifi, Droplets, Armchair, Footprints, MessageCircle,
+    Mountain, Shovel, Plane, PartyPopper, Wheat, Dog, Sun, Gamepad2,
+    Ship, Dice5, Trophy, Activity, Sword, Beer, Wine, Moon, Bike,
+    Disc, Flame, Tent, Key, Ghost, Drama, Coffee, Glasses, Spline,
+    Car, Cat, Hammer, Anchor, Coins, Flower, FishSymbol, Fish,
+    Wind, CloudRain, Snowflake, Search, Club, Target, Crosshair,
+    Swords, Timer, HeartHandshake, Brush, Star, Camera, Scissors,
+    Shirt, Gavel, Scroll, Megaphone, Skull, UserPlus, Map,
+    Speaker, Music, BedDouble, Rocket, Utensils, Flag, BookOpen
+} from "lucide-react"
+
+export interface LifeService {
+    id: string
+    name: string
+    category: string
+    description?: string
+    icon: React.ReactNode
+    tags: string[]
+    price: number
+}
+
+export const MOCK_LIFE_SERVICES: LifeService[] = [
+    // === 娱乐 (Entertainment) ===
+    { id: "e1", name: "KTV唱歌", category: "entertainment", icon: <Mic2 className="w-full h-full text-violet-500" />, tags: ["聚会", "解压"], price: 80 },
+    { id: "e2", name: "电影院看电影", category: "entertainment", icon: <Film className="w-full h-full text-red-500" />, tags: ["情侣", "休闲"], price: 50 },
+    { id: "e3", name: "逛商场", category: "entertainment", icon: <ShoppingBag className="w-full h-full text-blue-500" />, tags: ["购物", "逛街"], price: 0 },
+    { id: "e4", name: "逛游乐园", category: "entertainment", icon: <FerrisWheel className="w-full h-full text-pink-500" />, tags: ["刺激", "约会"], price: 200 },
+    { id: "e5", name: "逛网吧", category: "entertainment", icon: <Wifi className="w-full h-full text-indigo-500" />, tags: ["游戏", "开黑"], price: 30 },
+    { id: "e6", name: "打游戏", category: "entertainment", icon: <Gamepad2 className="w-full h-full text-purple-600" />, tags: ["宅家", "竞技"], price: 0 },
+    { id: "e7", name: "麻将馆", category: "entertainment", icon: <Dice5 className="w-full h-full text-green-600" />, tags: ["社交", "国粹"], price: 40 },
+    { id: "e8", name: "电玩城", category: "entertainment", icon: <Trophy className="w-full h-full text-yellow-500" />, tags: ["怀旧", "娃娃机"], price: 100 },
+    { id: "e9", name: "Cosplay", category: "entertainment", icon: <Sword className="w-full h-full text-pink-400" />, tags: ["二次元", "装扮"], price: 300 },
+    { id: "e10", name: "酒吧", category: "entertainment", icon: <Beer className="w-full h-full text-amber-500" />, tags: ["夜生活", "微醺"], price: 150 },
+    { id: "e11", name: "清吧/夜店", category: "entertainment", icon: <Wine className="w-full h-full text-purple-500" />, tags: ["蹦迪", "音乐"], price: 200 },
+    { id: "e12", name: "逛夜市", category: "entertainment", icon: <Moon className="w-full h-full text-yellow-400" />, tags: ["美食", "热闹"], price: 50 },
+    { id: "e13", name: "桌游", category: "entertainment", icon: <Dice5 className="w-full h-full text-orange-500" />, tags: ["烧脑", "聚会"], price: 60 },
+    { id: "e14", name: "密室逃脱", category: "entertainment", icon: <Key className="w-full h-full text-gray-700" />, tags: ["解谜", "恐怖"], price: 168 },
+    { id: "e15", name: "鬼屋", category: "entertainment", icon: <Ghost className="w-full h-full text-gray-800" />, tags: ["尖叫", "胆量"], price: 120 },
+    { id: "e16", name: "VR游戏", category: "entertainment", icon: <Glasses className="w-full h-full text-blue-400" />, tags: ["科技", "沉浸"], price: 90 },
+    { id: "e17", name: "看演唱会", category: "entertainment", icon: <Mic2 className="w-full h-full text-rose-500" />, tags: ["追星", "狂欢"], price: 800 },
+    { id: "e18", name: "动物园", category: "entertainment", icon: <Cat className="w-full h-full text-orange-400" />, tags: ["亲子", "可爱"], price: 120 },
+    { id: "e19", name: "海洋馆", category: "entertainment", icon: <FishSymbol className="w-full h-full text-cyan-500" />, tags: ["梦幻", "科普"], price: 180 },
+    { id: "e20", name: "漫展", category: "entertainment", icon: <Ticket className="w-full h-full text-pink-500" />, tags: ["二次元", "集市"], price: 80 },
+    { id: "e21", name: "去音乐节", category: "entertainment", icon: <Speaker className="w-full h-full text-violet-600" />, tags: ["摇滚", "户外"], price: 400 },
+    { id: "e22", name: "斗地主(自娱自乐)", category: "entertainment", icon: <Activity className="w-full h-full text-green-500" />, tags: ["休闲", "扑克"], price: 0 },
+    { id: "e23", name: "打网球", category: "sports", icon: <Activity className="w-full h-full text-green-400" />, tags: ["运动", "网球"], price: 100 },
+    { id: "e24", name: "打篮球", category: "sports", icon: <Activity className="w-full h-full text-orange-600" />, tags: ["运动", "篮球"], price: 0 },
+    { id: "e25", name: "踢足球", category: "sports", icon: <Activity className="w-full h-full text-black" />, tags: ["运动", "足球"], price: 0 },
+    { id: "e26", name: "游泳", category: "sports", icon: <Droplets className="w-full h-full text-cyan-500" />, tags: ["运动", "清凉"], price: 40 },
+    { id: "e27", name: "跑步", category: "sports", icon: <Footprints className="w-full h-full text-orange-400" />, tags: ["运动", "健康"], price: 0 },
+    { id: "e28", name: "跆拳道", category: "sports", icon: <Swords className="w-full h-full text-black" />, tags: ["格斗", "防身"], price: 100 },
+    { id: "e29", name: "乒乓球", category: "sports", icon: <Activity className="w-full h-full text-red-500" />, tags: ["国球", "技巧"], price: 30 },
+    { id: "e30", name: "滑板", category: "sports", icon: <Activity className="w-full h-full text-yellow-500" />, tags: ["酷炫", "街头"], price: 0 },
+    { id: "e31", name: "骑行", category: "sports", icon: <Bike className="w-full h-full text-blue-500" />, tags: ["风景", "有氧"], price: 0 },
+    { id: "e32", name: "飞盘", category: "sports", icon: <Disc className="w-full h-full text-green-500" />, tags: ["社交", "潮流"], price: 0 },
+    { id: "e33", name: "射箭", category: "sports", icon: <Target className="w-full h-full text-red-600" />, tags: ["专注", "解压"], price: 85 },
+    { id: "e34", name: "射击", category: "sports", icon: <Crosshair className="w-full h-full text-gray-800" />, tags: ["刺激", "精准"], price: 200 },
+    { id: "e35", name: "拳击", category: "sports", icon: <Swords className="w-full h-full text-red-700" />, tags: ["发泄", "力量"], price: 120 },
+    { id: "e36", name: "骑马", category: "sports", icon: <Activity className="w-full h-full text-brown-500" />, tags: ["贵族", "自然"], price: 300 },
+    { id: "e37", name: "赛车/卡丁车", category: "sports", icon: <Car className="w-full h-full text-red-500" />, tags: ["速度", "激情"], price: 150 },
+    { id: "e38", name: "攀岩", category: "sports", icon: <Mountain className="w-full h-full text-stone-500" />, tags: ["挑战", "高度"], price: 90 },
+    { id: "e39", name: "溜冰", category: "sports", icon: <Snowflake className="w-full h-full text-cyan-300" />, tags: ["优雅", "冰雪"], price: 60 },
+    { id: "e40", name: "打高尔夫", category: "sports", icon: <Club className="w-full h-full text-green-700" />, tags: ["商务", "休闲"], price: 500 },
+    { id: "e41", name: "打保龄球", category: "sports", icon: <Activity className="w-full h-full text-blue-700" />, tags: ["聚会", "技巧"], price: 50 },
+    { id: "e42", name: "滑雪", category: "sports", icon: <Snowflake className="w-full h-full text-white bg-blue-200 rounded-full" />, tags: ["冬季", "极限"], price: 300 },
+    { id: "e43", name: "冲浪", category: "sports", icon: <Wind className="w-full h-full text-blue-400" />, tags: ["海浪", "平衡"], price: 200 },
+    { id: "e44", name: "潜水", category: "sports", icon: <Droplets className="w-full h-full text-blue-600" />, tags: ["深海", "探秘"], price: 400 },
+
+    // === 文化 (Culture) ===
+    { id: "c1", name: "逛寺庙", category: "culture", icon: <Landmark className="w-full h-full text-amber-600" />, tags: ["祈福", "静心"], price: 0 },
+    { id: "c2", name: "逛博物馆", category: "culture", icon: <Landmark className="w-full h-full text-stone-600" />, tags: ["历史", "知识"], price: 0 },
+    { id: "c3", name: "逛美术馆/画展", category: "culture", icon: <Palette className="w-full h-full text-purple-500" />, tags: ["艺术", "审美"], price: 60 },
+    { id: "c4", name: "逛科技馆", category: "culture", icon: <Rocket className="w-full h-full text-blue-600" />, tags: ["未来", "探索"], price: 40 },
+    { id: "c5", name: "听讲座/论坛", category: "culture", icon: <MessageCircle className="w-full h-full text-indigo-500" />, tags: ["学习", "提升"], price: 0 },
+    { id: "c6", name: "看电影展", category: "culture", icon: <Film className="w-full h-full text-gray-800" />, tags: ["文艺", "经典"], price: 80 },
+    { id: "c7", name: "话剧", category: "culture", icon: <Drama className="w-full h-full text-red-600" />, tags: ["表演", "现场"], price: 200 },
+    { id: "c8", name: "相声/脱口秀", category: "culture", icon: <Mic2 className="w-full h-full text-orange-500" />, tags: ["幽默", "开心"], price: 120 },
+    { id: "c9", name: "听戏曲", category: "culture", icon: <Drama className="w-full h-full text-rose-600" />, tags: ["传统", "国粹"], price: 80 },
+    { id: "c10", name: "看变脸", category: "culture", icon: <Drama className="w-full h-full text-red-500" />, tags: ["非遗", "神奇"], price: 100 },
+    { id: "c11", name: "围炉煮茶", category: "culture", icon: <Coffee className="w-full h-full text-amber-700" />, tags: ["惬意", "社交"], price: 128 },
+    { id: "c12", name: "制陶/做手工", category: "culture", icon: <Hammer className="w-full h-full text-stone-500" />, tags: ["DIY", "创造"], price: 150 },
+    { id: "c13", name: "涂鸦", category: "culture", icon: <Brush className="w-full h-full text-pink-500" />, tags: ["街头", "艺术"], price: 50 },
+    { id: "c14", name: "去法院旁听", category: "culture", icon: <Gavel className="w-full h-full text-stone-800" />, tags: ["法律", "真实"], price: 0 },
+    { id: "c15", name: "参加拍卖会", category: "culture", icon: <Gavel className="w-full h-full text-amber-600" />, tags: ["见世面", "收藏"], price: 0 },
+
+    // === 养生 (Wellness) ===
+    { id: "w1", name: "泡温泉", category: "wellness", icon: <Droplets className="w-full h-full text-blue-300" />, tags: ["放松", "温暖"], price: 180 },
+    { id: "w2", name: "按摩/足疗", category: "wellness", icon: <Armchair className="w-full h-full text-green-600" />, tags: ["舒缓", "健康"], price: 120 },
+    { id: "w3", name: "拔火罐/刮痧", category: "wellness", icon: <Flame className="w-full h-full text-red-500" />, tags: ["排毒", "传统"], price: 80 },
+    { id: "w4", name: "蒸桑拿", category: "wellness", icon: <CloudRain className="w-full h-full text-gray-400" />, tags: ["排汗", "养肤"], price: 60 },
+    { id: "w5", name: "点4个技师按摩", category: "wellness", icon: <UserPlus className="w-full h-full text-purple-600" />, tags: ["奢华", "享受"], price: 600 },
+    { id: "w6", name: "献血", category: "wellness", icon: <HeartHandshake className="w-full h-full text-red-600" />, tags: ["公益", "爱心"], price: 0 },
+    { id: "w7", name: "吃一顿斋饭", category: "wellness", icon: <Utensils className="w-full h-full text-green-500" />, tags: ["清淡", "修行"], price: 30 },
+
+    // === 户外 (Outdoor) ===
+    { id: "o1", name: "逛公园", category: "outdoor", icon: <Trees className="w-full h-full text-green-500" />, tags: ["自然", "散步"], price: 0 },
+    { id: "o2", name: "爬山", category: "outdoor", icon: <Mountain className="w-full h-full text-stone-600" />, tags: ["登顶", "锻炼"], price: 0 },
+    { id: "o3", name: "植树", category: "outdoor", icon: <Shovel className="w-full h-full text-green-700" />, tags: ["环保", "绿色"], price: 50 },
+    { id: "o4", name: "看日出日落", category: "outdoor", icon: <Sun className="w-full h-full text-orange-400" />, tags: ["浪漫", "美景"], price: 0 },
+    { id: "o5", name: "露营/野炊", category: "outdoor", icon: <Tent className="w-full h-full text-green-600" />, tags: ["野趣", "聚会"], price: 200 },
+    { id: "o6", name: "坐轮渡/划船", category: "outdoor", icon: <Ship className="w-full h-full text-blue-500" />, tags: ["水上", "吹风"], price: 10 },
+    { id: "o7", name: "钓鱼/赶海", category: "outdoor", icon: <Fish className="w-full h-full text-blue-400" />, tags: ["收获", "耐心"], price: 50 },
+    { id: "o8", name: "热气球", category: "outdoor", icon: <FerrisWheel className="w-full h-full text-red-400" />, tags: ["天空", "浪漫"], price: 800 },
+    { id: "o9", name: "跳伞/蹦极", category: "outdoor", icon: <Wind className="w-full h-full text-blue-600" />, tags: ["极限", "勇敢"], price: 1500 },
+    { id: "o10", name: "溶洞探险", category: "outdoor", icon: <Search className="w-full h-full text-stone-700" />, tags: ["神秘", "地质"], price: 100 },
+    { id: "o11", name: "走迷宫", category: "outdoor", icon: <Spline className="w-full h-full text-green-500" />, tags: ["趣味", "方向"], price: 50 },
+    { id: "o12", name: "放风筝", category: "outdoor", icon: <Wind className="w-full h-full text-cyan-400" />, tags: ["春游", "童趣"], price: 20 },
+    { id: "o13", name: "看极光/流星雨", category: "outdoor", icon: <Star className="w-full h-full text-yellow-300" />, tags: ["许愿", "奇迹"], price: 0 },
+    { id: "o14", name: "去果园摘水果", category: "outdoor", icon: <Flower className="w-full h-full text-red-500" />, tags: ["新鲜", "农乐"], price: 60 },
+    { id: "o15", name: "去海边看海", category: "outdoor", icon: <Anchor className="w-full h-full text-blue-600" />, tags: ["治愈", "听涛"], price: 0 },
+    { id: "o16", name: "植物园", category: "outdoor", icon: <Flower className="w-full h-full text-green-400" />, tags: ["花草", "氧吧"], price: 40 },
+
+    // === 生活体验 (Lifestyle) ===
+    { id: "l1", name: "旅游/无计划旅程", category: "lifestyle", icon: <Plane className="w-full h-full text-blue-500" />, tags: ["远方", "自由"], price: 2000 },
+    { id: "l2", name: "种田/秋收", category: "lifestyle", icon: <Wheat className="w-full h-full text-yellow-600" />, tags: ["归园田居", "体验"], price: 100 },
+    { id: "l3", name: "遛狗", category: "lifestyle", icon: <Dog className="w-full h-full text-stone-500" />, tags: ["陪伴", "散步"], price: 0 },
+    { id: "l4", name: "和陌生人聊天", category: "lifestyle", icon: <MessageCircle className="w-full h-full text-pink-500" />, tags: ["社牛", "缘分"], price: 0 },
+    { id: "l5", name: "去星巴克喝咖啡", category: "lifestyle", icon: <Coffee className="w-full h-full text-green-700" />, tags: ["小资", "办公"], price: 35 },
+    { id: "l6", name: "去舞蹈室跳舞", category: "lifestyle", icon: <Activity className="w-full h-full text-purple-500" />, tags: ["律动", "热爱"], price: 80 },
+    { id: "l7", name: "住一次别墅", category: "lifestyle", icon: <Building2 className="w-full h-full text-orange-400" />, tags: ["享受", "聚会"], price: 2000 },
+    { id: "l8", name: "住五星级酒店", category: "lifestyle", icon: <BedDouble className="w-full h-full text-indigo-400" />, tags: ["奢华", "服务"], price: 1500 },
+    { id: "l9", name: "坐一次豪车", category: "lifestyle", icon: <Car className="w-full h-full text-black" />, tags: ["体验", "速度"], price: 500 },
+    { id: "l10", name: "坐直升机", category: "lifestyle", icon: <Plane className="w-full h-full text-blue-700" />, tags: ["俯瞰", "豪华"], price: 1000 },
+    { id: "l11", name: "私人聚会", category: "lifestyle", icon: <PartyPopper className="w-full h-full text-yellow-500" />, tags: ["圈子", "狂欢"], price: 500 },
+    { id: "l12", name: "看模特走秀/时尚秀", category: "lifestyle", icon: <Camera className="w-full h-full text-black" />, tags: ["时尚", "潮流"], price: 300 },
+    { id: "l13", name: "拍写真", category: "lifestyle", icon: <Camera className="w-full h-full text-pink-500" />, tags: ["留念", "美"], price: 500 },
+    { id: "l14", name: "素人改造", category: "lifestyle", icon: <Scissors className="w-full h-full text-gray-600" />, tags: ["变美", "惊喜"], price: 800 },
+    { id: "l15", name: "定做西装", category: "lifestyle", icon: <Shirt className="w-full h-full text-blue-900" />, tags: ["绅士", "品味"], price: 2000 },
+    { id: "l16", name: "立遗嘱", category: "lifestyle", icon: <Scroll className="w-full h-full text-stone-600" />, tags: ["人生", "规划"], price: 1000 },
+    { id: "l17", name: "大树顶端大喊", category: "lifestyle", icon: <Megaphone className="w-full h-full text-red-500" />, tags: ["释放", "疯狂"], price: 0 },
+    { id: "l18", name: "凌晨去坟山", category: "lifestyle", icon: <Skull className="w-full h-full text-gray-500" />, tags: ["探险", "胆量"], price: 0 },
+    { id: "l19", name: "编路人背景故事", category: "lifestyle", icon: <BookOpen className="w-full h-full text-blue-400" />, tags: ["观察", "脑洞"], price: 0 },
+    { id: "l20", name: "淘金", category: "lifestyle", icon: <Coins className="w-full h-full text-yellow-500" />, tags: ["财富", "运气"], price: 50 },
+    { id: "l21", name: "酿酒", category: "lifestyle", icon: <Wine className="w-full h-full text-purple-700" />, tags: ["手作", "时间"], price: 200 },
+    { id: "l22", name: "喷火表演", category: "entertainment", icon: <Flame className="w-full h-full text-orange-600" />, tags: ["特技", "危险"], price: 0 }
+]
