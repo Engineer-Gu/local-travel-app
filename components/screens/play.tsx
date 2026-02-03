@@ -272,7 +272,7 @@ export function PlayScreen() {
             ) : randomResult && (
               <div className="flex flex-col items-center animate-in zoom-in duration-300">
                 <div className="text-6xl mb-4">{randomResult.icon}</div>
-                <h3 className="text-lg font-bold mb-1">去玩这个吧！</h3>
+                <h3 className="text-lg font-bold mb-1">去试试这个吧！</h3>
                 <div className="text-xl font-bold text-blue-600 mb-6">{randomResult.name}</div>
                 <Button
                   className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold"

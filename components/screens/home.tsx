@@ -409,8 +409,8 @@ export function Home({ navigate }: HomeProps) {
   // 顶部Tab配置
   const topTabs = [
     { id: "prediction", title: "预测" },
-    { id: "dining", title: "吃喝" },
-    { id: "play", title: "玩乐" },
+    // { id: "dining", title: "吃喝" }, // Moved to Prediction Screen
+    // { id: "play", title: "玩乐" },   // Moved to Prediction Screen
     { id: "routes", title: "路线" },
     { id: "planning", title: "规划" },
     { id: "guides", title: "向导" },
@@ -552,9 +552,9 @@ export function Home({ navigate }: HomeProps) {
         </>
       )}
 
-      {/* 热门路线 Tab */}
+      {/* 热门路线 Tab (Actually Prediction) */}
       {activeTab === 'prediction' && (
-        <PredictionScreen />
+        <PredictionScreen onNavigateToTab={(tab) => setActiveTab(tab)} />
       )}
 
       {/* 吃喝 Tab */}

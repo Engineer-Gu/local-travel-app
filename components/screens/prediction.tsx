@@ -51,7 +51,11 @@ const SCENIC_SPOTS = [
   }
 ]
 
-export function PredictionScreen() {
+interface PredictionScreenProps {
+  onNavigateToTab?: (tab: "dining" | "play") => void
+}
+
+export function PredictionScreen({ onNavigateToTab }: PredictionScreenProps) {
   const { toast } = useToast()
   const [location, setLocation] = useState("定位中...")
   const [isNavOpen, setIsNavOpen] = useState(false)
@@ -122,6 +126,57 @@ export function PredictionScreen() {
         </div>
         <div className="text-sm text-muted-foreground">
           26°C 晴
+        </div>
+      </div>
+
+      {/* 1.5 Quick Access Buttons for Dining & Play */}
+      <div className="px-4 grid grid-cols-2 gap-4">
+        {/* Dining Button */}
+        <div
+          className="group relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-sm hover:shadow-md"
+          onClick={() => onNavigateToTab && onNavigateToTab('dining')}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-red-500 opacity-90 dark:opacity-80 transition-opacity" />
+
+          <div className="relative h-24 flex flex-row items-center justify-between px-5">
+            <div className="flex flex-col items-start text-white">
+              <span className="text-xl font-bold tracking-wide">吃喝</span>
+              <span className="text-xs opacity-90 font-medium mt-1">美食 / 探店</span>
+            </div>
+            <div className="bg-white/20 p-2.5 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+                <path d="M7 2v20" />
+                <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Play Button */}
+        <div
+          className="group relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-sm hover:shadow-md"
+          onClick={() => onNavigateToTab && onNavigateToTab('play')}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-purple-600 opacity-90 dark:opacity-80 transition-opacity" />
+
+          <div className="relative h-24 flex flex-row items-center justify-between px-5">
+            <div className="flex flex-col items-start text-white">
+              <span className="text-xl font-bold tracking-wide">玩乐</span>
+              <span className="text-xs opacity-90 font-medium mt-1">景点 / 娱乐</span>
+            </div>
+            <div className="bg-white/20 p-2.5 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                <path d="M5.8 11.3 2 22l10.7-3.79" />
+                <path d="M4 3h.01" />
+                <path d="M22 8h.01" />
+                <path d="M15 2h.01" />
+                <path d="M22 20h.01" />
+                <path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 1.96l-.75 2.24L17.05 6.95a2.9 2.9 0 0 0-1.96-1.96L12.85 4.25l2.25-.75a2.9 2.9 0 0 0 1.96-1.96l.75-2.25L17.8 1.5a2.9 2.9 0 0 0 1.96 1.96z" />
+                <path d="m14.2 9.7-7.2-7.2-1.2 1.2a2.9 2.9 0 0 0 0 4.1l4 4a2.9 2.9 0 0 0 4.1 0z" />
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
 
