@@ -67,12 +67,68 @@ export function PredictionScreen({ onNavigateToTab }: PredictionScreenProps) {
   const [reportStatus, setReportStatus] = useState("moderate")
   const [reportDesc, setReportDesc] = useState("")
 
+  // Weather State
+  const [weather, setWeather] = useState<{ temp: number, condition: string } | null>(null)
+
   // Simulate getting location on mount
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLocation("杭州市 · 西湖区")
-    }, 1500)
-    return () => clearTimeout(timer)
+    // 1. Get Coordinates
+    if (!navigator.geolocation) {
+      setLocation("定位不可用")
+      return
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords
+
+        try {
+          // 2. Reverse Geocoding (Nominatim)
+          // Note: In production, you should use a backend proxy or a paid service to avoid exposing logic/rate limits
+          const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&accept-language=zh`)
+          const geoData = await geoRes.json()
+
+          if (geoData && geoData.address) {
+            // Priority: City -> County -> State
+            const city = geoData.address.city || geoData.address.town || geoData.address.county
+            const district = geoData.address.district || geoData.address.suburb || ""
+            setLocation(`${city} · ${district}`)
+          } else {
+            setLocation("未知位置")
+          }
+
+          // 3. Fetch Weather (Open-Meteo)
+          const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`)
+          const weatherData = await weatherRes.json()
+
+          if (weatherData && weatherData.current_weather) {
+            const code = weatherData.current_weather.weathercode
+            // Map WMO codes to text (Simplified)
+            let condition = "晴"
+            if (code >= 1 && code <= 3) condition = "多云"
+            else if (code >= 45 && code <= 48) condition = "雾"
+            else if (code >= 51 && code <= 67) condition = "雨"
+            else if (code >= 71 && code <= 77) condition = "雪"
+            else if (code >= 80 && code <= 82) condition = "阵雨"
+            else if (code >= 95) condition = "雷雨"
+
+            setWeather({
+              temp: weatherData.current_weather.temperature,
+              condition: condition
+            })
+          }
+
+        } catch (error) {
+          console.error("Failed to fetch location/weather data:", error)
+          setLocation("获取失败")
+        }
+      },
+      (error) => {
+        console.error("Geolocation error:", error)
+        setLocation("定位失败")
+      },
+      { timeout: 10000 }
+    )
   }, [])
 
   const openNavigation = (destination: string) => {
@@ -125,7 +181,7 @@ export function PredictionScreen({ onNavigateToTab }: PredictionScreenProps) {
           <span className="text-lg font-bold">{location}</span>
         </div>
         <div className="text-sm text-muted-foreground">
-          26°C 晴
+          {weather ? `${weather.temp}°C ${weather.condition}` : "加载中..."}
         </div>
       </div>
 

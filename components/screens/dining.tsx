@@ -168,17 +168,33 @@ export function DiningScreen() {
                                 <div
                                     key={item.id}
                                     onClick={() => setSelectedItem(item)}
-                                    className="group bg-white dark:bg-gray-900 rounded-xl p-3 shadow-[0_2px_6px_rgba(0,0,0,0.03)] border border-gray-100 dark:border-gray-800 flex items-center gap-3 cursor-pointer hover:border-blue-100 transition-all active:scale-95"
+                                    className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 cursor-pointer hover:shadow-md transition-all active:scale-95 flex flex-col"
                                 >
-                                    <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-xl shrink-0">
-                                        {item.icon}
-                                    </div>
-                                    <div className="min-w-0 flex-1">
-                                        <div className="flex justify-between items-start">
-                                            <div className="font-bold text-sm text-gray-800 dark:text-gray-100 truncate">{item.name}</div>
-                                            <div className="text-xs font-bold text-blue-600">¥{item.price}</div>
+                                    <div className="relative h-24 w-full bg-gray-100 overflow-hidden">
+                                        {item.image ? (
+                                            <img
+                                                src={item.image}
+                                                alt={item.name}
+                                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-4xl bg-gray-50">
+                                                {item.icon}
+                                            </div>
+                                        )}
+                                        <div className="absolute top-1 right-1 bg-white/90 backdrop-blur-sm px-1.5 py-0.5 rounded-md text-[10px] font-bold text-gray-600 shadow-sm">
+                                            {item.category === 'drink' ? '饮品' : '美食'}
                                         </div>
-                                        <div className="text-[10px] text-gray-400 mt-0.5">{item.subCategory}</div>
+                                    </div>
+                                    <div className="p-3">
+                                        <div className="flex justify-between items-start mb-1">
+                                            <div className="font-bold text-sm text-gray-800 dark:text-gray-100 truncate flex-1 mr-1">{item.name}</div>
+                                            <div className="text-xs font-bold text-blue-600 shrink-0">¥{item.price}</div>
+                                        </div>
+                                        <div className="flex justify-between items-center text-[10px] text-gray-400">
+                                            <span>{item.subCategory}</span>
+                                            <span className="bg-gray-50 dark:bg-gray-800 px-1 rounded text-gray-400">评分 4.8</span>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -201,12 +217,34 @@ export function DiningScreen() {
                     {selectedItem && (
                         <div className="flex flex-col bg-white dark:bg-gray-900">
                             {/* Header */}
-                            <div className="bg-blue-600 p-6 text-white flex flex-col items-center justify-center relative">
-                                <div className="text-5xl mb-3 drop-shadow-sm transform hover:scale-110 transition-transform duration-300">
-                                    {selectedItem.icon}
+                            {/* Header */}
+                            <div className="relative h-48 w-full bg-gray-100">
+                                {selectedItem.image ? (
+                                    <img
+                                        src={selectedItem.image}
+                                        alt={selectedItem.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-6xl bg-blue-50">
+                                        {selectedItem.icon}
+                                    </div>
+                                )}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-5 text-white">
+                                    <div className="flex justify-between items-end">
+                                        <div>
+                                            <h2 className="text-2xl font-bold mb-1">{selectedItem.name}</h2>
+                                            <div className="text-xs opacity-90">{selectedItem.subCategory} · {selectedItem.category === 'drink' ? '饮品' : '美食'}</div>
+                                        </div>
+                                        <div className="text-xl font-bold text-yellow-400">¥{selectedItem.price}</div>
+                                    </div>
                                 </div>
-                                <h2 className="text-xl font-bold">{selectedItem.name}</h2>
-                                <div className="text-blue-100 text-xs mt-1">{selectedItem.subCategory} · {selectedItem.category === 'drink' ? '饮品' : '美食'}</div>
+                            </div>
+
+                            <div className="px-5 pt-4 pb-0">
+                                <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                                    {selectedItem.description}
+                                </p>
                             </div>
 
                             {/* Actions */}
@@ -247,7 +285,15 @@ export function DiningScreen() {
                             </div>
                         ) : randomResult && (
                             <div className="flex flex-col items-center animate-in zoom-in duration-300">
-                                <div className="text-6xl mb-4">{randomResult.icon}</div>
+                                <div className="w-32 h-32 rounded-xl overflow-hidden mb-4 shadow-lg border-4 border-white">
+                                    {randomResult.image ? (
+                                        <img src={randomResult.image} alt={randomResult.name} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-6xl bg-blue-50">
+                                            {randomResult.icon}
+                                        </div>
+                                    )}
+                                </div>
                                 <h3 className="text-lg font-bold mb-1">今天就吃它！</h3>
                                 <div className="text-xl font-bold text-blue-600 mb-6">{randomResult.name}</div>
                                 <Button

@@ -3,7 +3,8 @@ export interface DiningItem {
     name: string
     category: string
     subCategory: string // e.g. "鸡", "鸭", "饮料", "酒"
-    icon: string // We will use generic emojis based on category
+    icon: string // Keeping icon for compatibility/fallback, but image is preferred
+    image?: string // New image property
     price: number
     description: string
 }
@@ -16,10 +17,21 @@ export const DINING_CATEGORIES = [
     { id: "light", name: "轻食/素食" },
 ]
 
-// Creative description templates
+// Pool of food images from mock directory
+const FOOD_IMAGES = [
+    "/images/mock/hangzhou_food_1.png",
+    "/images/mock/hangzhou_food_2.png",
+    "/images/mock/product_cake.png",
+    "/images/mock/product_snack.png",
+    "/images/mock/product_tea.png",
+    "/images/mock/west_lake_1.png", // Scenic but usable for vibe
+    "/images/mock/west_lake_2.png",
+]
 
-// Explicit item definitions now used
-
+const DRINK_IMAGES = [
+    "/images/mock/product_tea.png",
+    "/images/mock/product_teaset.png",
+]
 
 // Helper to create items quickly
 const create = (name: string, subCategory: string, category: "meal" | "snack" | "drink" | "light", icon: string, description: string): DiningItem => {
@@ -29,12 +41,20 @@ const create = (name: string, subCategory: string, category: "meal" | "snack" | 
     if (category === "snack") price = Math.floor(Math.random() * 30) + 5
     if (category === "drink") price = Math.floor(Math.random() * 25) + 8
     if (category === "light") price = Math.floor(Math.random() * 40) + 15
+
+    // Pick random image based on category
+    let imagePool = FOOD_IMAGES
+    if (category === "drink") imagePool = DRINK_IMAGES
+
+    const randomImage = imagePool[Math.floor(Math.random() * imagePool.length)]
+
     return {
         id: Math.random().toString(36).substr(2, 9),
         name,
         category,
         subCategory,
         icon,
+        image: randomImage,
         price,
         description
     }
