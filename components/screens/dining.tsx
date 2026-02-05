@@ -1,14 +1,18 @@
 "use client"
 
 import { useState } from "react"
-import { Search, Utensils, Dices, Navigation, Heart } from "lucide-react"
+import { Search, Utensils, Dices, Navigation, Heart, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { MOCK_DINING_LIST, DiningItem, DINING_CATEGORIES } from "@/data/mock_dining_list"
 
-export function DiningScreen() {
+interface DiningScreenProps {
+    onBack?: () => void
+}
+
+export function DiningScreen({ onBack }: DiningScreenProps) {
     const [search, setSearch] = useState("")
     const [selectedCategory, setSelectedCategory] = useState<string>("all")
     const [selectedItem, setSelectedItem] = useState<DiningItem | null>(null)
@@ -62,11 +66,18 @@ export function DiningScreen() {
             {/* 1. Header (Blue Theme) */}
             <div className="shrink-0 pt-4 px-4 pb-4 bg-white dark:bg-black sticky top-0 z-10 shadow-sm">
                 <div className="flex items-center justify-between mb-4">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                            今天吃什么
-                        </h1>
-                        <p className="text-xs text-gray-500 mt-1">探索美食，治愈味蕾</p>
+                    <div className="flex items-center gap-2">
+                        {onBack && (
+                            <Button variant="ghost" size="icon" className="-ml-2" onClick={onBack}>
+                                <ArrowLeft className="w-6 h-6" />
+                            </Button>
+                        )}
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                                吃什么
+                            </h1>
+                            <p className="text-xs text-gray-500 mt-1">探索美食</p>
+                        </div>
                     </div>
                     <div className="flex gap-2">
                         <Button

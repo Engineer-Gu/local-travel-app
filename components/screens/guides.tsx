@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Search, Filter, Star, Calendar, MessageCircle, Award, ArrowLeft, ThumbsUp } from "lucide-react"
+import { Search, Filter, Star, Calendar, MessageCircle, Award, ArrowLeft, ThumbsUp, Headphones } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -55,6 +55,7 @@ const reviewsData = {
 
 export function Guides({ navigate }: GuidesProps) {
   const [selectedCategory, setSelectedCategory] = useState("全部")
+  const [searchQuery, setSearchQuery] = useState("") // Added search query state
   const [showReviews, setShowReviews] = useState(false)
   const [selectedGuide, setSelectedGuide] = useState<any>(null)
 
@@ -140,16 +141,22 @@ export function Guides({ navigate }: GuidesProps) {
     },
   ]
 
-  // 根据选择的分类筛选导游
-  const filteredGuides =
-    selectedCategory === "全部"
-      ? allGuides
-      : allGuides.filter((guide) =>
-        guide.specialties.some(
-          (specialty) =>
-            specialty === selectedCategory || (selectedCategory === "亲子" && specialty.includes("亲子")),
-        ),
-      )
+  // Filter guides based on category and search query
+  const filteredGuides = allGuides.filter((guide) => {
+    // 1. Category Filter
+    const matchesCategory = selectedCategory === "全部" || guide.specialties.some(
+      (specialty) => specialty === selectedCategory || (selectedCategory === "亲子" && specialty.includes("亲子"))
+    )
+
+    // 2. Search Filter
+    const query = searchQuery.toLowerCase().trim()
+    const matchesSearch = query === "" ||
+      guide.name.includes(query) ||
+      guide.specialties.some(s => s.includes(query))
+
+    return matchesCategory && matchesSearch
+  })
+
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category)
@@ -177,9 +184,20 @@ export function Guides({ navigate }: GuidesProps) {
     <div className="p-4 pb-16">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold">需要导游吗</h1>
-        <Button variant="outline" size="icon">
-          <Filter size={18} />
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1 text-blue-600 border-blue-100 bg-blue-50"
+            onClick={() => navigate("ai-voice-guide")}
+          >
+            <Headphones size={16} />
+            <span className="text-xs">AI导游</span>
+          </Button>
+          <Button variant="outline" size="icon">
+            <Filter size={18} />
+          </Button>
+        </div>
       </div>
 
       <div className="relative mb-6">
@@ -188,6 +206,8 @@ export function Guides({ navigate }: GuidesProps) {
           type="text"
           placeholder="搜索导游或专长"
           className="w-full pl-10 pr-4 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
 

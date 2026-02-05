@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Search, Navigation, Dices } from "lucide-react"
+import { Search, Navigation, Dices, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
@@ -9,7 +9,11 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { MOCK_LIFE_SERVICES, LifeService } from "@/data/mock_life_list"
 import { NavigationModal } from "@/components/ui/navigation-modal"
 
-export function PlayScreen() {
+interface PlayScreenProps {
+  onBack?: () => void
+}
+
+export function PlayScreen({ onBack }: PlayScreenProps) {
   const [search, setSearch] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [selectedActivity, setSelectedActivity] = useState<LifeService | null>(null)
@@ -73,11 +77,18 @@ export function PlayScreen() {
       {/* 1. Header (Clean White) */}
       <div className="shrink-0 pt-4 px-4 pb-4 bg-white dark:bg-black sticky top-0 z-10 shadow-sm">
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              去哪玩
-            </h1>
-            <p className="text-xs text-gray-500 mt-1">发现城市里的宝藏活动</p>
+          <div className="flex items-center gap-2">
+            {onBack && (
+              <Button variant="ghost" size="icon" className="-ml-2" onClick={onBack}>
+                <ArrowLeft className="w-6 h-6" />
+              </Button>
+            )}
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                去哪玩
+              </h1>
+              <p className="text-xs text-gray-500 mt-1">发现城市里的宝藏活动</p>
+            </div>
           </div>
           <div className="flex gap-2">
             <Button

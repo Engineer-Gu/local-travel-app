@@ -448,14 +448,7 @@ export function Home({ navigate }: HomeProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full bg-black/5 dark:bg-white/10"
-            onClick={() => navigate("ai-voice-guide")} // 临时放这里或者搜索
-          >
-            <Search size={20} />
-          </Button>
+          {/* Search/AI button removed - moved to Guides screen */}
         </div>
       </div>
 
@@ -559,12 +552,12 @@ export function Home({ navigate }: HomeProps) {
 
       {/* 吃喝 Tab */}
       {activeTab === 'dining' && (
-        <DiningScreen />
+        <DiningScreen onBack={() => setActiveTab('prediction')} />
       )}
 
       {/* 玩乐 Tab */}
       {activeTab === 'play' && (
-        <PlayScreen />
+        <PlayScreen onBack={() => setActiveTab('prediction')} />
       )}
 
       {activeTab === 'routes' && (
