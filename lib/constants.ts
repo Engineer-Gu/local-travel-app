@@ -4,8 +4,10 @@
 export const APP_CONSTANTS = {
   /**
    * API基础URL
+   * 优先使用环境变量NEXT_PUBLIC_API_URL
+   * 默认使用localhost:8080，确保本地开发和不同环境都能正常访问
    */
-  API_BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'http://192.168.90.227:8080',
+  API_BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
 
   /**
    * API请求超时时间（毫秒）

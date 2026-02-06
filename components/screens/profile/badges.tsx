@@ -1,27 +1,26 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowLeft, Search, Lock, CheckCircle, Info } from "lucide-react"
+import { ArrowLeft, Search, Lock, CheckCircle, Info, Trophy, Star, Share2, Crown, Flame, Target, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-// import { userService } from "@/lib/services/user-service"
-// import type { Badge as BadgeType } from "@/lib/services/user-service"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import type { Screen } from "@/lib/navigation-types"
 
 interface BadgesProps {
   goBack: () => void
+  navigate: (screen: Screen, params?: Record<string, any>) => void
 }
 
-export function Badges({ goBack }: BadgesProps) {
+export function Badges({ goBack, navigate }: BadgesProps) {
   const [activeTab, setActiveTab] = useState("earned")
   const [selectedBadge, setSelectedBadge] = useState<BadgeType | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  // const [isLoading, setIsLoading] = useState(false)
-  // const [error, setError] = useState<string | null>(null)
-  // const [badgeStats, setBadgeStats] = useState<any>(null)
+  const [showShareDialog, setShowShareDialog] = useState(false)
 
   // 模拟徽章数据
   const earnedBadges = [
@@ -193,125 +192,164 @@ export function Badges({ goBack }: BadgesProps) {
 
   type BadgeType = (typeof earnedBadges)[0] | (typeof inProgressBadges)[0] | (typeof lockedBadges)[0]
 
-  // 后端API调用 - 获取徽章列表
-  /* 
-  const fetchBadges = async () => {
-    try {
-      setIsLoading(true)
-      setError(null)
-      
-      // 获取不同状态的徽章
-      const earned = await userService.getBadges({ status: 'earned' })
-      const inProgress = await userService.getBadges({ status: 'progress' })
-      const locked = await userService.getBadges({ status: 'locked' })
-      
-      // 更新状态
-      setEarnedBadges(earned)
-      setInProgressBadges(inProgress)
-      setLockedBadges(locked)
-    } catch (error) {
-      console.error("获取徽章失败", error)
-      setError("获取徽章失败，请稍后重试")
-    } finally {
-      setIsLoading(false)
-    }
-  }
-  */
+  // 成就排行榜数据
+  const leaderboard = [
+    { rank: 1, name: "旅行大神", avatar: "/images/mock/avatar_male_1.png", badges: 45, level: 28 },
+    { rank: 2, name: "探索达人", avatar: "/images/mock/avatar_female_1.png", badges: 42, level: 26 },
+    { rank: 3, name: "摄影高手", avatar: "/images/mock/avatar_male_2.png", badges: 38, level: 24 },
+    { rank: 4, name: "美食猎人", avatar: "/images/mock/avatar_female_2.png", badges: 35, level: 22 },
+    { rank: 5, name: "我", avatar: "/images/mock/avatar_male_1.png", badges: 5, level: 8, isMe: true },
+  ]
 
-  // 后端API调用 - 获取徽章统计数据
-  /* 
-  const fetchBadgeStats = async () => {
-    try {
-      const stats = await userService.getBadgeStats()
-      setBadgeStats(stats)
-    } catch (error) {
-      console.error("获取徽章统计数据失败", error)
-    }
-  }
-  */
+  // 稀有成就数据
+  const rareBadges = [
+    { id: "rare1", name: "传奇旅行家", icon: "👑", rarity: "传说", holders: 12, description: "完成100条不同路线", color: "bg-gradient-to-r from-yellow-400 to-orange-500" },
+    { id: "rare2", name: "环球探险家", icon: "🌍", rarity: "史诗", holders: 58, description: "在10个国家完成旅行", color: "bg-gradient-to-r from-purple-500 to-pink-500" },
+    { id: "rare3", name: "摄影大师", icon: "📷", rarity: "稀有", holders: 156, description: "获得10000个照片点赞", color: "bg-gradient-to-r from-blue-500 to-cyan-500" },
+  ]
 
-  // 后端API调用 - 获取徽章详情
-  /* 
-  const fetchBadgeDetail = async (badgeId: string) => {
-    try {
-      const badgeDetail = await userService.getBadgeDetail(badgeId)
-      setSelectedBadge(badgeDetail)
-      setIsDialogOpen(true)
-    } catch (error) {
-      console.error("获取徽章详情失败", error)
-      setError("获取徽章详情失败，请稍后重试")
-    }
-  }
-  */
-
-  // 后端API调用 - 分享徽章
-  /* 
-  const shareBadge = async (badgeId: string, platform: string) => {
-    try {
-      await userService.shareBadge(badgeId, platform)
-      // 显示分享成功提示
-    } catch (error) {
-      console.error("分享徽章失败", error)
-    }
-  }
-  */
-
-  // 组件挂载时加载数据
-  /* 
-  useEffect(() => {
-    fetchBadges()
-    fetchBadgeStats()
-  }, [])
-  */
-
-  // 搜索徽章
-  /* 
-  const handleSearch = async (searchText: string) => {
-    try {
-      setIsLoading(true)
-      
-      // 根据当前选中的标签页决定搜索哪种状态的徽章
-      const status = activeTab === 'earned' ? 'earned' : 
-                    activeTab === 'progress' ? 'progress' : 'locked'
-      
-      const results = await userService.getBadges({ 
-        status, 
-        searchText 
-      })
-      
-      // 更新对应标签页的徽章列表
-      if (activeTab === 'earned') {
-        setEarnedBadges(results)
-      } else if (activeTab === 'progress') {
-        setInProgressBadges(results)
-      } else {
-        setLockedBadges(results)
-      }
-    } catch (error) {
-      console.error("搜索徽章失败", error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-  */
+  // 成就挑战数据
+  const challenges = [
+    { id: "ch1", name: "周末探索者", description: "本周末完成3个景点打卡", reward: "探索徽章", progress: 1, target: 3, deadline: "2天后截止", icon: "🎯" },
+    { id: "ch2", name: "美食品鉴家", description: "本月品尝10种当地美食", reward: "美食徽章升级", progress: 6, target: 10, deadline: "15天后截止", icon: "🍜" },
+    { id: "ch3", name: "社交达人", description: "邀请3位好友一起旅行", reward: "社交蝴蝶徽章", progress: 2, target: 3, deadline: "7天后截止", icon: "🦋" },
+  ]
 
   const handleBadgeClick = (badge: BadgeType) => {
-    // 如果使用后端API，则调用fetchBadgeDetail(badge.id)
-    // fetchBadgeDetail(badge.id)
-
-    // 使用模拟数据，直接设置选中的徽章
     setSelectedBadge(badge)
     setIsDialogOpen(true)
   }
 
+  // 分享徽章
+  const handleShareBadge = () => {
+    setShowShareDialog(true)
+  }
+
   return (
     <div className="p-4 pb-16">
-      <div className="flex items-center mb-6">
-        <Button variant="ghost" size="sm" className="mr-2 p-0" onClick={goBack}>
-          <ArrowLeft size={18} />
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center">
+          <Button variant="ghost" size="sm" className="mr-2 p-0" onClick={goBack}>
+            <ArrowLeft size={18} />
+          </Button>
+          <h1 className="text-xl font-bold">成就中心</h1>
+        </div>
+        <Button variant="ghost" size="icon" onClick={handleShareBadge}>
+          <Share2 size={18} />
         </Button>
-        <h1 className="text-xl font-bold">我的徽章</h1>
       </div>
+
+      {/* 成就挑战区域 */}
+      <Card className="mb-6 bg-gradient-to-r from-orange-50 to-yellow-50 border-none">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center">
+              <Flame size={20} className="text-orange-500 mr-2" />
+              <h3 className="font-semibold">限时挑战</h3>
+            </div>
+            <Button variant="ghost" size="sm" className="text-orange-500 h-auto p-0">
+              全部 <ChevronRight size={16} />
+            </Button>
+          </div>
+          <div className="space-y-3">
+            {challenges.map((challenge) => (
+              <div key={challenge.id} className="bg-white rounded-lg p-3 shadow-sm">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center">
+                    <span className="text-2xl mr-2">{challenge.icon}</span>
+                    <div>
+                      <h4 className="font-medium text-sm">{challenge.name}</h4>
+                      <p className="text-xs text-gray-500">{challenge.description}</p>
+                    </div>
+                  </div>
+                  <Badge variant="outline" className="text-orange-600 border-orange-200 bg-orange-50 text-xs">
+                    {challenge.deadline}
+                  </Badge>
+                </div>
+                <div className="mt-2">
+                  <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                    <span>进度 {challenge.progress}/{challenge.target}</span>
+                    <span className="text-orange-500">奖励: {challenge.reward}</span>
+                  </div>
+                  <Progress value={(challenge.progress / challenge.target) * 100} className="h-1.5" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* 稀有成就展示 */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center">
+            <Crown size={20} className="text-yellow-500 mr-2" />
+            <h3 className="font-semibold">稀有成就</h3>
+          </div>
+        </div>
+        <div className="flex space-x-3 overflow-x-auto pb-2">
+          {rareBadges.map((badge) => (
+            <Card key={badge.id} className="min-w-[140px] overflow-hidden">
+              <CardContent className="p-3 text-center">
+                <div className={`w-14 h-14 rounded-full ${badge.color} text-white flex items-center justify-center text-3xl mx-auto mb-2`}>
+                  {badge.icon}
+                </div>
+                <h4 className="font-medium text-sm">{badge.name}</h4>
+                <Badge variant="outline" className="mt-1 text-xs">
+                  {badge.rarity}
+                </Badge>
+                <p className="text-xs text-gray-500 mt-1">{badge.holders}人拥有</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+
+      {/* 成就排行榜 */}
+      <Card className="mb-6">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center">
+              <Trophy size={20} className="text-yellow-500 mr-2" />
+              <h3 className="font-semibold">成就排行榜</h3>
+            </div>
+            <Badge variant="secondary">本周</Badge>
+          </div>
+          <div className="space-y-3">
+            {leaderboard.map((user, index) => (
+              <div
+                key={index}
+                className={`flex items-center justify-between p-2 rounded-lg ${user.isMe ? 'bg-blue-50' : ''}`}
+              >
+                <div className="flex items-center">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-3 ${
+                    user.rank === 1 ? 'bg-yellow-400 text-white' :
+                    user.rank === 2 ? 'bg-gray-300 text-white' :
+                    user.rank === 3 ? 'bg-orange-400 text-white' :
+                    'bg-gray-100 text-gray-600'
+                  }`}>
+                    {user.rank}
+                  </div>
+                  <Avatar className="h-8 w-8 mr-2">
+                    <AvatarImage src={user.avatar} alt={user.name} />
+                    <AvatarFallback>{user.name.slice(0, 1)}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <span className={`text-sm font-medium ${user.isMe ? 'text-blue-600' : ''}`}>
+                      {user.name} {user.isMe && '(我)'}
+                    </span>
+                    <div className="text-xs text-gray-500">Lv.{user.level}</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-semibold">{user.badges}</div>
+                  <div className="text-xs text-gray-500">徽章</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="relative mb-6">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -319,23 +357,8 @@ export function Badges({ goBack }: BadgesProps) {
           type="text"
           placeholder="搜索徽章"
           className="w-full pl-10 pr-4 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          // onChange={(e) => handleSearch(e.target.value)}
         />
       </div>
-
-      {/* 错误提示 */}
-      {/* {error && (
-        <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm mb-4">
-          {error}
-        </div>
-      )} */}
-
-      {/* 加载状态 */}
-      {/* {isLoading && (
-        <div className="flex justify-center items-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-        </div>
-      )} */}
 
       <Tabs defaultValue="earned" className="mb-6" value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid grid-cols-3 mb-4">
@@ -525,28 +548,59 @@ export function Badges({ goBack }: BadgesProps) {
               </div>
 
               {/* 分享按钮 */}
-              {/* {"id" in selectedBadge && "earnedDate" in selectedBadge && (
-                <div className="mt-4 flex space-x-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => shareBadge(selectedBadge.id, 'wechat')}
-                  >
-                    分享到微信
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => shareBadge(selectedBadge.id, 'weibo')}
-                  >
-                    分享到微博
-                  </Button>
-                </div>
-              )} */}
+              {"earnedDate" in selectedBadge && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mt-4"
+                  onClick={handleShareBadge}
+                >
+                  <Share2 size={14} className="mr-1" />
+                  分享徽章
+                </Button>
+              )}
             </div>
           )}
           <DialogFooter>
             <Button onClick={() => setIsDialogOpen(false)}>关闭</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* 分享对话框 */}
+      <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>分享成就</DialogTitle>
+          </DialogHeader>
+          <div className="grid grid-cols-4 gap-4 py-4">
+            <Button variant="ghost" className="flex flex-col items-center h-auto py-3" onClick={() => setShowShareDialog(false)}>
+              <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white text-xl mb-1">
+                微
+              </div>
+              <span className="text-xs">微信</span>
+            </Button>
+            <Button variant="ghost" className="flex flex-col items-center h-auto py-3" onClick={() => setShowShareDialog(false)}>
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl mb-1">
+                Q
+              </div>
+              <span className="text-xs">QQ</span>
+            </Button>
+            <Button variant="ghost" className="flex flex-col items-center h-auto py-3" onClick={() => setShowShareDialog(false)}>
+              <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white text-xl mb-1">
+                微
+              </div>
+              <span className="text-xs">微博</span>
+            </Button>
+            <Button variant="ghost" className="flex flex-col items-center h-auto py-3" onClick={() => setShowShareDialog(false)}>
+              <div className="w-12 h-12 bg-gray-500 rounded-full flex items-center justify-center text-white text-xl mb-1">
+                链
+              </div>
+              <span className="text-xs">复制链接</span>
+            </Button>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowShareDialog(false)}>取消</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

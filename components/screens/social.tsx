@@ -1,24 +1,22 @@
 "use client"
 
-import { Search, MapPin, MessageCircle, UserPlus } from "lucide-react"
+import { useState } from "react"
+import { Search, MapPin, MessageCircle, UserPlus, Users, Calendar, ChevronRight, Sparkles, Target } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { Screen } from "@/lib/navigation-types"
-
-// Add these imports at the top of the file (commented out)
-// import { useState, useEffect } from "react"
-// import { socialService } from "@/lib/services/social-service"
-// import { toast } from "@/hooks/use-toast"
-// import type { LocalGroup } from "@/lib/services/social-service"
 
 interface SocialProps {
   navigate: (screen: Screen, params?: Record<string, any>) => void
 }
 
 export function Social({ navigate }: SocialProps) {
+  const [searchQuery, setSearchQuery] = useState("")
+
   const nearbyPlayers = [
     {
       id: "player1",
@@ -70,204 +68,58 @@ export function Social({ navigate }: SocialProps) {
     },
   ]
 
-  // Add these functions inside the Social component (commented out)
-  /*
-    // 获取附近玩家
-    const fetchNearbyPlayers = async () => {
-      try {
-        setIsLoading(true)
-        // 获取当前位置
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const { latitude, longitude } = position.coords
-            const players = await userService.getNearbyPlayers(latitude, longitude, nearbyFilter)
-            setNearbyPlayers(players)
-            setIsLoading(false)
-          },
-          (error) => {
-            console.error('获取位置失败', error)
-            toast({
-              title: "获取位置失败",
-              description: "请检查位置权限设置",
-              variant: "destructive",
-            })
-            setIsLoading(false)
-          }
-        )
-      } catch (error) {
-        console.error('获取附近玩家失败', error)
-        toast({
-          title: "获取附近玩家失败",
-          description: "请检查网络连接后重试",
-          variant: "destructive",
-        })
-        setIsLoading(false)
-      }
-    }
-  */
+  // 智能匹配玩家数据
+  const matchedPlayers = [
+    {
+      id: "match1",
+      name: "小李",
+      avatar: "/images/mock/avatar_male_1.png",
+      matchScore: 92,
+      commonInterests: ["摄影", "美食", "历史"],
+      plan: "周六去西湖",
+      distance: "1.5km",
+    },
+    {
+      id: "match2",
+      name: "小王",
+      avatar: "/images/mock/avatar_female_1.png",
+      matchScore: 85,
+      commonInterests: ["徒步", "摄影"],
+      plan: "周日爬山",
+      distance: "2.3km",
+    },
+    {
+      id: "match3",
+      name: "阿杰",
+      avatar: "/images/mock/avatar_male_2.png",
+      matchScore: 78,
+      commonInterests: ["美食", "探店"],
+      plan: "本周末美食探店",
+      distance: "3.1km",
+    },
+  ]
 
-  /* 
-    // 获取同城群组
-    const fetchLocalGroups = async () => {
-      try {
-        setIsLoadingGroups(true)
-        // 获取当前城市
-        const city = await getCurrentCity()
-        const groups = await socialService.getLocalGroups(city)
-        setLocalGroups(groups)
-        setIsLoadingGroups(false)
-      } catch (error) {
-        console.error('获取同城群组失败', error)
-        toast({
-          title: "获取同城群组失败",
-          description: "请检查网络连接后重试",
-          variant: "destructive",
-        })
-        setIsLoadingGroups(false)
-      }
-    }
-
-    // 获取当前城市
-    const getCurrentCity = async (): Promise<string> => {
-      return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            try {
-              const { latitude, longitude } = position.coords
-              // 调用地理编码API获取城市
-              const response = await fetch(`https://api.map.baidu.com/reverse_geocoding/v3/?ak=${process.env.NEXT_PUBLIC_BAIDU_MAP_AK}&output=json&coordtype=wgs84ll&location=${latitude},${longitude}`)
-              const data = await response.json()
-              if (data.status === 0) {
-                resolve(data.result.addressComponent.city)
-              } else {
-                reject(new Error('地理编码失败'))
-              }
-            } catch (error) {
-              reject(error)
-            }
-          },
-          (error) => {
-            reject(error)
-          }
-        )
-      })
-    }
-
-    // 搜索同城群组
-    const searchLocalGroups = async (keyword: string) => {
-      try {
-        setIsLoadingGroups(true)
-        const city = await getCurrentCity()
-        const groups = await socialService.searchLocalGroups(keyword, city)
-        setLocalGroups(groups)
-        setIsLoadingGroups(false)
-      } catch (error) {
-        console.error('搜索同城群组失败', error)
-        setIsLoadingGroups(false)
-      }
-    }
-
-    // 加入群组
-    const handleJoinGroup = async (groupId: string) => {
-      try {
-        await socialService.joinGroup(groupId)
-        toast({
-          title: "已申请加入群组",
-          description: "等待管理员审核",
-        })
-      } catch (error) {
-        console.error('加入群组失败', error)
-        toast({
-          title: "加入群组失败",
-          description: "请稍后重试",
-          variant: "destructive",
-        })
-      }
-    }
-
-    // 获取热门同城群组
-    const fetchPopularLocalGroups = async () => {
-      try {
-        const city = await getCurrentCity()
-        const groups = await socialService.getPopularLocalGroups(city)
-        setPopularGroups(groups)
-      } catch (error) {
-        console.error('获取热门同城群组失败', error)
-      }
-    }
-
-    // 创建同城群组
-    const handleCreateGroup = async (groupData: {
-      name: string
-      description: string
-      tags?: string[]
-      image?: File
-    }) => {
-      try {
-        setIsCreating(true)
-        const city = await getCurrentCity()
-        const newGroup = await socialService.createLocalGroup({
-          ...groupData,
-          city
-        })
-        toast({
-          title: "群组创建成功",
-          description: `"${newGroup.name}"已创建`,
-        })
-        setIsCreating(false)
-        navigate("group-detail", { group: newGroup })
-      } catch (error) {
-        console.error('创建群组失败', error)
-        toast({
-          title: "创建群组失败",
-          description: "请稍后重试",
-          variant: "destructive",
-        })
-        setIsCreating(false)
-      }
-    }
-
-    // 获取附近的同城群组
-    const fetchNearbyGroups = async () => {
-      try {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const { latitude, longitude } = position.coords
-            const groups = await socialService.getNearbyGroups(latitude, longitude)
-            setNearbyGroups(groups)
-          },
-          (error) => {
-            console.error('获取位置失败', error)
-          }
-        )
-      } catch (error) {
-        console.error('获取附近群组失败', error)
-      }
-    }
-
-    // 获取群组分类
-    const fetchGroupCategories = async () => {
-      try {
-        const categories = await socialService.getGroupCategories()
-        setGroupCategories(categories)
-      } catch (error) {
-        console.error('获取群组分类失败', error)
-      }
-    }
-
-    // 按分类获取群组
-    const fetchGroupsByCategory = async (categoryId: string) => {
-      try {
-        setIsLoadingGroups(true)
-        const groups = await socialService.getGroupsByCategory(categoryId)
-        setLocalGroups(groups)
-        setIsLoadingGroups(false)
-      } catch (error) {
-        console.error('获取分类群组失败', error)
-        setIsLoadingGroups(false)
-      }
-    }
-  */
+  // 热门组队数据
+  const hotTeams = [
+    {
+      id: "team1",
+      title: "周末千岛湖自驾",
+      destination: "千岛湖",
+      date: "本周六",
+      currentMembers: 3,
+      maxMembers: 5,
+      creator: { name: "旅行达人", avatar: "/images/mock/avatar_male_1.png" },
+    },
+    {
+      id: "team2",
+      title: "西湖徒步摄影",
+      destination: "西湖",
+      date: "本周日",
+      currentMembers: 2,
+      maxMembers: 4,
+      creator: { name: "摄影爱好者", avatar: "/images/mock/avatar_female_2.png" },
+    },
+  ]
 
   return (
     <div className="p-4 pb-16">
@@ -358,19 +210,157 @@ export function Social({ navigate }: SocialProps) {
           })}
         </TabsContent>
 
-        <TabsContent value="matching">
-          <div className="flex flex-col items-center justify-center py-8">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-              <UserPlus size={32} className="text-blue-500" />
-            </div>
-            <h3 className="text-lg font-medium mb-2">完善您的兴趣标签</h3>
-            <p className="text-center text-gray-500 mb-4">添加您的兴趣爱好，我们将为您匹配志同道合的玩伴</p>
-            <Button onClick={() => navigate("interest-settings")}>设置兴趣标签</Button>
-          </div>
+        <TabsContent value="matching" className="space-y-4">
+          {/* AI智能匹配说明 */}
+          <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-none">
+            <CardContent className="p-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                  <Sparkles size={20} className="text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-sm">AI智能匹配</h3>
+                  <p className="text-xs text-gray-600">根据兴趣、出行计划、历史轨迹为您推荐</p>
+                </div>
+                <Button size="sm" variant="outline" onClick={() => navigate("interest-settings")}>
+                  设置偏好
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 匹配玩家列表 */}
+          {matchedPlayers.map((player) => (
+            <Card key={player.id}>
+              <CardContent className="p-4">
+                <div className="flex items-start">
+                  <div className="relative">
+                    <Avatar className="h-14 w-14">
+                      <AvatarImage src={player.avatar} alt={player.name} />
+                      <AvatarFallback>{player.name.slice(0, 2)}</AvatarFallback>
+                    </Avatar>
+                    {/* 匹配度标签 */}
+                    <div className="absolute -top-1 -right-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs px-1.5 py-0.5 rounded-full font-medium">
+                      {player.matchScore}%
+                    </div>
+                  </div>
+
+                  <div className="ml-3 flex-1">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold">{player.name}</h3>
+                      <Badge variant="outline" className="flex items-center">
+                        <MapPin size={12} className="mr-1" />
+                        {player.distance}
+                      </Badge>
+                    </div>
+
+                    {/* 共同兴趣 */}
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {player.commonInterests.map((interest, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs bg-blue-100 text-blue-700">
+                          {interest}
+                        </Badge>
+                      ))}
+                    </div>
+
+                    {/* 出行计划 */}
+                    <div className="flex items-center mt-2 text-sm text-gray-600">
+                      <Target size={14} className="mr-1 text-orange-500" />
+                      <span>{player.plan}</span>
+                    </div>
+
+                    {/* 匹配度进度条 */}
+                    <div className="mt-2">
+                      <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                        <span>匹配度</span>
+                        <span>{player.matchScore}%</span>
+                      </div>
+                      <Progress value={player.matchScore} className="h-1.5" />
+                    </div>
+
+                    <div className="flex space-x-2 mt-3">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() =>
+                          navigate("chat", { friend: { id: player.id, name: player.name, avatar: player.avatar } })
+                        }
+                      >
+                        <MessageCircle size={14} className="mr-1" />
+                        打招呼
+                      </Button>
+                      <Button size="sm" className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500">
+                        <UserPlus size={14} className="mr-1" />
+                        邀请同行
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </TabsContent>
 
-        <TabsContent value="groups">
-          <div className="space-y-4">
+        <TabsContent value="groups" className="space-y-4">
+          {/* 组队大厅入口 */}
+          <Card className="bg-gradient-to-r from-orange-50 to-yellow-50 border-none cursor-pointer" onClick={() => navigate("team-hall")}>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center">
+                    <Users size={24} className="text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">组队大厅</h3>
+                    <p className="text-xs text-gray-600">找到志同道合的旅伴一起出发</p>
+                  </div>
+                </div>
+                <ChevronRight size={20} className="text-gray-400" />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 热门组队预览 */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-sm">热门组队</h3>
+              <Button variant="ghost" size="sm" className="text-blue-500 h-auto p-0" onClick={() => navigate("team-hall")}>
+                查看更多 <ChevronRight size={16} />
+              </Button>
+            </div>
+            {hotTeams.map((team) => (
+              <Card key={team.id} className="cursor-pointer" onClick={() => navigate("team-hall")}>
+                <CardContent className="p-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={team.creator.avatar} alt={team.creator.name} />
+                        <AvatarFallback>{team.creator.name.slice(0, 1)}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <h4 className="font-medium text-sm">{team.title}</h4>
+                        <div className="flex items-center text-xs text-gray-500 mt-0.5">
+                          <Calendar size={12} className="mr-1" />
+                          <span>{team.date}</span>
+                          <span className="mx-2">·</span>
+                          <Users size={12} className="mr-1" />
+                          <span>{team.currentMembers}/{team.maxMembers}人</span>
+                        </div>
+                      </div>
+                    </div>
+                    <Badge variant="secondary" className="bg-orange-100 text-orange-700">
+                      招募中
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* 同城群组列表 */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-sm">同城群组</h3>
             {[
               {
                 id: "group1",
@@ -398,7 +388,7 @@ export function Social({ navigate }: SocialProps) {
                 name: "城市探索小分队",
                 members: 156,
                 activity: "每周探索城市秘境",
-                image: "/images/mock/group_cycling.png", // Reusing cycling for city explore or fallback
+                image: "/images/mock/group_cycling.png",
               },
               {
                 id: "group5",

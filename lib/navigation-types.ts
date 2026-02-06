@@ -56,6 +56,11 @@ export type ScreenParams = {
     "transaction-detail": any
     "coupon-detail": any
     "story-detail": { story?: any }
+    // 新增功能融合页面
+    "daily-tasks": undefined
+    "activities": { activityId?: string }
+    "team-hall": undefined
+    "travel-timeline": undefined
 }
 
 export type Screen = keyof ScreenParams

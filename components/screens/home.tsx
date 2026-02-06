@@ -20,12 +20,17 @@ import {
   Share,
   Bookmark,
   MoreHorizontal,
+  Plus,
+  TrendingUp,
+  Hash,
+  Play,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
 import type { Screen } from "@/lib/navigation-types"
 import { userService } from "@/lib/services/user-service"
@@ -113,6 +118,61 @@ export function Home({ navigate }: HomeProps) {
       time: "昨天",
       tags: ["千岛湖", "自然", "度假"],
       isLiked: false,
+    },
+  ])
+
+  // 故事广场 - 热门话题
+  const [hotTopics] = useState([
+    { id: "1", name: "春游季", count: 12580 },
+    { id: "2", name: "美食探店", count: 8960 },
+    { id: "3", name: "周末去哪", count: 6540 },
+    { id: "4", name: "摄影打卡", count: 5230 },
+    { id: "5", name: "亲子游", count: 4120 },
+  ])
+
+  // 故事广场 - 当前分类Tab
+  const [storyTab, setStoryTab] = useState("recommend")
+
+  // 更多故事数据（用于瀑布流展示）
+  const [moreStories] = useState([
+    {
+      id: "story4",
+      user: { id: "user4", name: "摄影师小王", avatar: "/images/mock/avatar_male_1.png", isVerified: true },
+      location: "杭州·雷峰塔",
+      content: "夕阳下的雷峰塔，美得像一幅画",
+      images: ["/images/hangzhou/leifeng.jpg"],
+      likes: 520,
+      comments: 38,
+      time: "3小时前",
+      tags: ["摄影", "雷峰塔"],
+      isLiked: false,
+      type: "image",
+    },
+    {
+      id: "story5",
+      user: { id: "user5", name: "旅行vlogger", avatar: "/images/mock/avatar_female_2.png", isVerified: true },
+      location: "千岛湖",
+      content: "千岛湖vlog来啦！",
+      images: ["/images/route-qiandao.png"],
+      likes: 1280,
+      comments: 96,
+      time: "5小时前",
+      tags: ["vlog", "千岛湖"],
+      isLiked: true,
+      type: "video",
+    },
+    {
+      id: "story6",
+      user: { id: "user6", name: "吃货日记", avatar: "/images/mock/avatar_female_1.png", isVerified: false },
+      location: "杭州·河坊街",
+      content: "河坊街小吃合集，每一样都好吃！",
+      images: ["/images/mock/hangzhou_food_1.png", "/images/mock/hangzhou_food_2.png"],
+      likes: 368,
+      comments: 45,
+      time: "昨天",
+      tags: ["美食", "小吃"],
+      isLiked: false,
+      type: "image",
     },
   ])
 
@@ -408,14 +468,12 @@ export function Home({ navigate }: HomeProps) {
 
   // 顶部Tab配置
   const topTabs = [
-    { id: "prediction", title: "预测" },
-    // { id: "dining", title: "吃喝" }, // Moved to Prediction Screen
-    // { id: "play", title: "玩乐" },   // Moved to Prediction Screen
+    { id: "prediction", title: "发现" },
     { id: "routes", title: "路线" },
     { id: "planning", title: "规划" },
-    { id: "guides", title: "向导" },
-    { id: "diary", title: "日记" },
+    { id: "diary", title: "故事" },
     { id: "social", title: "社交" },
+    { id: "guides", title: "向导" },
     { id: "shop", title: "商城" },
   ]
 
@@ -456,98 +514,99 @@ export function Home({ navigate }: HomeProps) {
 
       {/* 内容区域 - 根据Tab显示 */}
       {activeTab === 'diary' && (
-        <>
-          {/* 智能功能区 - 卡片展示 (保留在推荐页顶部) */}
-
-
-          {/* 旅行故事圈推荐内容 */}
-          <div className="mb-6">
-            <div className="space-y-4">
-              {stories.map((story) => (
-                <div
-                  key={story.id}
-                  className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-800 cursor-pointer active:scale-[0.99] transition-transform"
-                  onClick={() => handleStoryClick(story)}
+        <div className="relative">
+          {/* 热门话题横向滚动 */}
+          <div className="mb-4 -mx-4 px-4">
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+              <div className="flex items-center text-orange-500 shrink-0">
+                <TrendingUp size={16} className="mr-1" />
+                <span className="text-sm font-medium">热门</span>
+              </div>
+              {hotTopics.map((topic) => (
+                <Badge
+                  key={topic.id}
+                  variant="secondary"
+                  className="shrink-0 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900"
                 >
-                  {/* 用户信息 */}
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center">
-                      <Avatar className="h-8 w-8 mr-2">
-                        <AvatarImage src={story.user.avatar} alt={story.user.name} />
-                        <AvatarFallback>{story.user.name.slice(0, 2)}</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <div className="flex items-center">
-                          <h3 className="text-sm font-semibold">{story.user.name}</h3>
-                          {story.user.isVerified && (
-                            <Badge className="ml-1 h-3 w-3 p-0 bg-blue-500 flex justify-center items-center">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="h-2 w-2 text-white">
-                                <path d="M20 6L9 17l-5-5" />
-                              </svg>
-                            </Badge>
-                          )}
-                        </div>
-                        <p className="text-xs text-gray-500">{story.time} · {story.location}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 内容 */}
-                  <p className="text-sm mb-3">{story.content}</p>
-
-                  {/* 图片 */}
-                  <div className="grid grid-cols-2 gap-2 mb-3">
-                    {story.images.map((img, index) => (
-                      <img
-                        key={index}
-                        src={img}
-                        alt="Story image"
-                        className={`w-full object-cover rounded-lg ${story.images.length === 1 ? 'h-48' : 'h-24'}`}
-                      />
-                    ))}
-                  </div>
-
-                  {/* 底部互动 */}
-                  <div className="flex items-center justify-between text-gray-500 text-xs border-t border-gray-50 pt-3 dark:border-gray-700">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className={`flex-1 h-8 ${story.isLiked ? "text-red-500" : ""}`}
-                      onClick={(e) => handleLike(e, story.id)}
-                    >
-                      <Heart size={14} className={`mr-1 ${story.isLiked ? "fill-current" : ""}`} />
-                      {story.likes}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="flex-1 h-8"
-                      onClick={(e) => handleComment(e, story.id)}
-                    >
-                      <MessageCircle size={14} className="mr-1" />
-                      {story.comments}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="flex-1 h-8"
-                      onClick={(e) => handleShare(e, story.id)}
-                    >
-                      <Share size={14} className="mr-1" />
-                      分享
-                    </Button>
-                  </div>
-                </div>
+                  <Hash size={12} className="mr-1" />
+                  {topic.name}
+                </Badge>
               ))}
             </div>
           </div>
 
-        </>
+          {/* 内容分类Tab */}
+          <Tabs value={storyTab} onValueChange={setStoryTab} className="mb-4">
+            <TabsList className="grid w-full grid-cols-4 h-9">
+              <TabsTrigger value="recommend" className="text-xs">推荐</TabsTrigger>
+              <TabsTrigger value="follow" className="text-xs">关注</TabsTrigger>
+              <TabsTrigger value="nearby" className="text-xs">附近</TabsTrigger>
+              <TabsTrigger value="hot" className="text-xs">热门</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          {/* 瀑布流内容 */}
+          <div className="grid grid-cols-2 gap-3 mb-20">
+            {[...stories, ...moreStories].map((story: any) => (
+              <Card
+                key={story.id}
+                className="overflow-hidden cursor-pointer active:scale-[0.98] transition-transform"
+                onClick={() => handleStoryClick(story)}
+              >
+                {/* 图片/视频 */}
+                <div className="relative">
+                  <img
+                    src={story.images[0]}
+                    alt={story.content}
+                    className="w-full h-32 object-cover"
+                  />
+                  {story.type === "video" && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                      <div className="w-10 h-10 rounded-full bg-white/80 flex items-center justify-center">
+                        <Play size={20} className="text-gray-800 ml-1" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <CardContent className="p-2">
+                  {/* 内容预览 */}
+                  <p className="text-xs line-clamp-2 mb-2">{story.content}</p>
+
+                  {/* 用户信息和互动 */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Avatar className="h-5 w-5">
+                        <AvatarImage src={story.user.avatar} alt={story.user.name} />
+                        <AvatarFallback className="text-[8px]">{story.user.name.slice(0, 1)}</AvatarFallback>
+                      </Avatar>
+                      <span className="text-[10px] text-gray-500 ml-1 truncate max-w-[60px]">
+                        {story.user.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center text-[10px] text-gray-400">
+                      <Heart size={10} className={story.isLiked ? "fill-red-500 text-red-500" : ""} />
+                      <span className="ml-0.5">{story.likes}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* 悬浮发布按钮 */}
+          <Button
+            className="fixed bottom-24 right-6 w-14 h-14 rounded-full shadow-lg z-20"
+            onClick={() => navigate("ai-photo-diary")}
+          >
+            <Plus size={24} />
+          </Button>
+        </div>
       )}
 
       {/* 热门路线 Tab (Actually Prediction) */}
       {activeTab === 'prediction' && (
-        <PredictionScreen onNavigateToTab={(tab) => setActiveTab(tab)} />
+        <PredictionScreen onNavigateToTab={(tab) => setActiveTab(tab)} navigate={navigate} />
       )}
 
       {/* 吃喝 Tab */}

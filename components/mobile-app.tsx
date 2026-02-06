@@ -60,6 +60,11 @@ import { AIPhotoDiary } from "@/components/screens/ai-photo-diary"
 import { TransactionDetail } from "@/components/screens/wallet/transaction-detail"
 import { CouponDetail } from "@/components/screens/wallet/coupon-detail"
 import { StoryDetail } from "@/components/screens/story-detail"
+// 新增功能融合页面
+import { DailyTasks } from "@/components/screens/daily-tasks"
+import { Activities } from "@/components/screens/activities"
+import { TeamHall } from "@/components/screens/team-hall"
+import { TravelTimeline } from "@/components/screens/travel-timeline"
 
 import { Screen, ScreenParams, NavigationProps } from "@/lib/navigation-types"
 export type { Screen, NavigationProps }
@@ -247,7 +252,7 @@ export function MobileApp() {
       case "completed-routes":
         return <CompletedRoutes goBack={goBack} navigate={navigate} />
       case "badges":
-        return <Badges goBack={goBack} />
+        return <Badges goBack={goBack} navigate={navigate} />
       // 新增的智能化功能
       case "ai-voice-guide":
         return <AIVoiceGuide goBack={goBack} navigate={navigate} location={params?.location} />
@@ -267,6 +272,15 @@ export function MobileApp() {
         return <CouponDetail goBack={goBack} params={params} />
       case "story-detail":
         return <StoryDetail goBack={goBack} navigate={navigate} story={params?.story} />
+      // 新增功能融合页面
+      case "daily-tasks":
+        return <DailyTasks goBack={goBack} navigate={navigate} />
+      case "activities":
+        return <Activities goBack={goBack} navigate={navigate} />
+      case "team-hall":
+        return <TeamHall goBack={goBack} navigate={navigate} />
+      case "travel-timeline":
+        return <TravelTimeline goBack={goBack} navigate={navigate} />
       default:
         return <Home navigate={navigate} />
     }

@@ -18,6 +18,11 @@ import {
   Edit2,
   AlertTriangle,
   CheckSquare,
+  Clock,
+  Trophy,
+  Target,
+  Flame,
+  ChevronRight,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
@@ -152,6 +157,16 @@ export function Profile({ navigate }: ProfileProps) {
           title: "日记",
           icon: <BookOpen size={20} className="text-emerald-500" />,
           screen: "travel-diary" as Screen,
+        },
+        {
+          title: "时光机",
+          icon: <Clock size={20} className="text-purple-500" />,
+          screen: "travel-timeline" as Screen,
+        },
+        {
+          title: "成就",
+          icon: <Trophy size={20} className="text-yellow-500" />,
+          screen: "badges" as Screen,
         },
       ],
     },
@@ -445,6 +460,60 @@ export function Profile({ navigate }: ProfileProps) {
             +
           </Badge>
         </div>
+      </div>
+
+      {/* 每日任务进度 */}
+      <div className="p-4 border-b">
+        <Card className="bg-gradient-to-r from-orange-50 to-yellow-50 border-none cursor-pointer" onClick={() => navigate("daily-tasks")}>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center mr-3">
+                  <Target size={20} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-sm">每日任务</h3>
+                  <p className="text-xs text-gray-500">完成任务获取积分奖励</p>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <Flame size={16} className="text-orange-500 mr-1" />
+                <span className="text-sm font-medium text-orange-500">连续7天</span>
+                <ChevronRight size={16} className="text-gray-400 ml-1" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-gray-600">今日进度</span>
+                <span className="text-orange-500 font-medium">3/5 已完成</span>
+              </div>
+              <Progress value={60} className="h-2" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* 旅行时光机入口 */}
+      <div className="p-4 border-b">
+        <Card className="bg-gradient-to-r from-purple-50 to-pink-50 border-none cursor-pointer" onClick={() => navigate("travel-timeline")}>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-3">
+                  <Clock size={20} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-sm">旅行时光机</h3>
+                  <p className="text-xs text-gray-500">回顾你的旅行足迹</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-lg font-bold text-purple-600">{mockVisitedCities}</div>
+                <div className="text-xs text-gray-500">座城市</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* 功能菜单卡片 */}
