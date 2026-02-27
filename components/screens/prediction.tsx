@@ -237,34 +237,32 @@ export function PredictionScreen({ onNavigateToTab, navigate }: PredictionScreen
   }
 
   return (
-    <div className="space-y-6 pb-20 pt-4 bg-gray-50 dark:bg-black min-h-[85vh] overflow-y-auto">
+    <div className="space-y-5 pb-20 pt-4 bg-white dark:bg-gray-950 min-h-[85vh] overflow-y-auto">
       {/* 1. Header & Location */}
       <div className="flex items-center justify-between px-4">
-        <div className="flex items-center space-x-2 text-blue-600">
-          <MapPin className={`h-5 w-5 ${location === "定位中..." ? "animate-pulse" : ""}`} />
-          <span className="text-lg font-bold">{location}</span>
+        <div className="flex items-center space-x-2 text-gray-800 dark:text-gray-200">
+          <MapPin className={`h-4 w-4 text-gray-500 ${location === "定位中..." ? "animate-pulse" : ""}`} />
+          <span className="text-base font-medium">{location}</span>
         </div>
-        <div className="text-sm text-muted-foreground">
+        <div className="text-sm text-gray-500 dark:text-gray-400">
           {weather ? `${weather.temp}°C ${weather.condition}` : "加载中..."}
         </div>
       </div>
 
       {/* 1.5 Quick Access Buttons for Dining & Play */}
-      <div className="px-4 grid grid-cols-2 gap-4">
+      <div className="px-4 grid grid-cols-2 gap-3">
         {/* Dining Button */}
         <div
-          className="group relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-sm hover:shadow-md"
+          className="bg-orange-50 dark:bg-orange-950/30 rounded-xl cursor-pointer border border-orange-100 dark:border-orange-900/50"
           onClick={() => onNavigateToTab && onNavigateToTab('dining')}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-red-500 opacity-90 dark:opacity-80 transition-opacity" />
-
-          <div className="relative h-24 flex flex-row items-center justify-between px-5">
-            <div className="flex flex-col items-start text-white">
-              <span className="text-xl font-bold tracking-wide">吃喝</span>
-              <span className="text-xs opacity-90 font-medium mt-1">美食 / 探店</span>
+          <div className="h-20 flex flex-row items-center justify-between px-4">
+            <div className="flex flex-col items-start">
+              <span className="text-base font-semibold text-gray-800 dark:text-gray-200">吃喝</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">美食 / 探店</span>
             </div>
-            <div className="bg-white/20 p-2.5 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+            <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/50 rounded-full flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-orange-600 dark:text-orange-400">
                 <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
                 <path d="M7 2v20" />
                 <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
@@ -275,18 +273,16 @@ export function PredictionScreen({ onNavigateToTab, navigate }: PredictionScreen
 
         {/* Play Button */}
         <div
-          className="group relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-sm hover:shadow-md"
+          className="bg-blue-50 dark:bg-blue-950/30 rounded-xl cursor-pointer border border-blue-100 dark:border-blue-900/50"
           onClick={() => onNavigateToTab && onNavigateToTab('play')}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-purple-600 opacity-90 dark:opacity-80 transition-opacity" />
-
-          <div className="relative h-24 flex flex-row items-center justify-between px-5">
-            <div className="flex flex-col items-start text-white">
-              <span className="text-xl font-bold tracking-wide">玩乐</span>
-              <span className="text-xs opacity-90 font-medium mt-1">景点 / 娱乐</span>
+          <div className="h-20 flex flex-row items-center justify-between px-4">
+            <div className="flex flex-col items-start">
+              <span className="text-base font-semibold text-gray-800 dark:text-gray-200">玩乐</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">景点 / 娱乐</span>
             </div>
-            <div className="bg-white/20 p-2.5 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600 dark:text-blue-400">
                 <path d="M5.8 11.3 2 22l10.7-3.79" />
                 <path d="M4 3h.01" />
                 <path d="M22 8h.01" />
@@ -302,88 +298,85 @@ export function PredictionScreen({ onNavigateToTab, navigate }: PredictionScreen
 
       {/* 2. 每日任务入口 */}
       <div className="px-4">
-        <Card
-          className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0 cursor-pointer active:scale-[0.99] transition-transform"
+        <div
+          className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 cursor-pointer border border-gray-100 dark:border-gray-800"
           onClick={() => navigate && navigate("daily-tasks")}
         >
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center">
-                <Target size={20} className="mr-2" />
-                <span className="font-bold">每日任务</span>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-orange-100 dark:bg-orange-900/50 rounded-lg flex items-center justify-center mr-3">
+                <Target size={16} className="text-orange-600 dark:text-orange-400" />
               </div>
-              <div className="flex items-center text-sm">
-                <span>已完成 {dailyTasks.completed}/{dailyTasks.total}</span>
-                <ChevronRight size={16} className="ml-1" />
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              {dailyTasks.tasks.map((task) => (
-                <div
-                  key={task.id}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    task.completed ? "bg-white/30" : "bg-white/10"
-                  }`}
-                >
-                  {task.completed ? (
-                    <CheckCircle2 size={16} />
-                  ) : (
-                    <div className="w-3 h-3 rounded-full border-2 border-white/50" />
-                  )}
-                </div>
-              ))}
-              <div className="flex-1 ml-2">
-                <Progress value={(dailyTasks.completed / dailyTasks.total) * 100} className="h-1.5 bg-white/20" />
+              <div>
+                <span className="font-medium text-gray-800 dark:text-gray-200">每日任务</span>
+                <p className="text-xs text-gray-500">完成任务获取积分</p>
               </div>
             </div>
-          </CardContent>
-        </Card>
+            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+              <span>{dailyTasks.completed}/{dailyTasks.total}</span>
+              <ChevronRight size={16} className="ml-1" />
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {dailyTasks.tasks.map((task) => (
+              <div
+                key={task.id}
+                className={`w-7 h-7 rounded-full flex items-center justify-center ${
+                  task.completed
+                    ? "bg-orange-500 text-white"
+                    : "bg-gray-200 dark:bg-gray-700"
+                }`}
+              >
+                {task.completed ? (
+                  <CheckCircle2 size={14} />
+                ) : (
+                  <div className="w-2.5 h-2.5 rounded-full bg-gray-400 dark:bg-gray-500" />
+                )}
+              </div>
+            ))}
+            <div className="flex-1 ml-2">
+              <Progress value={(dailyTasks.completed / dailyTasks.total) * 100} className="h-1.5" />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* 3. 限时活动入口 */}
       <div className="px-4">
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center">
-            <Flame size={18} className="text-orange-500 mr-2" />
-            <span className="font-semibold">限时活动</span>
-          </div>
+          <span className="font-medium text-gray-800 dark:text-gray-200">限时活动</span>
           <Button
             variant="ghost"
             size="sm"
-            className="text-blue-500 h-8"
+            className="text-gray-500 h-8 px-2"
             onClick={() => navigate && navigate("activities")}
           >
-            查看全部
-            <ChevronRight size={14} className="ml-1" />
+            更多
+            <ChevronRight size={14} className="ml-0.5" />
           </Button>
         </div>
         <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4">
           {activities.map((activity) => (
-            <Card
+            <div
               key={activity.id}
-              className="min-w-[200px] overflow-hidden cursor-pointer active:scale-[0.98] transition-transform"
+              className="min-w-[180px] rounded-xl overflow-hidden cursor-pointer bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800"
               onClick={() => navigate && navigate("activities")}
             >
               <div
                 className="h-24 bg-cover bg-center relative"
-                style={{ backgroundImage: `url(${activity.image})`, backgroundColor: "#e5e7eb" }}
+                style={{ backgroundImage: `url(${activity.image})`, backgroundColor: "#f3f4f6" }}
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className="absolute bottom-2 left-2 right-2 text-white">
-                  <h4 className="font-bold text-sm">{activity.title}</h4>
-                  <div className="flex items-center justify-between text-xs mt-1">
-                    <span className="flex items-center">
-                      <Users size={10} className="mr-1" />
-                      {activity.participants}人
-                    </span>
-                    <span className="flex items-center">
-                      <Clock size={10} className="mr-1" />
-                      {activity.endTime}
-                    </span>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute bottom-2 left-3 right-3 text-white">
+                  <h4 className="font-medium text-sm">{activity.title}</h4>
+                  <div className="flex items-center text-xs mt-1 text-white/80">
+                    <span>{activity.participants}人参与</span>
+                    <span className="mx-1.5">·</span>
+                    <span>{activity.endTime}</span>
                   </div>
                 </div>
               </div>
-            </Card>
+            </div>
           ))}
         </div>
       </div>
@@ -391,65 +384,58 @@ export function PredictionScreen({ onNavigateToTab, navigate }: PredictionScreen
       {/* 4. 附近的人在玩 */}
       <div className="px-4">
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center">
-            <Users size={18} className="text-green-500 mr-2" />
-            <span className="font-semibold">附近的人在玩</span>
-          </div>
+          <span className="font-medium text-gray-800 dark:text-gray-200">附近动态</span>
           <Button
             variant="ghost"
             size="sm"
-            className="text-blue-500 h-8"
+            className="text-gray-500 h-8 px-2"
             onClick={() => onNavigateToTab && onNavigateToTab('play')}
           >
             更多
-            <ChevronRight size={14} className="ml-1" />
+            <ChevronRight size={14} className="ml-0.5" />
           </Button>
         </div>
         <div className="space-y-2">
           {nearbyPlayers.map((player) => (
-            <Card key={player.id} className="cursor-pointer active:scale-[0.99] transition-transform">
-              <CardContent className="p-3 flex items-center">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={player.avatar} alt={player.name} />
-                  <AvatarFallback>{player.name.slice(0, 1)}</AvatarFallback>
-                </Avatar>
-                <div className="ml-3 flex-1">
-                  <div className="flex items-center">
-                    <span className="font-medium text-sm">{player.name}</span>
-                    <Badge variant="secondary" className="ml-2 text-xs">
-                      {player.distance}
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-gray-500">{player.action}</p>
+            <div key={player.id} className="flex items-center p-3 bg-gray-50 dark:bg-gray-900 rounded-xl">
+              <Avatar className="h-9 w-9">
+                <AvatarImage src={player.avatar} alt={player.name} />
+                <AvatarFallback className="text-sm">{player.name.slice(0, 1)}</AvatarFallback>
+              </Avatar>
+              <div className="ml-3 flex-1 min-w-0">
+                <div className="flex items-center">
+                  <span className="font-medium text-sm text-gray-800 dark:text-gray-200">{player.name}</span>
+                  <span className="ml-2 text-xs text-gray-400">{player.distance}</span>
                 </div>
-                <span className="text-xs text-gray-400">{player.time}</span>
-              </CardContent>
-            </Card>
+                <p className="text-xs text-gray-500 truncate">{player.action}</p>
+              </div>
+              <span className="text-xs text-gray-400 shrink-0">{player.time}</span>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* 2. Scenic Spots List */}
-      <div className="px-4 space-y-6">
-        <h3 className="text-lg font-semibold">离你最近的景点</h3>
+      {/* 5. Scenic Spots List */}
+      <div className="px-4 space-y-4">
+        <span className="font-medium text-gray-800 dark:text-gray-200">附近景点</span>
 
         {SCENIC_SPOTS.map((spot) => (
-          <div key={spot.id} className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800">
+          <div key={spot.id} className="bg-white dark:bg-gray-900 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800">
             {/* Image Section */}
-            <div className="relative h-48 w-full">
+            <div className="relative h-40 w-full">
               <img
                 src={spot.image}
                 alt={spot.name}
                 className="h-full w-full object-cover"
                 onError={(e) => (e.target as HTMLImageElement).src = '/images/placeholder.svg'}
               />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white">
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 text-white">
                 <div className="flex items-end justify-between">
                   <div>
-                    <h4 className="text-xl font-bold">{spot.name}</h4>
-                    <p className="text-sm opacity-90">距离您 {spot.distance}</p>
+                    <h4 className="text-base font-semibold">{spot.name}</h4>
+                    <p className="text-xs text-white/80">距离 {spot.distance}</p>
                   </div>
-                  <Button size="sm" className="bg-white/20 hover:bg-white/30 text-white border-none backdrop-blur-md" onClick={() => openNavigation(spot.name)}>
+                  <Button size="sm" variant="secondary" className="h-7 text-xs" onClick={() => openNavigation(spot.name)}>
                     <Navigation className="mr-1 h-3 w-3" /> 导航
                   </Button>
                 </div>
@@ -457,34 +443,31 @@ export function PredictionScreen({ onNavigateToTab, navigate }: PredictionScreen
             </div>
 
             {/* Info Section */}
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <div className="text-xs text-muted-foreground mb-1">当前人流预测</div>
-                  <div className="flex items-center gap-2">
-                    <span className={`text-lg font-bold ${getStatusColor(spot.status)}`}>
+            <div className="p-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div>
+                    <div className="text-xs text-gray-500 mb-0.5">人流</div>
+                    <span className={`text-sm font-medium ${getStatusColor(spot.status)}`}>
                       {getStatusText(spot.status)}
                     </span>
-                    <span className="text-sm text-gray-500">{spot.crowd}</span>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-500 mb-0.5">推荐</div>
+                    <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{spot.reportScore}分</span>
                   </div>
                 </div>
 
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-orange-500">{spot.reportScore} <span className="text-xs text-gray-400 font-normal">分</span></div>
-                  <div className="text-xs text-gray-400">推荐指数</div>
-                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-500 h-8"
+                  onClick={() => openReportDialog(spot)}
+                >
+                  <AlertTriangle className="w-3.5 h-3.5 mr-1" />
+                  上报
+                </Button>
               </div>
-
-              {/* Report Action */}
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full border-blue-100 text-blue-600 hover:bg-blue-50 dark:border-blue-900 dark:bg-blue-900/10 dark:hover:bg-blue-900/30"
-                onClick={() => openReportDialog(spot)}
-              >
-                <AlertTriangle className="w-4 h-4 mr-2" />
-                上报实时人流
-              </Button>
             </div>
           </div>
         ))}

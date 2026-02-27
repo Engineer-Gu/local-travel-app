@@ -122,33 +122,32 @@ export function Social({ navigate }: SocialProps) {
   ]
 
   return (
-    <div className="p-4 pb-16">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold">和谁玩</h1>
-        <Button variant="outline" size="icon" onClick={() => navigate("friend-request")}>
+    <div className="p-4 pb-16 bg-white dark:bg-gray-950">
+      <div className="flex items-center justify-between mb-5">
+        <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-200">和谁玩</h1>
+        <Button variant="ghost" size="icon" className="text-gray-500" onClick={() => navigate("friend-request")}>
           <UserPlus size={18} />
         </Button>
       </div>
 
-      <div className="relative mb-6">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+      <div className="relative mb-5">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
         <input
           type="text"
-          placeholder="搜索玩家或兴趣标签"
-          className="w-full pl-10 pr-4 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="搜索玩家或兴趣"
+          className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-sm focus:outline-none focus:border-gray-300 dark:focus:border-gray-600"
         />
       </div>
 
       <Tabs defaultValue="nearby">
-        <TabsList className="grid w-full grid-cols-3 mb-6">
-          <TabsTrigger value="nearby">附近玩家</TabsTrigger>
-          <TabsTrigger value="matching">兴趣匹配</TabsTrigger>
-          <TabsTrigger value="groups">同城群组</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 mb-5 h-9">
+          <TabsTrigger value="nearby" className="text-sm">附近</TabsTrigger>
+          <TabsTrigger value="matching" className="text-sm">匹配</TabsTrigger>
+          <TabsTrigger value="groups" className="text-sm">群组</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="nearby" className="space-y-4">
+        <TabsContent value="nearby" className="space-y-3">
           {nearbyPlayers.map((player, index) => {
-            // Assign random avatar based on index
             const avatarIndex = (index % 4);
             const avatars = [
               "/images/mock/avatar_male_1.png",
@@ -158,209 +157,179 @@ export function Social({ navigate }: SocialProps) {
             ];
 
             return (
-              <Card key={index}>
-                <CardContent className="p-4">
-                  <div className="flex items-start">
-                    <Avatar className="h-14 w-14">
-                      <AvatarImage src={avatars[avatarIndex]} alt={player.name} />
-                      <AvatarFallback>{player.name.slice(0, 2)}</AvatarFallback>
-                    </Avatar>
+              <div key={index} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl">
+                <div className="flex items-start">
+                  <Avatar className="h-11 w-11">
+                    <AvatarImage src={avatars[avatarIndex]} alt={player.name} />
+                    <AvatarFallback className="text-sm">{player.name.slice(0, 2)}</AvatarFallback>
+                  </Avatar>
 
-                    <div className="ml-3 flex-1">
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-semibold">{player.name}</h3>
-                        <Badge variant="outline" className="flex items-center">
-                          <MapPin size={12} className="mr-1" />
-                          {player.distance}
-                        </Badge>
-                      </div>
+                  <div className="ml-3 flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-medium text-sm text-gray-800 dark:text-gray-200">{player.name}</h3>
+                      <span className="text-xs text-gray-400">{player.distance}</span>
+                    </div>
 
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {player.interests.map((interest, i) => (
-                          <Badge key={i} variant="secondary" className="text-xs">
-                            {interest}
-                          </Badge>
-                        ))}
-                      </div>
+                    <div className="flex flex-wrap gap-1 mt-1.5">
+                      {player.interests.slice(0, 3).map((interest, i) => (
+                        <span key={i} className="text-xs px-2 py-0.5 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                          {interest}
+                        </span>
+                      ))}
+                    </div>
 
-                      <p className="text-sm text-gray-600 mt-2">{player.status}</p>
+                    <p className="text-xs text-gray-500 mt-2 truncate">{player.status}</p>
 
-                      <div className="flex space-x-2 mt-3">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="flex-1"
-                          onClick={() =>
-                            navigate("chat", { friend: { id: player.id, name: player.name, avatar: avatars[avatarIndex] } })
-                          }
-                        >
-                          <MessageCircle size={14} className="mr-1" />
-                          聊天
-                        </Button>
-                        <Button size="sm" className="flex-1" onClick={() => navigate("friend-request")}>
-                          <UserPlus size={14} className="mr-1" />
-                          加好友
-                        </Button>
-                      </div>
+                    <div className="flex space-x-2 mt-2.5">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="flex-1 h-8 text-xs text-gray-600 dark:text-gray-400"
+                        onClick={() =>
+                          navigate("chat", { friend: { id: player.id, name: player.name, avatar: avatars[avatarIndex] } })
+                        }
+                      >
+                        <MessageCircle size={14} className="mr-1" />
+                        聊天
+                      </Button>
+                      <Button size="sm" className="flex-1 h-8 text-xs" onClick={() => navigate("friend-request")}>
+                        <UserPlus size={14} className="mr-1" />
+                        加好友
+                      </Button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             )
           })}
         </TabsContent>
 
-        <TabsContent value="matching" className="space-y-4">
+        <TabsContent value="matching" className="space-y-3">
           {/* AI智能匹配说明 */}
-          <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-none">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                  <Sparkles size={20} className="text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-sm">AI智能匹配</h3>
-                  <p className="text-xs text-gray-600">根据兴趣、出行计划、历史轨迹为您推荐</p>
-                </div>
-                <Button size="sm" variant="outline" onClick={() => navigate("interest-settings")}>
-                  设置偏好
-                </Button>
+          <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl">
+            <div className="flex items-center space-x-3">
+              <div className="w-9 h-9 bg-orange-100 dark:bg-orange-900/50 rounded-lg flex items-center justify-center">
+                <Sparkles size={18} className="text-orange-600 dark:text-orange-400" />
               </div>
-            </CardContent>
-          </Card>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm text-gray-800 dark:text-gray-200">智能匹配</h3>
+                <p className="text-xs text-gray-500">根据兴趣和出行计划推荐</p>
+              </div>
+              <Button size="sm" variant="ghost" className="text-xs text-gray-500" onClick={() => navigate("interest-settings")}>
+                设置
+              </Button>
+            </div>
+          </div>
 
           {/* 匹配玩家列表 */}
           {matchedPlayers.map((player) => (
-            <Card key={player.id}>
-              <CardContent className="p-4">
-                <div className="flex items-start">
-                  <div className="relative">
-                    <Avatar className="h-14 w-14">
-                      <AvatarImage src={player.avatar} alt={player.name} />
-                      <AvatarFallback>{player.name.slice(0, 2)}</AvatarFallback>
-                    </Avatar>
-                    {/* 匹配度标签 */}
-                    <div className="absolute -top-1 -right-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs px-1.5 py-0.5 rounded-full font-medium">
-                      {player.matchScore}%
-                    </div>
-                  </div>
-
-                  <div className="ml-3 flex-1">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-semibold">{player.name}</h3>
-                      <Badge variant="outline" className="flex items-center">
-                        <MapPin size={12} className="mr-1" />
-                        {player.distance}
-                      </Badge>
-                    </div>
-
-                    {/* 共同兴趣 */}
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {player.commonInterests.map((interest, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs bg-blue-100 text-blue-700">
-                          {interest}
-                        </Badge>
-                      ))}
-                    </div>
-
-                    {/* 出行计划 */}
-                    <div className="flex items-center mt-2 text-sm text-gray-600">
-                      <Target size={14} className="mr-1 text-orange-500" />
-                      <span>{player.plan}</span>
-                    </div>
-
-                    {/* 匹配度进度条 */}
-                    <div className="mt-2">
-                      <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
-                        <span>匹配度</span>
-                        <span>{player.matchScore}%</span>
-                      </div>
-                      <Progress value={player.matchScore} className="h-1.5" />
-                    </div>
-
-                    <div className="flex space-x-2 mt-3">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="flex-1"
-                        onClick={() =>
-                          navigate("chat", { friend: { id: player.id, name: player.name, avatar: player.avatar } })
-                        }
-                      >
-                        <MessageCircle size={14} className="mr-1" />
-                        打招呼
-                      </Button>
-                      <Button size="sm" className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500">
-                        <UserPlus size={14} className="mr-1" />
-                        邀请同行
-                      </Button>
-                    </div>
+            <div key={player.id} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl">
+              <div className="flex items-start">
+                <div className="relative">
+                  <Avatar className="h-11 w-11">
+                    <AvatarImage src={player.avatar} alt={player.name} />
+                    <AvatarFallback className="text-sm">{player.name.slice(0, 2)}</AvatarFallback>
+                  </Avatar>
+                  {/* 匹配度标签 */}
+                  <div className="absolute -top-1 -right-1 bg-orange-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-medium">
+                    {player.matchScore}%
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+
+                <div className="ml-3 flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-medium text-sm text-gray-800 dark:text-gray-200">{player.name}</h3>
+                    <span className="text-xs text-gray-400">{player.distance}</span>
+                  </div>
+
+                  {/* 共同兴趣 */}
+                  <div className="flex flex-wrap gap-1 mt-1.5">
+                    {player.commonInterests.map((interest, i) => (
+                      <span key={i} className="text-xs px-2 py-0.5 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded">
+                        {interest}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* 出行计划 */}
+                  <p className="text-xs text-gray-500 mt-2">{player.plan}</p>
+
+                  <div className="flex space-x-2 mt-2.5">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="flex-1 h-8 text-xs text-gray-600 dark:text-gray-400"
+                      onClick={() =>
+                        navigate("chat", { friend: { id: player.id, name: player.name, avatar: player.avatar } })
+                      }
+                    >
+                      <MessageCircle size={14} className="mr-1" />
+                      打招呼
+                    </Button>
+                    <Button size="sm" className="flex-1 h-8 text-xs">
+                      <UserPlus size={14} className="mr-1" />
+                      邀请同行
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
           ))}
         </TabsContent>
 
-        <TabsContent value="groups" className="space-y-4">
+        <TabsContent value="groups" className="space-y-3">
           {/* 组队大厅入口 */}
-          <Card className="bg-gradient-to-r from-orange-50 to-yellow-50 border-none cursor-pointer" onClick={() => navigate("team-hall")}>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center">
-                    <Users size={24} className="text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">组队大厅</h3>
-                    <p className="text-xs text-gray-600">找到志同道合的旅伴一起出发</p>
-                  </div>
+          <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl cursor-pointer" onClick={() => navigate("team-hall")}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/50 rounded-lg flex items-center justify-center">
+                  <Users size={20} className="text-orange-600 dark:text-orange-400" />
                 </div>
-                <ChevronRight size={20} className="text-gray-400" />
+                <div>
+                  <h3 className="font-medium text-sm text-gray-800 dark:text-gray-200">组队大厅</h3>
+                  <p className="text-xs text-gray-500">找旅伴一起出发</p>
+                </div>
               </div>
-            </CardContent>
-          </Card>
+              <ChevronRight size={18} className="text-gray-400" />
+            </div>
+          </div>
 
           {/* 热门组队预览 */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-sm">热门组队</h3>
-              <Button variant="ghost" size="sm" className="text-blue-500 h-auto p-0" onClick={() => navigate("team-hall")}>
-                查看更多 <ChevronRight size={16} />
+              <span className="text-sm font-medium text-gray-800 dark:text-gray-200">热门组队</span>
+              <Button variant="ghost" size="sm" className="text-xs text-gray-500 h-auto p-0" onClick={() => navigate("team-hall")}>
+                更多 <ChevronRight size={14} />
               </Button>
             </div>
             {hotTeams.map((team) => (
-              <Card key={team.id} className="cursor-pointer" onClick={() => navigate("team-hall")}>
-                <CardContent className="p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <Avatar className="h-10 w-10">
-                        <AvatarImage src={team.creator.avatar} alt={team.creator.name} />
-                        <AvatarFallback>{team.creator.name.slice(0, 1)}</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <h4 className="font-medium text-sm">{team.title}</h4>
-                        <div className="flex items-center text-xs text-gray-500 mt-0.5">
-                          <Calendar size={12} className="mr-1" />
-                          <span>{team.date}</span>
-                          <span className="mx-2">·</span>
-                          <Users size={12} className="mr-1" />
-                          <span>{team.currentMembers}/{team.maxMembers}人</span>
-                        </div>
+              <div key={team.id} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl cursor-pointer" onClick={() => navigate("team-hall")}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage src={team.creator.avatar} alt={team.creator.name} />
+                      <AvatarFallback className="text-sm">{team.creator.name.slice(0, 1)}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h4 className="font-medium text-sm text-gray-800 dark:text-gray-200">{team.title}</h4>
+                      <div className="flex items-center text-xs text-gray-500 mt-0.5">
+                        <span>{team.date}</span>
+                        <span className="mx-1.5">·</span>
+                        <span>{team.currentMembers}/{team.maxMembers}人</span>
                       </div>
                     </div>
-                    <Badge variant="secondary" className="bg-orange-100 text-orange-700">
-                      招募中
-                    </Badge>
                   </div>
-                </CardContent>
-              </Card>
+                  <span className="text-xs px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded">
+                    招募中
+                  </span>
+                </div>
+              </div>
             ))}
           </div>
 
           {/* 同城群组列表 */}
-          <div className="space-y-3">
-            <h3 className="font-semibold text-sm">同城群组</h3>
+          <div className="space-y-2">
+            <span className="text-sm font-medium text-gray-800 dark:text-gray-200">同城群组</span>
             {[
               {
                 id: "group1",
@@ -383,51 +352,28 @@ export function Social({ navigate }: SocialProps) {
                 activity: "计划下周登山活动",
                 image: "/images/mock/group_hiking.png",
               },
-              {
-                id: "group4",
-                name: "城市探索小分队",
-                members: 156,
-                activity: "每周探索城市秘境",
-                image: "/images/mock/group_cycling.png",
-              },
-              {
-                id: "group5",
-                name: "单车骑行俱乐部",
-                members: 208,
-                activity: "本周末环湖骑行活动",
-                image: "/images/mock/group_cycling.png",
-              },
-              {
-                id: "group6",
-                name: "摄影爱好者联盟",
-                members: 175,
-                activity: "城市夜景拍摄活动",
-                image: "/images/mock/group_photography.png",
-              },
             ].map((group, index) => (
-              <Card key={index}>
-                <CardContent className="p-4">
-                  <div className="flex">
-                    <div className="w-20 h-20 rounded-lg overflow-hidden">
-                      <img
-                        src={group.image || "/placeholder.svg"}
-                        alt={group.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-
-                    <div className="ml-3 flex-1">
-                      <h3 className="font-semibold">{group.name}</h3>
-                      <div className="text-sm text-gray-500 mt-1">{group.members} 位成员</div>
-                      <p className="text-sm mt-2">{group.activity}</p>
-
-                      <Button size="sm" className="mt-2" onClick={() => navigate("group-detail", { group })}>
-                        加入群组
-                      </Button>
-                    </div>
+              <div key={index} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl">
+                <div className="flex">
+                  <div className="w-14 h-14 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 shrink-0">
+                    <img
+                      src={group.image || "/placeholder.svg"}
+                      alt={group.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                </CardContent>
-              </Card>
+
+                  <div className="ml-3 flex-1 min-w-0">
+                    <h3 className="font-medium text-sm text-gray-800 dark:text-gray-200">{group.name}</h3>
+                    <div className="text-xs text-gray-500 mt-0.5">{group.members} 位成员</div>
+                    <p className="text-xs text-gray-500 mt-1 truncate">{group.activity}</p>
+                  </div>
+
+                  <Button size="sm" variant="ghost" className="text-xs h-8 shrink-0" onClick={() => navigate("group-detail", { group })}>
+                    加入
+                  </Button>
+                </div>
+              </div>
             ))}
           </div>
         </TabsContent>

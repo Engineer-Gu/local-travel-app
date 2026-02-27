@@ -308,145 +308,129 @@ export function DailyTasks({ goBack, navigate }: DailyTasksProps) {
   const progressPercent = (completed / total) * 100
 
   return (
-    <div className="pb-16">
+    <div className="pb-16 bg-white dark:bg-gray-950">
       {/* 顶部导航 */}
-      <div className="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b">
+      <div className="sticky top-0 z-10 bg-white dark:bg-gray-950 border-b dark:border-gray-800">
         <div className="flex items-center p-4">
           <Button variant="ghost" size="icon" onClick={goBack}>
             <ArrowLeft size={20} />
           </Button>
-          <h1 className="text-lg font-bold ml-2">每日任务</h1>
+          <h1 className="text-base font-semibold ml-2 text-gray-800 dark:text-gray-200">每日任务</h1>
         </div>
       </div>
 
       {/* 任务进度卡片 */}
       <div className="p-4">
-        <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h2 className="text-lg font-bold">今日任务进度</h2>
-                <p className="text-sm opacity-90">
-                  已完成 {completed}/{total} 个任务
-                </p>
-              </div>
-              <div className="text-right">
-                <div className="flex items-center">
-                  <Zap size={20} className="mr-1" />
-                  <span className="text-2xl font-bold">{totalPoints}</span>
-                </div>
-                <p className="text-xs opacity-90">已获积分</p>
-              </div>
+        <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h2 className="font-medium text-gray-800 dark:text-gray-200">今日进度</h2>
+              <p className="text-sm text-gray-500">
+                {completed}/{total} 个任务
+              </p>
             </div>
-            <Progress value={progressPercent} className="h-2 bg-white/30" />
-            <p className="text-xs mt-2 opacity-80">
-              完成所有任务可额外获得 50 积分奖励
-            </p>
-          </CardContent>
-        </Card>
+            <div className="text-right">
+              <div className="flex items-center text-orange-500">
+                <Zap size={16} className="mr-1" />
+                <span className="text-xl font-semibold">{totalPoints}</span>
+              </div>
+              <p className="text-xs text-gray-500">积分</p>
+            </div>
+          </div>
+          <Progress value={progressPercent} className="h-1.5" />
+          <p className="text-xs mt-2 text-gray-500">
+            完成所有任务可额外获得 50 积分
+          </p>
+        </div>
       </div>
 
       {/* 任务列表 */}
-      <div className="px-4 space-y-6">
+      <div className="px-4 space-y-5">
         {taskCategories.map((category) => (
           <div key={category.id}>
             {/* 分类标题 */}
-            <div className="flex items-center mb-3">
-              <span className={category.color}>{category.icon}</span>
-              <h3 className="font-semibold ml-2">{category.title}</h3>
-              <Badge variant="secondary" className="ml-2 text-xs">
-                {category.tasks.filter((t) => t.completed).length}/
-                {category.tasks.length}
-              </Badge>
+            <div className="flex items-center mb-2.5">
+              <span className="text-gray-500">{category.icon}</span>
+              <h3 className="font-medium text-sm text-gray-800 dark:text-gray-200 ml-2">{category.title}</h3>
+              <span className="ml-2 text-xs text-gray-400">
+                {category.tasks.filter((t) => t.completed).length}/{category.tasks.length}
+              </span>
             </div>
 
             {/* 任务卡片列表 */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               {category.tasks.map((task) => (
-                <Card
+                <div
                   key={task.id}
-                  className={`${
+                  className={`p-3 rounded-xl ${
                     task.completed
-                      ? "bg-gray-50 dark:bg-gray-800/50"
-                      : "bg-white dark:bg-gray-800"
+                      ? "bg-gray-100 dark:bg-gray-800/50"
+                      : "bg-gray-50 dark:bg-gray-900"
                   }`}
                 >
-                  <CardContent className="p-3">
-                    <div className="flex items-center">
-                      {/* 任务图标 */}
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          task.completed
-                            ? "bg-green-100 dark:bg-green-900/30"
-                            : "bg-gray-100 dark:bg-gray-700"
-                        }`}
-                      >
-                        {task.completed ? (
-                          <CheckCircle2
-                            size={20}
-                            className="text-green-500"
-                          />
-                        ) : (
-                          task.icon
-                        )}
-                      </div>
-
-                      {/* 任务信息 */}
-                      <div className="flex-1 ml-3">
-                        <div className="flex items-center justify-between">
-                          <h4
-                            className={`font-medium ${
-                              task.completed
-                                ? "text-gray-400 line-through"
-                                : ""
-                            }`}
-                          >
-                            {task.title}
-                          </h4>
-                          <Badge
-                            variant={task.completed ? "secondary" : "default"}
-                            className="text-xs"
-                          >
-                            +{task.points}
-                          </Badge>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-0.5">
-                          {task.description}
-                        </p>
-
-                        {/* 进度条（如果有） */}
-                        {task.maxProgress && !task.completed && (
-                          <div className="mt-2">
-                            <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
-                              <span>进度</span>
-                              <span>
-                                {task.progress}/{task.maxProgress}
-                              </span>
-                            </div>
-                            <Progress
-                              value={
-                                ((task.progress || 0) / task.maxProgress) * 100
-                              }
-                              className="h-1.5"
-                            />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* 操作按钮 */}
-                      {!task.completed && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="ml-2"
-                          onClick={() => handleTaskAction(task.id)}
-                        >
-                          去完成
-                        </Button>
+                  <div className="flex items-center">
+                    {/* 任务图标 */}
+                    <div
+                      className={`w-9 h-9 rounded-lg flex items-center justify-center ${
+                        task.completed
+                          ? "bg-green-100 dark:bg-green-900/30"
+                          : "bg-gray-200 dark:bg-gray-700"
+                      }`}
+                    >
+                      {task.completed ? (
+                        <CheckCircle2 size={18} className="text-green-500" />
+                      ) : (
+                        <span className="text-gray-500">{task.icon}</span>
                       )}
                     </div>
-                  </CardContent>
-                </Card>
+
+                    {/* 任务信息 */}
+                    <div className="flex-1 ml-3 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h4
+                          className={`font-medium text-sm ${
+                            task.completed
+                              ? "text-gray-400 line-through"
+                              : "text-gray-800 dark:text-gray-200"
+                          }`}
+                        >
+                          {task.title}
+                        </h4>
+                        <span className={`text-xs ${task.completed ? "text-gray-400" : "text-orange-500"}`}>
+                          +{task.points}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-0.5 truncate">
+                        {task.description}
+                      </p>
+
+                      {/* 进度条（如果有） */}
+                      {task.maxProgress && !task.completed && (
+                        <div className="mt-1.5">
+                          <div className="flex items-center justify-between text-xs text-gray-400 mb-1">
+                            <span>{task.progress}/{task.maxProgress}</span>
+                          </div>
+                          <Progress
+                            value={((task.progress || 0) / task.maxProgress) * 100}
+                            className="h-1"
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 操作按钮 */}
+                    {!task.completed && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="ml-2 text-xs h-7 text-gray-500"
+                        onClick={() => handleTaskAction(task.id)}
+                      >
+                        去完成
+                      </Button>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           </div>

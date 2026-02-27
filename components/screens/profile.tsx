@@ -452,68 +452,62 @@ export function Profile({ navigate }: ProfileProps) {
         </div>
         <div className="flex space-x-2 overflow-x-auto pb-2">
           {mockBadges.map((badge, index) => (
-            <Badge key={index} variant="outline" className="py-1 px-3">
+            <Badge key={index} variant="outline" className="py-1 px-2.5 text-xs">
               {badge}
             </Badge>
           ))}
-          <Badge variant="outline" className="py-1 px-3 border-dashed cursor-pointer" onClick={handleViewBadges}>
+          <Badge variant="outline" className="py-1 px-2.5 text-xs border-dashed cursor-pointer" onClick={handleViewBadges}>
             +
           </Badge>
         </div>
       </div>
 
       {/* 每日任务进度 */}
-      <div className="p-4 border-b">
-        <Card className="bg-gradient-to-r from-orange-50 to-yellow-50 border-none cursor-pointer" onClick={() => navigate("daily-tasks")}>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center">
-                <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center mr-3">
-                  <Target size={20} className="text-white" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-sm">每日任务</h3>
-                  <p className="text-xs text-gray-500">完成任务获取积分奖励</p>
-                </div>
+      <div className="p-4 border-b dark:border-gray-800">
+        <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl cursor-pointer" onClick={() => navigate("daily-tasks")}>
+          <div className="flex items-center justify-between mb-2.5">
+            <div className="flex items-center">
+              <div className="w-9 h-9 bg-orange-100 dark:bg-orange-900/50 rounded-lg flex items-center justify-center mr-3">
+                <Target size={18} className="text-orange-600 dark:text-orange-400" />
               </div>
-              <div className="flex items-center">
-                <Flame size={16} className="text-orange-500 mr-1" />
-                <span className="text-sm font-medium text-orange-500">连续7天</span>
-                <ChevronRight size={16} className="text-gray-400 ml-1" />
+              <div>
+                <h3 className="font-medium text-sm text-gray-800 dark:text-gray-200">每日任务</h3>
+                <p className="text-xs text-gray-500">完成任务获取积分</p>
               </div>
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-gray-600">今日进度</span>
-                <span className="text-orange-500 font-medium">3/5 已完成</span>
-              </div>
-              <Progress value={60} className="h-2" />
+            <div className="flex items-center text-xs text-gray-500">
+              <span>连续7天</span>
+              <ChevronRight size={14} className="ml-0.5" />
             </div>
-          </CardContent>
-        </Card>
+          </div>
+          <div className="flex items-center justify-between text-xs mb-1.5">
+            <span className="text-gray-500">今日进度</span>
+            <span className="text-gray-600 dark:text-gray-400">3/5</span>
+          </div>
+          <Progress value={60} className="h-1.5" />
+        </div>
       </div>
 
       {/* 旅行时光机入口 */}
-      <div className="p-4 border-b">
-        <Card className="bg-gradient-to-r from-purple-50 to-pink-50 border-none cursor-pointer" onClick={() => navigate("travel-timeline")}>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-3">
-                  <Clock size={20} className="text-white" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-sm">旅行时光机</h3>
-                  <p className="text-xs text-gray-500">回顾你的旅行足迹</p>
-                </div>
+      <div className="p-4 border-b dark:border-gray-800">
+        <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl cursor-pointer" onClick={() => navigate("travel-timeline")}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <div className="w-9 h-9 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center mr-3">
+                <Clock size={18} className="text-blue-600 dark:text-blue-400" />
               </div>
-              <div className="text-right">
-                <div className="text-lg font-bold text-purple-600">{mockVisitedCities}</div>
-                <div className="text-xs text-gray-500">座城市</div>
+              <div>
+                <h3 className="font-medium text-sm text-gray-800 dark:text-gray-200">旅行时光机</h3>
+                <p className="text-xs text-gray-500">回顾旅行足迹</p>
               </div>
             </div>
-          </CardContent>
-        </Card>
+            <div className="flex items-center">
+              <span className="text-base font-semibold text-gray-800 dark:text-gray-200">{mockVisitedCities}</span>
+              <span className="text-xs text-gray-500 ml-1">座城市</span>
+              <ChevronRight size={14} className="text-gray-400 ml-1" />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* 功能菜单卡片 */}
@@ -521,36 +515,34 @@ export function Profile({ navigate }: ProfileProps) {
         {menuGroups
           .filter((group) => group.items.length > 0)
           .map((group, groupIndex) => (
-            <Card key={groupIndex} className="overflow-hidden">
-              <CardContent className="p-3">
-                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">{group.title}</h3>
-                <div className="grid grid-cols-4 gap-2">
-                  {group.items.map((item, itemIndex) => (
-                    <Button
-                      key={itemIndex}
-                      variant="ghost"
-                      className="flex flex-col items-center justify-center h-20 p-2"
-                      onClick={() => navigate(item.screen)}
-                    >
-                      <div className="relative">
-                        {item.icon}
-                        {item.badge && (
-                          <Badge className="absolute -top-2 -right-2 h-4 w-4 p-0 flex items-center justify-center rounded-full bg-yellow-500 text-white border-none text-[10px]">
-                            {item.badge}
-                          </Badge>
-                        )}
-                      </div>
-                      <span className="mt-2 text-xs">{item.title}</span>
-                    </Button>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <div key={groupIndex} className="bg-gray-50 dark:bg-gray-900 rounded-xl p-3">
+              <h3 className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3">{group.title}</h3>
+              <div className="grid grid-cols-4 gap-1">
+                {group.items.map((item, itemIndex) => (
+                  <Button
+                    key={itemIndex}
+                    variant="ghost"
+                    className="flex flex-col items-center justify-center h-16 p-1"
+                    onClick={() => navigate(item.screen)}
+                  >
+                    <div className="relative text-gray-500 dark:text-gray-400">
+                      {item.icon}
+                      {item.badge && (
+                        <span className="absolute -top-1 -right-1 h-3.5 w-3.5 flex items-center justify-center rounded-full bg-orange-500 text-white text-[8px]">
+                          {item.badge}
+                        </span>
+                      )}
+                    </div>
+                    <span className="mt-1.5 text-xs text-gray-600 dark:text-gray-400">{item.title}</span>
+                  </Button>
+                ))}
+              </div>
+            </div>
           ))}
 
         <Button
           variant="ghost"
-          className="justify-center h-12 px-4 text-red-500 w-full mt-4"
+          className="justify-center h-10 px-4 text-gray-400 w-full mt-4 text-sm"
           onClick={handleLogout}
           disabled={isLoading}
         >
